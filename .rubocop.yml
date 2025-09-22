@@ -1,8 +1,9 @@
-# Omakase Ruby styling for Rails
-inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+inherit_from: .rubocop_todo.yml
 
-# Overwrite or add rules to create your own house style
-#
-# # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
-# Layout/SpaceInsideArrayLiteralBrackets:
-#   Enabled: false
+# Offense count: 2
+# This cop supports safe autocorrection (--autocorrect).
+Layout/SpaceInsidePercentLiteralDelimiters:
+  Exclude:
+    - 'app/controllers/comments_controller.rb'
+
+  Enabled: false
