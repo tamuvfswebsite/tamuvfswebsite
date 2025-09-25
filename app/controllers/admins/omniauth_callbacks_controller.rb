@@ -46,11 +46,15 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     first_name = name_parts[0]
     last_name = name_parts[1] || ''
 
-    User.find_or_create_by(google_uid: auth.uid) do |user|
+    user = User.find_or_create_by(google_uid: auth.uid) do |user|
       user.email = auth.info.email
       user.first_name = first_name
       user.last_name = last_name
       user.role = 'user'
+      user.google_avatar_url = auth.info.image
     end
+
+    # Update avatar URL on each login to keep it fresh
+    user.update(google_avatar_url: auth.info.image) if user.persisted?
   end
 end
