@@ -50,7 +50,7 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       user.email = auth.info.email
       user.first_name = first_name
       user.last_name = last_name
-      user.role = 'user'
+      user.role = Rails.env.development? ? 'admin' : 'user'
       user.google_avatar_url = auth.info.image
     end
 
