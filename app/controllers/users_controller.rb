@@ -8,8 +8,7 @@ class UsersController < ApplicationController
   end
 
   # GET /users/1 or /users/1.json
-  def show
-  end
+  def show; end
 
   # GET /users/new
   def new
@@ -17,8 +16,7 @@ class UsersController < ApplicationController
   end
 
   # GET /users/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /users or /users.json
   def create
@@ -26,7 +24,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: "User was successfully created." }
+        format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -39,7 +37,7 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to @user, notice: "User was successfully updated.", status: :see_other }
+        format.html { redirect_to @user, notice: 'User was successfully updated.', status: :see_other }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -53,29 +51,30 @@ class UsersController < ApplicationController
     @user.destroy!
 
     respond_to do |format|
-      format.html { redirect_to users_path, notice: "User was successfully destroyed.", status: :see_other }
+      format.html { redirect_to users_path, notice: 'User was successfully destroyed.', status: :see_other }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.find(params.expect(:id))
-    end
 
-    # Check if the current admin has admin role in Users table
-    def ensure_admin_user
-      current_user = User.find_by(google_uid: current_admin.uid)
+  # Use callbacks to share common setup or constraints between actions.
+  def set_user
+    @user = User.find(params.expect(:id))
+  end
 
-      unless current_user&.role == 'admin'
-        flash[:alert] = 'Access denied. Admin privileges required.'
-        redirect_to root_path
-      end
-    end
+  # Check if the current admin has admin role in Users table
+  def ensure_admin_user
+    current_user = User.find_by(google_uid: current_admin.uid)
 
-    # Only allow a list of trusted parameters through.
-    def user_params
-      params.expect(user: [ :first_name, :last_name, :email, :role, :google_uid, :google_avatar_url ])
-    end
+    return if current_user&.role == 'admin'
+
+    flash[:alert] = 'Access denied. Admin privileges required.'
+    redirect_to root_path
+  end
+
+  # Only allow a list of trusted parameters through.
+  def user_params
+    params.expect(user: %i[first_name last_name email role google_uid google_avatar_url])
+  end
 end

@@ -31,7 +31,7 @@
 # new tests to make test work with OmniAuth
 require 'rails_helper'
 
-RSpec.describe "CreatingBlogPosts", type: :system do
+RSpec.describe 'CreatingBlogPosts', type: :system do
   before do
     driven_by(:rack_test)
 
@@ -40,18 +40,18 @@ RSpec.describe "CreatingBlogPosts", type: :system do
 
     # Mock the Google OAuth response
     OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new({
-      provider: 'google_oauth2',
-      uid: '123456',
-      info: {
-        email: 'admin@example.com',
-        name: 'Admin User',
-        image: 'https://example.com/avatar.jpg'
-      },
-      credentials: {
-        token: 'mock_token',
-        expires_at: Time.now + 1.week
-      }
-    })
+                                                                         provider: 'google_oauth2',
+                                                                         uid: '123456',
+                                                                         info: {
+                                                                           email: 'admin@example.com',
+                                                                           name: 'Admin User',
+                                                                           image: 'https://example.com/avatar.jpg'
+                                                                         },
+                                                                         credentials: {
+                                                                           token: 'mock_token',
+                                                                           expires_at: Time.now + 1.week
+                                                                         }
+                                                                       })
 
     # Create an admin in the database
     @admin = Admin.create!(
@@ -64,14 +64,14 @@ RSpec.describe "CreatingBlogPosts", type: :system do
 
   it 'saves & displays the resulting blog post' do
     # Simulate OAuth login
-    #visit '/admins/auth/google_oauth2/callback'
+    # visit '/admins/auth/google_oauth2/callback'
     visit new_admin_session_path
-    click_on "Google"
+    click_on 'Google'
     # Expect to be redirected to the root path after successful login
     expect(page).to have_current_path(root_path)
 
-    expect(page).to have_link("New Post", wait: 10)
-    click_on "New Post"
+    expect(page).to have_link('New Post', wait: 10)
+    click_on 'New Post'
 
     fill_in 'Title', with: 'Hello, World!'
     fill_in 'Body', with: 'Hello, I say!'
@@ -81,7 +81,7 @@ RSpec.describe "CreatingBlogPosts", type: :system do
     expect(page).to have_content('Hello, World!')
     expect(page).to have_content('Hello, I say!')
 
-    post = Post.order("id").last
+    post = Post.order('id').last
     expect(post.title).to eq('Hello, World!')
     expect(post.body).to eq('Hello, I say!')
   end
