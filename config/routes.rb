@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :users
   root "posts#index"
 
   devise_for :admins, controllers: { omniauth_callbacks: 'admins/omniauth_callbacks' }
@@ -7,7 +8,6 @@ Rails.application.routes.draw do
     get 'admins/sign_out', to: 'admins/sessions#destroy', as: :destroy_admin_session
   end
 
-  resources :users
   resources :comments
   resources :posts do
     resources :comments

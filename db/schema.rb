@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_02_05_002323) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_25_171021) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -47,15 +47,13 @@ ActiveRecord::Schema[8.0].define(version: 2024_02_05_002323) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.text "first_name"
-    t.text "last_name"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email"
+    t.string "role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "phonenumber"
-    t.text "area_code"
   end
 
   add_foreign_key "comments", "posts"
-  add_foreign_key "comments", "users"
-  add_foreign_key "posts", "users"
 end
