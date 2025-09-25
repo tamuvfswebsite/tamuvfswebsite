@@ -4,13 +4,12 @@
 <h1>This is the version with authentication</h1>
 
 <h1>You're logged in! Welcome to the Dashboard!</h1>
-<div style="border: 1px solid black">
-  <h1>Debug information:</h1>
-  <p>Name from google oauth: <%= current_admin.full_name %></p>
-  <p>Email from google oauth: <%= current_admin.email %></p>
-  <p>Unique Google ID to use as PK in users table: <%= current_admin.uid %></p>
-
-</div>
+<!--<div style="border: 1px solid black">-->
+<!--  <h1>Debug information:</h1>-->
+<!--  <p>Name from google oauth: <%#= current_admin.full_name %></p>-->
+<!--  <p>Email from google oauth: <%#= current_admin.email %></p>-->
+<!--  <p>Unique Google ID to use as PK in users table: <%#= current_admin.uid %></p>-->
+<!--</div>-->
 
 
 <%= link_to "Sign Out", destroy_admin_session_path %>
