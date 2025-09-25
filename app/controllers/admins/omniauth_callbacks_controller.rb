@@ -2,6 +2,9 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def google_oauth2
     admin = Admin.from_google(**from_google_params)
 
+    # Create or update user record
+    create_or_update_user
+
     if admin.present?
       sign_out_all_scopes
       flash[:success] = t 'devise.omniauth_callbacks.success', kind: 'Google'
@@ -35,5 +38,19 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   def auth
     @auth ||= request.env['omniauth.auth']
+  end
+
+  def create_or_update_user
+    # Split full_name into first_name and last_name
+    name_parts = auth.info.name.split(' ', 2)
+    first_name = name_parts[0]
+    last_name = name_parts[1] || ''
+
+    User.find_or_create_by(google_uid: auth.uid) do |user|
+      user.email = auth.info.email
+      user.first_name = first_name
+      user.last_name = last_name
+      user.role = 'user'
+    end
   end
 end
