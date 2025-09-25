@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
+  before_action :ensure_admin_user
 
   # GET /users or /users.json
   def index
@@ -61,6 +62,16 @@ class UsersController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params.expect(:id))
+    end
+
+    # Check if the current admin has admin role in Users table
+    def ensure_admin_user
+      current_user = User.find_by(google_uid: current_admin.uid)
+
+      unless current_user&.role == 'admin'
+        flash[:alert] = 'Access denied. Admin privileges required.'
+        redirect_to root_path
+      end
     end
 
     # Only allow a list of trusted parameters through.
