@@ -9,7 +9,7 @@ class PostsController < ApplicationController
 
     # @numposts = @posts.count
 
-    @nummessage = @posts.count > 0 ? @posts.count : 0
+    @nummessage = @posts.count.positive? ? @posts.count : 0
   end
 
   # Instead of
