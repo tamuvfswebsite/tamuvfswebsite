@@ -1,9 +1,52 @@
 inherit_from: .rubocop_todo.yml
 
+# Disable noisy rules that don't add much value
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - 'db/schema.rb'
+    - 'db/queue_schema.rb'
+    - 'db/cable_schema.rb'
+    - 'spec/**/*'
+    - 'config/routes.rb'
+
+Layout/LineLength:
+  Exclude:
+    - 'config/initializers/devise.rb'
+    - 'bin/bundle'
+
+# Ignore complexity issues in generated files
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'bin/bundle'
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'bin/bundle'
+
+Metrics/MethodLength:
+  Max: 20
+  Exclude:
+    - 'bin/bundle'
+    - 'app/controllers/admins/**/*'
+
+Metrics/AbcSize:
+  Exclude:
+    - 'app/controllers/admins/**/*'
+
+# Ignore style issues in Devise-generated admin controllers
+Style/ClassAndModuleChildren:
+  Exclude:
+    - 'app/controllers/admins/**/*'
+
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
 Layout/SpaceInsidePercentLiteralDelimiters:
   Exclude:
     - 'app/controllers/comments_controller.rb'
-
   Enabled: false

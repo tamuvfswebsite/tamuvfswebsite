@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :users
-  root "posts#index"
+  root 'posts#index'
 
   devise_for :admins, controllers: { omniauth_callbacks: 'admins/omniauth_callbacks' }
   devise_scope :admin do
@@ -12,5 +12,4 @@ Rails.application.routes.draw do
   resources :posts do
     resources :comments
   end
-
 end
