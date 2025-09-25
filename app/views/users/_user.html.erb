@@ -1,38 +1,16 @@
-<div id="<%= dom_id user %>">
-  <% if user.google_avatar_url.present? %>
-    <p>
-      <img src="<%= user.google_avatar_url %>" alt="<%= user.first_name %>'s avatar" style="width: 50px; height: 50px; border-radius: 50%;">
-    </p>
-  <% end %>
-
-  <p>
-    <strong>First name:</strong>
-    <%= user.first_name %>
-  </p>
-
-  <p>
-    <strong>Last name:</strong>
-    <%= user.last_name %>
-  </p>
-
-  <p>
-    <strong>Email:</strong>
-    <%= user.email %>
-  </p>
-
-  <p>
-    <strong>Role:</strong>
-    <%= user.role %>
-  </p>
-
-  <p>
-    <strong>Google uid:</strong>
-    <%= user.google_uid %>
-  </p>
-
-  <p>
-    <strong>Google avatar url:</strong>
-    <%= user.google_avatar_url %>
-  </p>
-
+<div id="<%= dom_id user %>" class="user-card">
+  <div class="user-header">
+    <% if user.google_avatar_url.present? %>
+      <div class="user-avatar">
+        <img src="<%= user.google_avatar_url %>" alt="<%= user.first_name %>'s avatar">
+      </div>
+    <% end %>
+    <div class="user-info">
+      <h3 class="user-name"><%= user.first_name %> <%= user.last_name %></h3>
+      <p class="user-email"><%= user.email %></p>
+      <% if user.role.present? %>
+        <span class="user-role badge"><%= user.role.titleize %></span>
+      <% end %>
+    </div>
+  </div>
 </div>
