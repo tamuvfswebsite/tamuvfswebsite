@@ -5,8 +5,8 @@ class DropPostsAndCommentsTables < ActiveRecord::Migration[8.0]
   end
 
   def down
-    # Note: This is intentionally left empty as we don't want to recreate these tables
+    # NOTE: This is intentionally left empty as we don't want to recreate these tables
     # If you need to recreate them, you'll need to look at the original migration files
-    raise ActiveRecord::IrreversibleMigration, "Cannot recreate posts and comments tables"
+    raise ActiveRecord::IrreversibleMigration, 'Cannot recreate posts and comments tables'
   end
 end
