@@ -47,4 +47,9 @@ yarn-debug.log*
 .yarn-integrity
 /app/models/
 
+# this includes local ENV secrets that shouldn't be pushed to github
 /config/environments/development.rb
+
+# something keeps regenerating this locally but isn't needed
+# heroku gets mad when there are multiple lock files in the repo (package-lock.json is the one we want heroku to use)
+yarn.lock
