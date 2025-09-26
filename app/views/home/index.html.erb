@@ -9,7 +9,12 @@
 
       <div class="cta-row">
         <%= link_to "Apply Now", "#", class: "btn btn-primary" %>
-        <%= link_to "Sign In with Google", new_admin_session_path, class: "btn btn-primary" %>
+    <%= button_to "Member Sign In", 
+          admin_google_oauth2_omniauth_authorize_path,
+          method: :post,
+          form: { style: "display:inline-block;" },
+          data: { turbo: false },
+          class: "btn btn-outline" %>
       </div>
     </div>
 
