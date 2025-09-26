@@ -8,4 +8,13 @@ Rails.application.routes.draw do
     get 'admins/sign_in', to: 'admins/sessions#new', as: :new_admin_session
     get 'admins/sign_out', to: 'admins/sessions#destroy', as: :destroy_admin_session
   end
+
+  namespace :admin do
+    # get "dashboard/index"
+    get 'dashboard', to: 'dashboard#index'
+    resources :events
+    resources :sponsors
+    resources :resumes, only: [:index]
+    resources :applications, only: [:index]
+  end
 end

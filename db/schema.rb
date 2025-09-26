@@ -10,29 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 20_250_925_190_000) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_25_190000) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension 'pg_catalog.plpgsql'
+  enable_extension "pg_catalog.plpgsql"
 
-  create_table 'admins', force: :cascade do |t|
-    t.string 'email', null: false
-    t.string 'full_name'
-    t.string 'uid'
-    t.string 'avatar_url'
-    t.datetime 'created_at', precision: nil, null: false
-    t.datetime 'updated_at', precision: nil, null: false
-    t.index ['email'], name: 'index_admins_on_email', unique: true
+  create_table "admins", force: :cascade do |t|
+    t.string "email", null: false
+    t.string "full_name"
+    t.string "uid"
+    t.string "avatar_url"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.index ["email"], name: "index_admins_on_email", unique: true
   end
 
-  create_table 'users', force: :cascade do |t|
-    t.string 'first_name'
-    t.string 'last_name'
-    t.string 'email'
-    t.string 'role'
-    t.datetime 'created_at', null: false
-    t.datetime 'updated_at', null: false
-    t.string 'google_uid'
-    t.string 'google_avatar_url'
-    t.index ['google_uid'], name: 'index_users_on_google_uid', unique: true
+  create_table "users", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email"
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "google_uid"
+    t.string "google_avatar_url"
+    t.index ["google_uid"], name: "index_users_on_google_uid", unique: true
   end
 end
