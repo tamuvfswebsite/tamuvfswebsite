@@ -1,10 +1,17 @@
-<p style="color: green"><%= notice %></p>
+<% if notice %>
+  <div class="alert alert-success"><%= notice %></div>
+<% end %>
 
-<%= render @user %>
+<div class="user-show-page">
+  <div class="user-profile">
+    <%= render @user %>
+  </div>
 
-<div>
-  <%= link_to "Edit this user", edit_user_path(@user) %> |
-  <%= link_to "Back to users", users_path %>
-
-  <%= button_to "Destroy this user", @user, method: :delete %>
+  <div class="user-actions-bar">
+    <%= link_to "← Back to users", users_path, class: "btn btn-outline" %>
+    <%= link_to "Edit Profile", edit_user_path(@user), class: "btn btn-primary" %>
+    <%= button_to "Delete User", @user, method: :delete,
+                  class: "btn btn-danger",
+                  form: { data: { turbo_confirm: "Are you sure you want to delete #{@user.first_name} #{@user.last_name}?" } } %>
+  </div>
 </div>

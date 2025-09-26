@@ -47,6 +47,4 @@ Style/ClassAndModuleChildren:
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
 Layout/SpaceInsidePercentLiteralDelimiters:
-  Exclude:
-    - 'app/controllers/comments_controller.rb'
   Enabled: false

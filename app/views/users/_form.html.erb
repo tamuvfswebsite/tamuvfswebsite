@@ -1,8 +1,7 @@
-<%= form_with(model: user) do |form| %>
+<%= form_with(model: user, class: "user-role-form") do |form| %>
   <% if user.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
+    <div class="alert alert-danger">
+      <h4><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h4>
       <ul>
         <% user.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -11,38 +10,31 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :first_name, style: "display: block" %>
-    <%= form.text_field :first_name %>
+  <div class="user-info-display">
+    <div class="user-details">
+      <h3><%= user.first_name %> <%= user.last_name %></h3>
+      <p class="user-email"><%= user.email %></p>
+    </div>
+    <% if user.google_avatar_url.present? %>
+      <div class="user-avatar">
+        <img src="<%= user.google_avatar_url %>" alt="<%= user.first_name %>'s avatar">
+      </div>
+    <% end %>
   </div>
 
-  <div>
-    <%= form.label :last_name, style: "display: block" %>
-    <%= form.text_field :last_name %>
+  <div class="form-group">
+    <%= form.label :role, "User Role", class: "form-label" %>
+    <%= form.select :role,
+        options_for_select([
+          ['User', 'user'],
+          ['Admin', 'admin']
+        ], user.role),
+        { prompt: 'Select a role' },
+        { class: "form-select" } %>
+    <small class="form-text">Choose the user's access level for the application.</small>
   </div>
 
-  <div>
-    <%= form.label :email, style: "display: block" %>
-    <%= form.text_field :email %>
-  </div>
-
-  <div>
-    <%= form.label :role, style: "display: block" %>
-    <%= form.text_field :role %>
-  </div>
-
-  <div>
-    <%= form.label :google_uid, style: "display: block" %>
-    <%= form.text_field :google_uid %>
-  </div>
-
-  <div>
-    <%= form.label :google_avatar_url, style: "display: block" %>
-    <%= form.url_field :google_avatar_url, readonly: true, style: "background-color: #f5f5f5;" %>
-    <small>Avatar URL is automatically managed by Google OAuth</small>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div class="form-actions">
+    <%= form.submit "Update Role", class: "btn btn-primary" %>
   </div>
 <% end %>
