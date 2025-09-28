@@ -1,9 +1,8 @@
 class ApplicationController < ActionController::Base
   # Base controller for all controllers
 
+  private
 
-  private 
-  
   def ensure_admin_user
     unless admin_signed_in?
       flash[:alert] = 'Access denied. Admin privileges required.'
