@@ -10,11 +10,18 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
+    # get "events/index"
+    # get "events/show"
+    # get "events/new"
+    # get "events/create"
+    # get "events/edit"
+    # get "events/update"
+    # get "events/destroy"
     # get "dashboard/index"
     get 'dashboard', to: 'dashboard#index'
     resources :events
-    resources :sponsors
-    resources :resumes, only: [:index]
-    resources :applications, only: [:index]
+    # resources :sponsors
+    # resources :resumes, only: [:index]
+    # resources :applications, only: [:index]
   end
 end
