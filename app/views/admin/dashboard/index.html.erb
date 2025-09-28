@@ -5,13 +5,26 @@
   <h2>System Overview</h2>
   <ul>
     <li>Total Users: <%= @total_users %></li>
+    <li>Total Events: <%= @total_events %></li>
     <li>Total Resumes: [Data will be loaded from controller]</li>
   </ul>
 </div>
 
 <div class="recent-activity">
   <h2>Recent Activity</h2>
-  <p>Latest events and applications will appear here when controller data is available.</p>
+  <% if @recent_events.any? %>
+    <ul>
+      <% @recent_events.each do |event| %>
+        <li>
+          <strong><%= event.title %></strong>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>No recent events found.</p>
+  <% end %>
+
+  <p> Soon to also have recent application activity! </p>
 </div>
 
 <div class="quick-actions">
@@ -34,3 +47,5 @@
     <p>Status: Not logged in</p>
   <% end %>
 </div>
+
+<a href="/">Back to Home</a>
