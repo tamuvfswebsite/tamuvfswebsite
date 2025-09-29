@@ -13,15 +13,19 @@ require 'rails_helper'
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe '/resumes', type: :request do
-  # This should return the minimal set of attributes required to create a valid
-  # Resume. As you add validations to Resume, be sure to
-  # adjust the attributes here as well.
+  let(:user) { User.create!(email: 'test@example.com', google_uid: '12345') }
+
   let(:valid_attributes) do
-    skip('Add a hash of attributes valid for your model')
+    {
+      user_id: user.id,
+      file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf')
+    }
   end
 
   let(:invalid_attributes) do
-    skip('Add a hash of attributes invalid for your model')
+    {
+      file: nil  # File is required for resumes
+    }
   end
 
   describe 'GET /index' do
@@ -35,14 +39,14 @@ RSpec.describe '/resumes', type: :request do
   describe 'GET /show' do
     it 'renders a successful response' do
       resume = Resume.create! valid_attributes
-      get resume_url(resume)
+      get user_resume_url(user)
       expect(response).to be_successful
     end
   end
 
   describe 'GET /new' do
     it 'renders a successful response' do
-      get new_resume_url
+      get new_user_resume_url(user)
       expect(response).to be_successful
     end
   end
@@ -59,72 +63,71 @@ RSpec.describe '/resumes', type: :request do
     context 'with valid parameters' do
       it 'creates a new Resume' do
         expect do
-          post resumes_url, params: { resume: valid_attributes }
+          post user_resume_url(user), params: { resume: valid_attributes }
         end.to change(Resume, :count).by(1)
       end
 
       it 'redirects to the created resume' do
-        post resumes_url, params: { resume: valid_attributes }
-        expect(response).to redirect_to(resume_url(Resume.last))
+        post user_resume_url(user), params: { resume: valid_attributes }
+        expect(response).to redirect_to(user_path(user))
       end
     end
 
     context 'with invalid parameters' do
       it 'does not create a new Resume' do
         expect do
-          post resumes_url, params: { resume: invalid_attributes }
+          post user_resume_url(user), params: { resume: invalid_attributes }
         end.to change(Resume, :count).by(0)
       end
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
-        post resumes_url, params: { resume: invalid_attributes }
+        post user_resume_url(user), params: { resume: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
 
   describe 'PATCH /update' do
+    let!(:resume) { Resume.create!(user: user, file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf')) }
+
     context 'with valid parameters' do
       let(:new_attributes) do
-        skip('Add a hash of attributes valid for your model')
+        { file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf') }
       end
 
       it 'updates the requested resume' do
-        resume = Resume.create! valid_attributes
-        patch resume_url(resume), params: { resume: new_attributes }
+        patch user_resume_url(user), params: { resume: new_attributes }
         resume.reload
-        skip('Add assertions for updated state')
+        expect(response).to redirect_to(user_path(user))
       end
 
-      it 'redirects to the resume' do
-        resume = Resume.create! valid_attributes
-        patch resume_url(resume), params: { resume: new_attributes }
+      it 'redirects to the user' do
+        patch user_resume_url(user), params: { resume: new_attributes }
         resume.reload
-        expect(response).to redirect_to(resume_url(resume))
+        expect(response).to redirect_to(user_path(user))
       end
     end
 
     context 'with invalid parameters' do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        resume = Resume.create! valid_attributes
-        patch resume_url(resume), params: { resume: invalid_attributes }
+        patch user_resume_url(user), params: { resume: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
 
   describe 'DELETE /destroy' do
+    let!(:resume) { Resume.create!(user: user, file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf')) }
+
     it 'destroys the requested resume' do
-      resume = Resume.create! valid_attributes
       expect do
-        delete resume_url(resume)
+        delete user_resume_url(user)
       end.to change(Resume, :count).by(-1)
     end
 
-    it 'redirects to the resumes list' do
-      resume = Resume.create! valid_attributes
-      delete resume_url(resume)
-      expect(response).to redirect_to(resumes_url)
+    it 'redirects to the user page' do
+      delete user_resume_url(user)
+      expect(response).to redirect_to(user_path(user))
     end
   end
 end

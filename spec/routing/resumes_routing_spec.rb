@@ -7,27 +7,27 @@ RSpec.describe ResumesController, type: :routing do
     end
 
     it 'routes to #new' do
-      expect(get: '/resumes/new').to route_to('resumes#new')
+      expect(get: '/users/1/resume/new').to route_to('resumes#new', user_id: '1')
     end
 
     it 'routes to #show' do
-      expect(get: '/resumes/1').to route_to('resumes#show', id: '1')
+      expect(get: '/users/1/resume').to route_to('resumes#show', user_id: '1')
     end
 
     it 'routes to #edit' do
-      expect(get: '/resumes/1/edit').to route_to('resumes#edit', id: '1')
+      expect(get: '/users/1/resume/edit').to route_to('resumes#edit', user_id: '1')
     end
 
     it 'routes to #create' do
-      expect(post: '/resumes').to route_to('resumes#create')
+      expect(post: '/users/1/resume').to route_to('resumes#create', user_id: '1')
     end
 
     it 'routes to #update via PUT' do
-      expect(put: '/resumes/1').to route_to('resumes#update', id: '1')
+      expect(put: '/users/1/resume').to route_to('resumes#update', user_id: '1')
     end
 
     it 'routes to #update via PATCH' do
-      expect(patch: '/resumes/1').to route_to('resumes#update', id: '1')
+      expect(patch: '/users/1/resume').to route_to('resumes#update', user_id: '1')
     end
 
     it 'routes to #destroy' do
