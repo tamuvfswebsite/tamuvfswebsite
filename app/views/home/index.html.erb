@@ -1,60 +1,65 @@
-<% content_for :title, "Welcome" %>
+<% content_for :title, "Texas A&M Vertical Flight Society" %>
 
-<div class="home-page">
-  <div class="hero-section">
-    <h1>Welcome to User Management System</h1>
-    <p class="hero-subtitle">Manage users and roles with Google OAuth authentication</p>
-  </div>
+<div class="landing-page">
+  <div class="landing-content">
+    <div class="left">
+      <div class="brand">Texas A&M • Vertical Flight Society</div>
+      <h1 class="headline">Welcome to the Vertical Flight Society</h1>
+      <p class="subhead">Advancing rotorcraft and VTOL innovation at Texas A&M University.</p>
 
-  <div class="status-section">
-    <div class="status-card">
-      <h2>Authentication Status</h2>
-      <% if admin_signed_in? %>
-        <div class="status-info logged-in">
-          <div class="status-icon">✓</div>
-          <div class="status-details">
-            <h3>Logged In</h3>
-            <p>Welcome back, <%= current_admin.full_name || current_admin.email %></p>
-            <p class="status-meta">Signed in with Google OAuth</p>
-          </div>
-        </div>
-      <% else %>
-        <div class="status-info logged-out">
-          <div class="status-icon">⚠</div>
-          <div class="status-details">
-            <h3>Not Logged In</h3>
-            <p>Please sign in to access user management features</p>
-          </div>
-        </div>
-      <% end %>
+      <div class="cta-row">
+        <%= link_to "Apply Now", "#", class: "btn btn-primary" %>
+    <%= button_to "Member Sign In", 
+          admin_google_oauth2_omniauth_authorize_path,
+          method: :post,
+          form: { style: "display:inline-block;" },
+          data: { turbo: false },
+          class: "btn btn-outline" %>
+      </div>
     </div>
-  </div>
 
-  <div class="navigation-section">
-    <h2>Available Features</h2>
-    <div class="feature-cards">
-      <% if admin_signed_in? %>
-        <div class="feature-card">
-          <h3>User Management</h3>
-          <p>View and manage user roles and permissions</p>
-          <%= link_to "Manage Users", users_path, class: "btn btn-primary" %>
-        </div>
-
-        <div class="feature-card">
-          <h3>Account</h3>
-          <p>Sign out of your current session</p>
-          <%= link_to "Sign Out", destroy_admin_session_path,
-                      method: :delete,
-                      class: "btn btn-outline",
-                      data: { turbo_confirm: "Are you sure you want to sign out?" } %>
-        </div>
-      <% else %>
-        <div class="feature-card">
-          <h3>Sign In</h3>
-          <p>Sign in with your Google account to access features</p>
-          <%= link_to "Sign In with Google", new_admin_session_path, class: "btn btn-primary" %>
-        </div>
-      <% end %>
+    <div class="right">
+      <div class="image-placeholder" aria-label="Hero image placeholder">
+        <span>Image placeholder</span>
+      </div>
     </div>
   </div>
 </div>
+
+<style>
+  .landing-page { padding: 48px 24px; }
+  .landing-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .brand { color: #9fb3c8; letter-spacing: .06em; font-weight: 600; margin-bottom: 12px; }
+  .headline { font-size: 42px; line-height: 1.2; margin: 0 0 12px; }
+  .subhead { color: #5b6b7a; margin: 0 0 24px; }
+  .cta-row { display: flex; gap: 16px; }
+  .btn { padding: 10px 18px; border-radius: 999px; text-decoration: none; font-weight: 600; }
+  .btn-primary { background: #500000; color: #fff; border: 2px solid #500000; }
+  .btn-primary:hover { background: #6a0000; border-color: #6a0000; }
+  .btn-outline { background: transparent; color: #500000; border: 2px solid #500000; }
+  .btn-outline:hover { background: #5000000d; }
+  .right { display: flex; justify-content: center; }
+  .image-placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: #e6edf5;
+    border: 2px dashed #9fb3c8;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #74879b;
+    font-weight: 600;
+  }
+  @media (max-width: 900px) {
+    .landing-content { grid-template-columns: 1fr; }
+    .right { order: -1; }
+  }
+</style>
