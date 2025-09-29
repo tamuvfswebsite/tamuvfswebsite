@@ -1,1 +1,1 @@
-json.partial! "resumes/resume", resume: @resume
+json.partial! 'resumes/resume', resume: @resume

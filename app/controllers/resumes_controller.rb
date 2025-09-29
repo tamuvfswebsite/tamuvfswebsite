@@ -1,13 +1,12 @@
 class ResumesController < ApplicationController
   before_action :set_user
-  before_action :set_resume, only: [:show, :edit, :update, :destroy]
+  before_action :set_resume, only: %i[show edit update destroy]
 
   def index
     @resumes = Resume.all
   end
 
-  def show
-  end
+  def show; end
 
   def new
     if @user.resume.present?
@@ -20,10 +19,10 @@ class ResumesController < ApplicationController
   def edit
     # Load the resume's user if we don't have it
     @user ||= @resume.user
-    unless @resume.user == @user
-      redirect_to resumes_path, alert: 'You can only edit your own resume.'
-      return
-    end
+    return if @resume.user == @user
+
+    redirect_to resumes_path, alert: 'You can only edit your own resume.'
+    nil
   end
 
   def create
@@ -76,7 +75,7 @@ class ResumesController < ApplicationController
               else
                 @user&.resume
               end
-    
+
     redirect_to (@user || root_path), alert: 'Resume not found.' unless @resume
   end
 
