@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   end
 
   namespace :admin_panel do
+    root to: 'dashboard#index'
     # get "events/index"
     # get "events/show"
     # get "events/new"
