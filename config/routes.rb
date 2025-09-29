@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     get 'admins/sign_out', to: 'admins/sessions#destroy', as: :destroy_admin_session
   end
 
-  namespace :admin do
+  namespace :admin_panel do
     # get "events/index"
     # get "events/show"
     # get "events/new"

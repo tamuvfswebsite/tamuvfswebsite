@@ -9,9 +9,9 @@
 </div>
 
 <div class="actions">
-  <%= link_to 'Edit Event', edit_admin_event_path(@event) %>
-  <%= button_to 'Delete Event', admin_event_path(@event),
+  <%= link_to 'Edit Event', edit_admin_panel_event_path(@event) %>
+  <%= button_to 'Delete Event', admin_panel_event_path(@event),
               method: :delete,
               data: { confirm: "Are you sure you want to delete this event?" } %>
-  <%= link_to 'Back to Events', admin_events_path %>
+  <%= link_to 'Back to Events', admin_panel_events_path %>
 </div>

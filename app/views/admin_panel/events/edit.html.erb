@@ -1,0 +1,8 @@
+<h1>Edit Event</h1>
+
+<%= render 'form', event: @event %>
+
+<div class="navigation">
+  <%= link_to 'Show Event', admin_panel_event_path(@event) %> |
+  <%= link_to 'Back to Events', admin_panel_events_path %>
+</div>
