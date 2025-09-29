@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'resumes/new', type: :view do
-  before(:each) do
+  before do
     @user = User.create!(email: 'test@example.com', google_uid: '12345')
     assign(:user, @user)
     assign(:resume, Resume.new(user: @user))
