@@ -19,7 +19,7 @@ module AdminPanel
       if @event.save
         redirect_to [:admin_panel, @event], notice: 'Event created successfully!'
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -29,7 +29,7 @@ module AdminPanel
       if @event.update(event_parameters)
         redirect_to [:admin_panel, @event], notice: 'Event updated successfully!'
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 
