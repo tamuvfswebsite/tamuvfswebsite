@@ -1,0 +1,35 @@
+<p style="color: green"><%= notice %></p>
+
+<!-- <%= render @resume %> -->
+
+<p>
+  <strong>User:</strong>
+  <%= @resume.user.email %>
+</p>
+
+<p>
+  <strong>Resume:</strong>
+  <% if @resume.file.attached? %>
+    <%= link_to "Download", rails_blob_path(@resume.file, disposition: "attachment") %>
+    <!-- or inline preview for supported types -->
+    <!-- <%= link_to "View", url_for(@resume.file) %> -->
+  <% else %>
+    No file uploaded.
+  <% end %>
+  <% if @resume.file.attached? %>
+  <h2>Resume Preview</h2>
+  <iframe src="<%= url_for(@resume.file) %>" width="100%" height="600px" style="border: none;">
+    Your browser does not support iframes. 
+    <a href="<%= url_for(@resume.file) %>">Download the resume</a>.
+  </iframe>
+<% else %>
+  <p>No resume attached.</p>
+<% end %>
+</p>
+
+<div>
+  <%= link_to "Edit this resume", edit_resume_path(@resume) %> |
+  <%= link_to "Back to resumes", resumes_path %>
+
+  <%= button_to "Destroy this resume", @resume, method: :delete %>
+</div>

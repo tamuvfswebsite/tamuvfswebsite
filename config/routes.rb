@@ -2,7 +2,13 @@ Rails.application.routes.draw do
   root 'home#index'
   get 'homepage', to: 'home#homepage', as: :homepage
 
-  resources :users, except: %i[new create]
+  # Allow viewing all resumes
+  resources :resumes, only: %i[index show edit update destroy]
+
+  # Nested resume routes for user-specific actions
+  resources :users do
+    resource :resume, only: %i[new create show edit update destroy]
+  end
 
   devise_for :admins, controllers: { omniauth_callbacks: 'admins/omniauth_callbacks' }
   devise_scope :admin do
@@ -11,7 +17,7 @@ Rails.application.routes.draw do
     get 'admins/sign_out', to: 'admins/sessions#destroy', as: :destroy_admin_session
   end
 
-  namespace :admin do
+  namespace :admin_panel do
     # get "events/index"
     # get "events/show"
     # get "events/new"
