@@ -33,7 +33,7 @@ end
 RSpec.configure do |config|
   # Include ActionDispatch::TestProcess for file upload helpers
   config.include ActionDispatch::TestProcess
-  
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [
     Rails.root.join('spec/fixtures')
