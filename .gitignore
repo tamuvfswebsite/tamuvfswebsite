@@ -45,7 +45,7 @@ yarn-debug.log*
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
-/app/models/
+# /app/models/
 
 # this includes local ENV secrets that shouldn't be pushed to github
 /config/environments/development.rb
