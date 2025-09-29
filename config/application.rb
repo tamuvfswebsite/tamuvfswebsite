@@ -24,6 +24,7 @@ module BuildBlog
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
     config.time_zone = 'Central Time (US & Canada)'
+    config.active_support.to_time_preserves_timezone = 'Central Time (US & Canada)'
 
     # Configuration for the application, engines, and railties goes here.
     #
