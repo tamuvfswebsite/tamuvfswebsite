@@ -1,0 +1,51 @@
+<h1>Admin Dashboard</h1>
+<p>Welcome to the admin control panel</p>
+
+<div class="dashboard-overview">
+  <h2>System Overview</h2>
+  <ul>
+    <li>Total Users: <%= @total_users %></li>
+    <li>Total Events: <%= @total_events %></li>
+    <li>Total Resumes: [Data will be loaded from controller]</li>
+  </ul>
+</div>
+
+<div class="recent-activity">
+  <h2>Recent Activity</h2>
+  <% if @recent_events.any? %>
+    <ul>
+      <% @recent_events.each do |event| %>
+        <li>
+          <strong><%= event.title %></strong>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>No recent events found.</p>
+  <% end %>
+
+  <p> Soon to also have recent application activity! </p>
+</div>
+
+<div class="quick-actions">
+  <h2>Quick Actions</h2>
+  <ul>
+    <li><a href="/users">Manage Users</a></li>
+    <li><a href="/admin_panel/events">Manage Events</a></li>
+    <li><a>Review Applications</a></li>
+    <li><a>View Resumes</a></li>
+  </ul>
+</div>
+
+<div class="admin-info">
+  <h2>Admin Information</h2>
+  <% if admin_signed_in? %>
+    <p>Status: Logged in as admin</p>
+    <p>Name: <%= current_admin.try(:full_name) || "Not available" %>
+    <br> Email: <%= current_admin.try(:email) || "Not available" %></p>
+  <% else %>
+    <p>Status: Not logged in</p>
+  <% end %>
+</div>
+
+<a href="/">Back to Home</a>
