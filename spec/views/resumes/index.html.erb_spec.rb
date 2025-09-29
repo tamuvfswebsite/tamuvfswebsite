@@ -7,7 +7,8 @@ RSpec.describe 'resumes/index', type: :view do
     resumes = []
     [@user1, @user2].each do |user|
       resume = Resume.new(user: user)
-      resume.file.attach(io: File.open(Rails.root.join('spec', 'fixtures', 'test.pdf')), filename: 'test.pdf', content_type: 'application/pdf')
+      resume.file.attach(io: File.open(Rails.root.join('spec', 'fixtures', 'test.pdf')), filename: 'test.pdf',
+                         content_type: 'application/pdf')
       resume.save!
       resumes << resume
     end

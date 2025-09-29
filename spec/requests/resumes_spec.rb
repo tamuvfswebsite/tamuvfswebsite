@@ -24,7 +24,7 @@ RSpec.describe '/resumes', type: :request do
 
   let(:invalid_attributes) do
     {
-      file: nil  # File is required for resumes
+      file: nil # File is required for resumes
     }
   end
 
@@ -38,7 +38,7 @@ RSpec.describe '/resumes', type: :request do
 
   describe 'GET /show' do
     it 'renders a successful response' do
-      resume = Resume.create! valid_attributes
+      Resume.create! valid_attributes
       get user_resume_url(user)
       expect(response).to be_successful
     end

@@ -38,7 +38,7 @@ class ResumesController < ApplicationController
 
     @resume = @user.build_resume
     @resume.assign_attributes(resume_params)
-    
+
     if @resume.save
       redirect_to @user, notice: 'Resume was successfully created.'
     else
