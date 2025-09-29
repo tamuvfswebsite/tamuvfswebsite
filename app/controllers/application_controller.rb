@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   # Base controller for all controllers
+  helper_method :admin_user?
 
   private
 
@@ -16,5 +17,12 @@ class ApplicationController < ActionController::Base
 
     flash[:alert] = 'Access denied. Admin privileges required.'
     redirect_to root_path
+  end
+
+  def admin_user?
+    return false unless admin_signed_in?
+
+    user = User.find_by(google_uid: current_admin.uid)
+    user&.role == 'admin'
   end
 end

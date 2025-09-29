@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe 'resumes/index', type: :view do
-  before(:each) do
+  before do
     @user1 = User.create!(email: 'test1@example.com', google_uid: '12345')
     @user2 = User.create!(email: 'test2@example.com', google_uid: '67890')
     resumes = []
     [@user1, @user2].each do |user|
       resume = Resume.new(user: user)
-      resume.file.attach(io: File.open(Rails.root.join('spec', 'fixtures', 'test.pdf')), filename: 'test.pdf',
+      resume.file.attach(io: File.open(Rails.root.join('spec/fixtures/test.pdf')), filename: 'test.pdf',
                          content_type: 'application/pdf')
       resume.save!
       resumes << resume
