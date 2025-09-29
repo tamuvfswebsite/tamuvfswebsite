@@ -1,0 +1,23 @@
+<% content_for :title, "Homepage" %>
+
+<div class="homepage-simple">
+  <h1>Homepage</h1>
+  <% if admin_signed_in? %>
+    <p>You are signed in as <strong><%= current_admin.full_name || current_admin.email %></strong>.</p>
+  <% else %>
+    <p>You are not signed in.</p>
+  <% end %>
+  <div class="actions">
+    <%= link_to "Back to Landing", root_path, class: "btn" %>
+    <%= link_to "Users", users_path, class: "btn" %>
+  </div>
+</div>
+
+<style>
+  .homepage-simple { max-width: 720px; margin: 48px auto; padding: 24px; }
+  .homepage-simple h1 { margin: 0 0 12px; }
+  .homepage-simple p { color: #4b5563; }
+  .actions { margin-top: 16px; }
+  .actions .btn + .btn { margin-left: 8px; }
+  .btn { padding: 8px 14px; border: 1px solid #d1d5db; border-radius: 8px; text-decoration: none; }
+</style>
