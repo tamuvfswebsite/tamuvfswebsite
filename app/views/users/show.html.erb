@@ -11,7 +11,7 @@
     <%= link_to "← Back to users", users_path, class: "btn btn-outline" %>
     <%= link_to "Edit Profile", edit_user_path(@user), class: "btn btn-primary" %>
     <% if @user.resume.present? %>
-      <p><%= link_to 'View Resume', user_resume_path(@user), class: 'btn btn-primary' %></p>
+      <%= link_to 'View Resume', user_resume_path(@user), class: 'btn btn-primary' %>
     <% else %>
       <%= link_to 'Create Resume', new_user_resume_path(@user), class: 'btn btn-primary' %>
     <% end %>

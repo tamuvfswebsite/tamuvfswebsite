@@ -58,7 +58,7 @@ class ResumesController < ApplicationController
     @user ||= @resume.user
     if @resume.user == @user
       @resume.destroy
-      redirect_to resumes_path, notice: 'Resume was successfully deleted.'
+      redirect_to resumes_path
     else
       redirect_to resumes_path, alert: 'You can only delete your own resume.'
     end
