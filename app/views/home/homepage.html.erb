@@ -1,0 +1,69 @@
+<% content_for :title, "Homepage" %>
+
+<div class="homepage-simple">
+  <h1>Homepage</h1>
+  <% if admin_signed_in? %>
+    <p>You are signed in as <strong><%= current_admin.full_name || current_admin.email %></strong>.</p>
+  <% else %>
+    <p>You are not signed in.</p>
+  <% end %>
+  <div class="actions">
+    <%= link_to "Back to Landing", root_path, class: "btn" %>
+    <%= link_to "Users", users_path, class: "btn" %>
+    <% if admin_user? %>
+      <%= link_to "Admin Dashboard", admin_panel_root_path, class: "btn" %>
+    <% end %>
+  </div>
+</div>
+
+<div class="events-section">
+  <div class="events-container">
+    <h2 class="events-title">Upcoming Events</h2>
+    <% if @upcoming_events.present? %>
+      <ul class="events-list">
+        <% @upcoming_events.each do |event| %>
+          <li class="event-item">
+            <div class="event-main">
+              <span class="event-title"><%= event.title %></span>
+              <span class="event-date"><%= event.formatted_date %></span>
+            </div>
+            <div class="event-meta">
+              <span class="event-location"><%= event.location %></span>
+              <% if event.capacity.present? %>
+                <span class="event-capacity">Capacity: <%= event.capacity %></span>
+              <% end %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="events-empty">No upcoming events scheduled.</p>
+    <% end %>
+  </div>
+  <% if admin_signed_in? %>
+    <div class="events-actions">
+      <%= link_to "Manage Events", admin_panel_events_path, class: "btn" %>
+    </div>
+  <% end %>
+</div>
+
+<style>
+  .homepage-simple { max-width: 720px; margin: 48px auto; padding: 24px; }
+  .homepage-simple h1 { margin: 0 0 12px; }
+  .homepage-simple p { color: #4b5563; }
+  .actions { margin-top: 16px; }
+  .actions .btn + .btn { margin-left: 8px; }
+  .btn { padding: 8px 14px; border: 1px solid #d1d5db; border-radius: 8px; text-decoration: none; }
+  .events-section { max-width: 720px; margin: 24px auto 48px; padding: 0 24px; }
+  .events-container { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; }
+  .events-title { margin: 0 0 12px; font-size: 20px; }
+  .events-list { list-style: none; padding: 0; margin: 0; }
+  .event-item { padding: 12px 0; border-top: 1px solid #f0f2f5; }
+  .event-item:first-child { border-top: none; }
+  .event-main { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+  .event-title { font-weight: 600; }
+  .event-date { color: #5b6b7a; font-size: 14px; }
+  .event-meta { color: #6b7280; font-size: 14px; margin-top: 4px; display: flex; gap: 12px; }
+  .events-empty { color: #6b7280; margin: 8px 0 0; }
+  .events-actions { margin-top: 8px; }
+</style>

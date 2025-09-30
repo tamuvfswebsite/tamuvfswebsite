@@ -1,37 +1,40 @@
-<%= form_with(model: user, local: true) do |form| %>
+<%= form_with(model: user, class: "user-role-form") do |form| %>
   <% if user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
+    <div class="alert alert-danger">
+      <h4><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h4>
       <ul>
-        <% user.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+        <% user.errors.each do |error| %>
+          <li><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :first_name %>
-    <%= form.text_field :first_name %>
+  <div class="user-info-display">
+    <div class="user-details">
+      <h3><%= user.first_name %> <%= user.last_name %></h3>
+      <p class="user-email"><%= user.email %></p>
+    </div>
+    <% if user.google_avatar_url.present? %>
+      <div class="user-avatar">
+        <img src="<%= user.google_avatar_url %>" alt="<%= user.first_name %>'s avatar">
+      </div>
+    <% end %>
   </div>
 
-  <div class="field">
-    <%= form.label :last_name %>
-    <%= form.text_field :last_name %>
+  <div class="form-group">
+    <%= form.label :role, "User Role", class: "form-label" %>
+    <%= form.select :role,
+        options_for_select([
+          ['User', 'user'],
+          ['Admin', 'admin']
+        ], user.role),
+        { prompt: 'Select a role' },
+        { class: "form-select" } %>
+    <small class="form-text">Choose the user's access level for the application.</small>
   </div>
 
-  <div class="field">
-    <%= form.label :area_code %>
-    <%= form.text_field :area_code %>
-  </div>
-
-  <div class="field">
-    <%= form.label :phonenumber %>
-    <%= form.text_field :phonenumber %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
+  <div class="form-actions">
+    <%= form.submit "Update Role", class: "btn btn-primary" %>
   </div>
 <% end %>

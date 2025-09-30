@@ -1,27 +1,22 @@
-<p id="notice"><%= notice %></p>
+<% if notice %>
+  <div class="alert alert-success"><%= notice %></div>
+<% end %>
 
+<div class="user-show-page">
+  <div class="user-profile">
+    <%= render @user %>
+  </div>
 
-<p>
-  <strong>First name:</strong>
-  <%= @user.first_name %>
-</p>
-
-<p>
-  <strong>Last name:</strong>
-  <%= @user.last_name %>
-</p>
-
-<p>
-  <strong>Area Code:</strong>
-  <%= @user.area_code %>
-</p>
-
-<p>
-  <strong>Phone Number:</strong>
-  <%= @user.phonenumber %>
-</p>
-
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
-<br>
-<%= link_to 'See Posts', posts_path %>
+  <div class="user-actions-bar">
+    <%= link_to "← Back to users", users_path, class: "btn btn-outline" %>
+    <%= link_to "Edit Profile", edit_user_path(@user), class: "btn btn-primary" %>
+    <% if @user.resume.present? %>
+      <%= link_to 'View Resume', user_resume_path(@user), class: 'btn btn-primary' %>
+    <% else %>
+      <%= link_to 'Create Resume', new_user_resume_path(@user), class: 'btn btn-primary' %>
+    <% end %>
+    <%= button_to "Delete User", @user, method: :delete,
+                  class: "btn btn-danger",
+                  form: { data: { turbo_confirm: "Are you sure you want to delete #{@user.first_name} #{@user.last_name}?" } } %>
+  </div>
+</div>
