@@ -37,7 +37,11 @@ class ResumesController < ApplicationController
     end
 
     @resume = @user.build_resume
-    @resume.assign_attributes(resume_params)
+    
+    # Handle the case where no file is submitted
+    if params[:resume] && params[:resume][:file].present?
+      @resume.file.attach(params[:resume][:file])
+    end
 
     if @resume.save
       redirect_to @user, notice: 'Resume was successfully created.'
@@ -57,7 +61,12 @@ class ResumesController < ApplicationController
       return
     end
 
-    if @resume.update(resume_params)
+    # Handle the case where a new file is submitted
+    if params[:resume] && params[:resume][:file].present?
+      @resume.file.attach(params[:resume][:file])
+    end
+
+    if @resume.save
       redirect_to user_path(@user), notice: 'Resume was successfully updated.'
     else
       render :edit, status: :unprocessable_entity
@@ -65,11 +74,7 @@ class ResumesController < ApplicationController
   end
 
   def destroy
-    unless @user && @resume
-      redirect_to root_path, alert: 'Resume not found'
-      return
-    end
-
+    # @resume is set by set_resume before_action, @user by set_user before_action
     if @resume.user != @user
       redirect_to user_path(@user), alert: 'You can only delete your own resume.'
       return
@@ -87,12 +92,19 @@ class ResumesController < ApplicationController
 
   def set_resume
     @resume = if params[:id]
-                Resume.find_by(id: params[:id])
-              else
-                @user&.resume
+                # For routes like /resumes/:id
+                resume = Resume.find_by(id: params[:id])
+                # Set @user from the resume if we don't have it from params
+                @user ||= resume&.user
+                resume
+              elsif @user
+                # For nested routes like /users/:user_id/resume
+                @user.resume
               end
 
-    redirect_to (@user || root_path), alert: 'Resume not found.' unless @resume
+    unless @resume
+      redirect_to (@user ? user_path(@user) : resumes_path), alert: 'Resume not found.'
+    end
   end
 
   def resume_params
