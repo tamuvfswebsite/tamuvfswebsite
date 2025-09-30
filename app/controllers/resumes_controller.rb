@@ -26,22 +26,10 @@ class ResumesController < ApplicationController
   end
 
   def create
-    unless @user
-      redirect_to root_path, alert: 'User not found'
-      return
-    end
-
-    if @user.resume.present?
-      redirect_to @user, alert: 'You already have a resume.'
-      return
-    end
+    return unless validate_user_for_create
 
     @resume = @user.build_resume
-    
-    # Handle the case where no file is submitted
-    if params[:resume] && params[:resume][:file].present?
-      @resume.file.attach(params[:resume][:file])
-    end
+    attach_file_if_present
 
     if @resume.save
       redirect_to @user, notice: 'Resume was successfully created.'
@@ -51,20 +39,16 @@ class ResumesController < ApplicationController
   end
 
   def update
-    unless @user && @resume
-      redirect_to root_path, alert: 'Resume not found'
+    return unless validate_user_and_resume_for_update
+
+    # Check if the user is trying to remove the file
+    if params.dig(:resume, :file).nil?
+      @resume.errors.add(:file, "can't be blank")
+      render :edit, status: :unprocessable_entity
       return
     end
 
-    if @resume.user != @user
-      redirect_to user_path(@user), alert: 'You can only update your own resume.'
-      return
-    end
-
-    # Handle the case where a new file is submitted
-    if params[:resume] && params[:resume][:file].present?
-      @resume.file.attach(params[:resume][:file])
-    end
+    attach_file_if_present
 
     if @resume.save
       redirect_to user_path(@user), notice: 'Resume was successfully updated.'
@@ -102,9 +86,43 @@ class ResumesController < ApplicationController
                 @user.resume
               end
 
-    unless @resume
-      redirect_to (@user ? user_path(@user) : resumes_path), alert: 'Resume not found.'
+    return if @resume
+
+    redirect_to (@user ? user_path(@user) : resumes_path), alert: 'Resume not found.'
+  end
+
+  def validate_user_for_create
+    unless @user
+      redirect_to root_path, alert: 'User not found'
+      return false
     end
+
+    if @user.resume.present?
+      redirect_to @user, alert: 'You already have a resume.'
+      return false
+    end
+
+    true
+  end
+
+  def validate_user_and_resume_for_update
+    unless @user && @resume
+      redirect_to root_path, alert: 'Resume not found'
+      return false
+    end
+
+    if @resume.user != @user
+      redirect_to user_path(@user), alert: 'You can only update your own resume.'
+      return false
+    end
+
+    true
+  end
+
+  def attach_file_if_present
+    return unless params[:resume]&.dig(:file)&.present?
+
+    @resume.file.attach(params[:resume][:file])
   end
 
   def resume_params
