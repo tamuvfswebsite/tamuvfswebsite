@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 20_250_928_184_158) do
+ActiveRecord::Schema[8.0].define(version: 20_251_008_155_448) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_catalog.plpgsql'
 
@@ -67,6 +67,10 @@ ActiveRecord::Schema[8.0].define(version: 20_250_928_184_158) do
     t.bigint 'user_id', null: false
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
+    t.float 'gpa'
+    t.integer 'graduation_date'
+    t.string 'major'
+    t.string 'organizational_role'
     t.index ['user_id'], name: 'index_resumes_on_user_id'
   end
 

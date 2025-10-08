@@ -3,7 +3,11 @@ class ResumesController < ApplicationController
   before_action :set_resume, only: %i[show edit update destroy]
 
   def index
-    @resumes = Resume.all
+    per = (params[:per] || 20).to_i
+    per = 100 if per > 100
+
+    @resumes = Resumes::IndexQuery.call(sort: params[:sort], direction: params[:direction])
+                                  .page(params[:page]).per(per)
   end
 
   def show; end
@@ -28,8 +32,8 @@ class ResumesController < ApplicationController
   def create
     return unless validate_user_for_create
 
-    @resume = @user.build_resume
-    attach_file_if_present
+    @resume = @user.build_resume(resume_params)
+    @resume.file.attach(params[:resume][:file]) if params[:resume]&.dig(:file)&.present?
 
     if @resume.save
       redirect_to @user, notice: 'Resume was successfully created.'
@@ -41,19 +45,12 @@ class ResumesController < ApplicationController
   def update
     return unless validate_user_and_resume_for_update
 
-    # Check if the user is trying to remove the file
-    if params.dig(:resume, :file).nil?
-      @resume.errors.add(:file, "can't be blank")
-      render :edit, status: :unprocessable_entity
-      return
-    end
+    result = Resumes::Updater.new(@resume, @user, params).call
 
-    attach_file_if_present
-
-    if @resume.save
-      redirect_to user_path(@user), notice: 'Resume was successfully updated.'
+    if result[:success]
+      redirect_to result[:redirect_to], notice: result[:notice]
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: result[:status]
     end
   end
 
@@ -119,13 +116,7 @@ class ResumesController < ApplicationController
     true
   end
 
-  def attach_file_if_present
-    return unless params[:resume]&.dig(:file)&.present?
-
-    @resume.file.attach(params[:resume][:file])
-  end
-
   def resume_params
-    params.require(:resume).permit(:file)
+    params.require(:resume).permit(:file, :gpa, :graduation_date, :major, :organizational_role)
   end
 end

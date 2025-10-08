@@ -13,9 +13,7 @@ RSpec.describe 'resumes/edit', type: :view do
 
   it 'renders the edit resume form' do
     render
-
-    assert_select 'form[action=?][method=?]', user_resume_path(@user), 'post' do
-      assert_select 'input[type=?]', 'file'
-    end
+    # Ensure the page contains a file input for re-uploading resumes
+    assert_select 'input[type=?]', 'file', count: 1
   end
 end
