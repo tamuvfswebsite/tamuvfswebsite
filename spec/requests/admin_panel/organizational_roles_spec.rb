@@ -1,0 +1,62 @@
+require 'rails_helper'
+
+RSpec.describe 'AdminPanel::OrganizationalRoles', type: :request do
+  before do
+    # Skip the authentication entirely for tests
+    allow_any_instance_of(AdminPanel::BaseController).to receive(:ensure_admin_user).and_return(true)
+  end
+
+  describe 'CRUD operations' do
+    it 'creates a new organizational role' do
+      expect do
+        post '/admin_panel/organizational_roles', params: {
+          organizational_role: { name: 'Sales Team' }
+        }
+      end.to change(OrganizationalRole, :count).by(1)
+
+      expect(OrganizationalRole.last.name).to eq('Sales Team')
+    end
+
+    it 'updates an organizational role' do
+      role = OrganizationalRole.create!(name: 'Finance Team')
+      patch "/admin_panel/organizational_roles/#{role.id}", params: {
+        organizational_role: { name: 'Accounting Team' }
+      }
+      role.reload
+      expect(role.name).to eq('Accounting Team')
+    end
+
+    it 'deletes an organizational role and nullifies user references' do
+      role = OrganizationalRole.create!(name: 'Operations Team')
+      user = create_user(organizational_role: role)
+
+      delete "/admin_panel/organizational_roles/#{role.id}"
+      user.reload
+
+      expect(user.organizational_role_id).to be_nil
+      expect(OrganizationalRole.find_by(id: role.id)).to be_nil
+    end
+
+    it 'prevents creating duplicate organizational role names' do
+      OrganizationalRole.create!(name: 'Engineering Team')
+
+      expect do
+        post '/admin_panel/organizational_roles', params: {
+          organizational_role: { name: 'Engineering Team' }
+        }
+      end.not_to change(OrganizationalRole, :count)
+
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+
+    it 'prevents creating organizational role without name' do
+      expect do
+        post '/admin_panel/organizational_roles', params: {
+          organizational_role: { name: '' }
+        }
+      end.not_to change(OrganizationalRole, :count)
+
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+  end
+end
