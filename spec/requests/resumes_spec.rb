@@ -110,12 +110,7 @@ RSpec.describe '/resumes', type: :request do
 
     context 'with invalid parameters' do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        # Create a new resume with a valid file
-        Resume.create!(user: user, file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf'))
-
-        # Attempt to update the resume with an invalid file (nil)
-        patch user_resume_url(user), params: { resume: { file: nil } }
-
+        patch user_resume_url(user), params: { resume: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
