@@ -6,6 +6,8 @@ RSpec.describe 'Users', type: :request do
     allow_any_instance_of(UsersController).to receive(:ensure_admin_user).and_return(true)
   end
 
+  # Note: Authorization tests for /users endpoint are in application_controller_spec.rb
+
   describe 'sponsor role' do
     it 'allows assigning sponsor role to users' do
       user = create_user(role: 'user')
