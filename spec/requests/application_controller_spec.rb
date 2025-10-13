@@ -10,7 +10,7 @@ RSpec.describe ApplicationController, type: :request do
       expect(flash[:alert]).to include('Admin privileges required')
     end
 
-    it 'redirects non-admin users (regular users) from admin pages' do
+    it 'redirects non-admin users (regular users) from admin pages to homepage' do
       # Simulate signed in but not admin role
       admin = double('Admin', uid: 'user123')
       allow_any_instance_of(ApplicationController).to receive(:admin_signed_in?).and_return(true)
@@ -20,7 +20,7 @@ RSpec.describe ApplicationController, type: :request do
       create_user(role: 'user', uid: 'user123')
 
       get '/users'
-      expect(response).to redirect_to(root_path)
+      expect(response).to redirect_to(homepage_path)
       expect(flash[:alert]).to include('Admin privileges required')
     end
 
@@ -36,7 +36,7 @@ RSpec.describe ApplicationController, type: :request do
       expect(response).to have_http_status(:success)
     end
 
-    it 'redirects sponsor users from admin pages (only admin role allowed)' do
+    it 'redirects sponsor users from admin pages to homepage (only admin role allowed)' do
       admin = double('Admin', uid: 'sponsor123')
       allow_any_instance_of(ApplicationController).to receive(:admin_signed_in?).and_return(true)
       allow_any_instance_of(ApplicationController).to receive(:current_admin).and_return(admin)
@@ -45,7 +45,7 @@ RSpec.describe ApplicationController, type: :request do
       create_user(role: 'sponsor', uid: 'sponsor123')
 
       get '/users'
-      expect(response).to redirect_to(root_path)
+      expect(response).to redirect_to(homepage_path)
       expect(flash[:alert]).to include('Admin privileges required')
     end
   end

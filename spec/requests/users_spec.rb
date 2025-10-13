@@ -8,6 +8,54 @@ RSpec.describe 'Users', type: :request do
 
   # Note: Authorization tests for /users endpoint are in application_controller_spec.rb
 
+  describe 'profile viewing authorization' do
+    it 'allows users to view their own profile' do
+      user = create_user(role: 'user', uid: 'user123')
+
+      # Bypass admin check but keep own profile check
+      allow_any_instance_of(UsersController).to receive(:ensure_admin_user)
+      controller = UsersController.new
+      allow(UsersController).to receive(:new).and_return(controller)
+      allow(controller).to receive(:admin_user?).and_return(false)
+      allow(controller).to receive(:admin_signed_in?).and_return(true)
+      allow(controller).to receive(:current_admin).and_return(double('Admin', uid: 'user123'))
+
+      get "/users/#{user.id}"
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'prevents users from viewing other users profiles' do
+      user1 = create_user(role: 'user', uid: 'user123')
+      user2 = create_user(role: 'user', uid: 'user456')
+
+      # Bypass admin check but keep own profile check
+      allow_any_instance_of(UsersController).to receive(:ensure_admin_user)
+      controller = UsersController.new
+      allow(UsersController).to receive(:new).and_return(controller)
+      allow(controller).to receive(:admin_user?).and_return(false)
+      allow(controller).to receive(:admin_signed_in?).and_return(true)
+      allow(controller).to receive(:current_admin).and_return(double('Admin', uid: 'user123'))
+
+      get "/users/#{user2.id}"
+      expect(response).to redirect_to(homepage_path)
+      expect(flash[:alert]).to include('You can only view your own profile')
+    end
+
+    it 'allows admins to view any user profile' do
+      admin_user = create_user(role: 'admin', uid: 'admin123')
+      other_user = create_user(role: 'user', uid: 'user456')
+
+      # Bypass admin check, admin can view anyone
+      allow_any_instance_of(UsersController).to receive(:ensure_admin_user)
+      controller = UsersController.new
+      allow(UsersController).to receive(:new).and_return(controller)
+      allow(controller).to receive(:admin_user?).and_return(true)
+
+      get "/users/#{other_user.id}"
+      expect(response).to have_http_status(:success)
+    end
+  end
+
   describe 'sponsor role' do
     it 'allows assigning sponsor role to users' do
       user = create_user(role: 'user')
