@@ -15,14 +15,6 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1 or /users/1.json
   def update
-    if @user.google_uid == current_admin.uid && user_params[:role].present?
-      respond_to do |format|
-        format.html { redirect_to @user, alert: 'You cannot change your own role.', status: :see_other }
-        format.json { render json: { error: 'You cannot change your own role.' }, status: :forbidden }
-      end
-      return
-    end
-
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to @user, notice: 'User was successfully updated.', status: :see_other }
@@ -53,6 +45,6 @@ class UsersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def user_params
-    params.expect(user: %i[role organizational_role_id])
+    params.expect(user: [:role])
   end
 end

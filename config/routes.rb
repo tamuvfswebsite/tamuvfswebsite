@@ -29,7 +29,6 @@ Rails.application.routes.draw do
     # get "dashboard/index"
     get 'dashboard', to: 'dashboard#index'
     resources :events
-    resources :organizational_roles
     # resources :sponsors
     # resources :resumes, only: [:index]
     # resources :applications, only: [:index]
