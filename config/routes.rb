@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get "sponsor_dashboard/index"
+  get 'sponsor_dashboard/index'
   root 'home#index'
   get 'homepage', to: 'home#homepage', as: :homepage
 
