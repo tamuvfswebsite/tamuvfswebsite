@@ -1,28 +1,35 @@
 class ApplicationController < ActionController::Base
-  # Base controller for all controllers
-  helper_method :admin_user?
+  helper_method :admin_user?, :sponsor_user?, :current_user
+
+  def current_user
+    @current_user ||= User.find_by(google_uid: current_admin&.uid)
+  end
 
   private
 
+  # --- Access Control Helpers ---
+
   def ensure_admin_user
-    unless admin_signed_in?
+    unless admin_user?
       flash[:alert] = 'Access denied. Admin privileges required.'
       redirect_to root_path
-      return
     end
-
-    current_user = User.find_by(google_uid: current_admin.uid)
-
-    return if current_user&.role == 'admin'
-
-    flash[:alert] = 'Access denied. Admin privileges required.'
-    redirect_to root_path
   end
 
-  def admin_user?
-    return false unless admin_signed_in?
+  def ensure_sponsor_user
+    unless sponsor_user?
+      flash[:alert] = current_user.present? ? 'Access denied. Sponsor privileges required.' : 'You need to sign in first.'
+      redirect_to root_path
+    end
+  end
 
-    user = User.find_by(google_uid: current_admin.uid)
-    user&.role == 'admin'
+  # --- Role Check Helpers ---
+
+  def admin_user?
+    current_user&.role == 'admin' && admin_signed_in?
+  end
+
+  def sponsor_user?
+    current_user&.role == 'sponsor'
   end
 end
