@@ -75,6 +75,10 @@ ActiveRecord::Schema[8.0].define(version: 20_251_013_000_003) do
     t.bigint 'user_id', null: false
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
+    t.float 'gpa'
+    t.integer 'graduation_date'
+    t.string 'major'
+    t.string 'organizational_role'
     t.index ['user_id'], name: 'index_resumes_on_user_id'
   end
 
