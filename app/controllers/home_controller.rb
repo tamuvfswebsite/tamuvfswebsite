@@ -1,9 +1,9 @@
 class HomeController < ApplicationController
   def index
     # Redirect to homepage if signed in
-    if admin_signed_in?
-      redirect_to homepage_path
-    end
+    return unless admin_signed_in?
+
+    redirect_to homepage_path
   end
 
   def homepage

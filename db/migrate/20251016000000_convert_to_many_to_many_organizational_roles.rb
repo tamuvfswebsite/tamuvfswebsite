@@ -8,7 +8,7 @@ class ConvertToManyToManyOrganizationalRoles < ActiveRecord::Migration[7.2]
     end
 
     # Add unique index to prevent duplicate assignments
-    add_index :organizational_role_users, [:user_id, :organizational_role_id],
+    add_index :organizational_role_users, %i[user_id organizational_role_id],
               unique: true, name: 'index_org_role_users_on_user_and_role'
 
     # Migrate existing data

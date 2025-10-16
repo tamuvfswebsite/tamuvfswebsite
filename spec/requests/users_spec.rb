@@ -6,7 +6,7 @@ RSpec.describe 'Users', type: :request do
     allow_any_instance_of(UsersController).to receive(:ensure_admin_user).and_return(true)
   end
 
-  # Note: Authorization tests for /users endpoint are in application_controller_spec.rb
+  # NOTE: Authorization tests for /users endpoint are in application_controller_spec.rb
 
   describe 'profile viewing authorization' do
     it 'allows users to view their own profile' do
@@ -25,7 +25,7 @@ RSpec.describe 'Users', type: :request do
     end
 
     it 'prevents users from viewing other users profiles' do
-      user1 = create_user(role: 'user', uid: 'user123')
+      create_user(role: 'user', uid: 'user123')
       user2 = create_user(role: 'user', uid: 'user456')
 
       # Bypass admin check but keep own profile check
@@ -42,7 +42,7 @@ RSpec.describe 'Users', type: :request do
     end
 
     it 'allows admins to view any user profile' do
-      admin_user = create_user(role: 'admin', uid: 'admin123')
+      create_user(role: 'admin', uid: 'admin123')
       other_user = create_user(role: 'user', uid: 'user456')
 
       # Bypass admin check, admin can view anyone

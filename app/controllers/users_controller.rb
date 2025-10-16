@@ -61,9 +61,9 @@ class UsersController < ApplicationController
     return if admin_user? # Admins can view anyone's profile
 
     # Non-admins can only view their own profile
-    unless admin_signed_in? && @user.google_uid == current_admin.uid
-      flash[:alert] = 'Access denied. You can only view your own profile.'
-      redirect_to homepage_path
-    end
+    return if admin_signed_in? && @user.google_uid == current_admin.uid
+
+    flash[:alert] = 'Access denied. You can only view your own profile.'
+    redirect_to homepage_path
   end
 end
