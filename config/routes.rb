@@ -2,6 +2,10 @@ Rails.application.routes.draw do
   root 'home#index'
   get 'homepage', to: 'home#homepage', as: :homepage
 
+  # Public check-in endpoint (token-based)
+  get  'checkin', to: 'checkins#new',    as: :checkin
+  post 'checkin', to: 'checkins#create', as: :perform_checkin
+
   # Allow viewing all resumes
   resources :resumes, only: %i[index show edit update destroy]
 
@@ -29,6 +33,7 @@ Rails.application.routes.draw do
     # get "dashboard/index"
     get 'dashboard', to: 'dashboard#index'
     resources :events
+    resources :attendance_links, only: %i[new create]
     resources :organizational_roles
     # resources :sponsors
     # resources :resumes, only: [:index]
