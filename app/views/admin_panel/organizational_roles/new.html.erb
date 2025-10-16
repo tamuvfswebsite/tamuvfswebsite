@@ -1,0 +1,31 @@
+<h1>New Organizational Role</h1>
+
+<%= form_with(model: @organizational_role, url: admin_panel_organizational_roles_path) do |form| %>
+  <% if @organizational_role.errors.any? %>
+    <div>
+      <h2><%= pluralize(@organizational_role.errors.count, "error") %> prohibited this organizational role from being saved:</h2>
+      <ul>
+        <% @organizational_role.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div>
+    <%= form.submit "Create Organizational Role" %>
+  </div>
+<% end %>
+
+<br>
+<%= link_to "Back to List", admin_panel_organizational_roles_path %>

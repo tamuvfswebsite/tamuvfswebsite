@@ -77,7 +77,7 @@ RSpec.describe '/resumes', type: :request do
       it 'does not create a new Resume' do
         expect do
           post user_resume_url(user), params: { resume: invalid_attributes }
-        end.to change(Resume, :count).by(0)
+        end.not_to change(Resume, :count)
       end
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do

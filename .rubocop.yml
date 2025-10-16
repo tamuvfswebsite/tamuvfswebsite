@@ -8,6 +8,7 @@ Style/Documentation:
   Enabled: false
 
 Metrics/BlockLength:
+  Max: 30
   Exclude:
     - 'db/schema.rb'
     - 'db/queue_schema.rb'
@@ -36,6 +37,7 @@ Metrics/MethodLength:
     - 'app/controllers/admins/**/*'
 
 Metrics/AbcSize:
+  Max: 25
   Exclude:
     - 'app/controllers/admins/**/*'
 
@@ -47,4 +49,7 @@ Style/ClassAndModuleChildren:
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
 Layout/SpaceInsidePercentLiteralDelimiters:
+  Enabled: false
+
+Layout/EndOfLine:
   Enabled: false
