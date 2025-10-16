@@ -5,6 +5,7 @@ class HomeController < ApplicationController
 
   def homepage
     # Post-login landing page
+    @upcoming_events = Event.future_events.order(:event_date).limit(5)
     render :homepage, layout: 'application'
   end
 end

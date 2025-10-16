@@ -13,6 +13,8 @@ module AdminPanel
       @event = Event.new
     end
 
+    def edit; end
+
     def create
       @event = Event.new(event_parameters)
 
@@ -22,8 +24,6 @@ module AdminPanel
         render :new, status: :unprocessable_content
       end
     end
-
-    def edit; end
 
     def update
       if @event.update(event_parameters)

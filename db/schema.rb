@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 20_251_008_155_448) do
+ActiveRecord::Schema[8.0].define(version: 20_251_013_000_003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_catalog.plpgsql'
 
@@ -63,6 +63,14 @@ ActiveRecord::Schema[8.0].define(version: 20_251_008_155_448) do
     t.datetime 'updated_at', null: false
   end
 
+  create_table 'organizational_roles', force: :cascade do |t|
+    t.string 'name', null: false
+    t.text 'description'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['name'], name: 'index_organizational_roles_on_name', unique: true
+  end
+
   create_table 'resumes', force: :cascade do |t|
     t.bigint 'user_id', null: false
     t.datetime 'created_at', null: false
@@ -83,10 +91,13 @@ ActiveRecord::Schema[8.0].define(version: 20_251_008_155_448) do
     t.datetime 'updated_at', null: false
     t.string 'google_uid'
     t.string 'google_avatar_url'
+    t.bigint 'organizational_role_id'
     t.index ['google_uid'], name: 'index_users_on_google_uid', unique: true
+    t.index ['organizational_role_id'], name: 'index_users_on_organizational_role_id'
   end
 
   add_foreign_key 'active_storage_attachments', 'active_storage_blobs', column: 'blob_id'
   add_foreign_key 'active_storage_variant_records', 'active_storage_blobs', column: 'blob_id'
   add_foreign_key 'resumes', 'users'
+  add_foreign_key 'users', 'organizational_roles'
 end
