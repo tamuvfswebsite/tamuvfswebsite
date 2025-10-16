@@ -1,0 +1,2 @@
+module AdminPanel::SponsorsHelper
+end

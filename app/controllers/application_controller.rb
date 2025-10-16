@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_sponsor_user
-    return if sponsor_user?
+    return if sponsor_user? || admin_user? # Admins can access sponsor areas
 
     flash[:alert] =
       current_user.present? ? 'Access denied. Sponsor privileges required.' : 'You need to sign in first.'
