@@ -29,23 +29,26 @@ RSpec.describe OrganizationalRole, type: :model do
   describe 'associations' do
     it 'has many users' do
       role = OrganizationalRole.create!(name: 'AI Team')
-      user1 = create_user(organizational_role: role)
-      user2 = create_user(organizational_role: role)
+      user1 = create_user
+      user2 = create_user
+      user1.organizational_roles << role
+      user2.organizational_roles << role
 
       expect(role.users).to include(user1, user2)
       expect(role.users.count).to eq(2)
     end
 
-    it 'nullifies user organizational_role_id when deleted' do
+    it 'destroys organizational_role_users join records when deleted' do
       role = OrganizationalRole.create!(name: 'Design Team')
-      user = create_user(organizational_role: role)
+      user = create_user
+      user.organizational_roles << role
 
-      expect(user.organizational_role_id).to eq(role.id)
+      expect(user.organizational_roles).to include(role)
 
       role.destroy!
       user.reload
 
-      expect(user.organizational_role_id).to be_nil
+      expect(user.organizational_roles).to be_empty
     end
   end
 end

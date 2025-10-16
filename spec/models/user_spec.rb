@@ -2,18 +2,21 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   describe 'associations' do
-    it 'belongs to organizational_role optionally' do
+    it 'has no organizational_roles by default' do
       user = create_user
-      expect(user.organizational_role).to be_nil
+      expect(user.organizational_roles).to be_empty
       expect(user).to be_valid
     end
 
-    it 'can have an organizational_role' do
-      role = OrganizationalRole.create!(name: 'AI Team')
-      user = create_user(organizational_role: role)
+    it 'can have multiple organizational_roles' do
+      role1 = OrganizationalRole.create!(name: 'AI Team')
+      role2 = OrganizationalRole.create!(name: 'Design Team')
+      user = create_user
+      user.organizational_roles << [role1, role2]
 
-      expect(user.organizational_role).to eq(role)
-      expect(user.organizational_role.name).to eq('AI Team')
+      expect(user.organizational_roles).to include(role1, role2)
+      expect(user.organizational_roles.count).to eq(2)
+      expect(user.organizational_roles.pluck(:name)).to match_array(['AI Team', 'Design Team'])
     end
   end
 

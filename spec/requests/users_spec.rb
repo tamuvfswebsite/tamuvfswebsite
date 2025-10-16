@@ -72,17 +72,19 @@ RSpec.describe 'Users', type: :request do
 
   describe 'organizational roles' do
     let(:ai_team) { OrganizationalRole.create!(name: 'AI Team') }
+    let(:design_team) { OrganizationalRole.create!(name: 'Design Team') }
 
-    it 'allows assigning organizational role to users' do
+    it 'allows assigning multiple organizational roles to users' do
       user = create_user
       # Stub the update method's self-edit check to always allow changes
       controller = UsersController.new
       allow(UsersController).to receive(:new).and_return(controller)
       allow(controller).to receive(:current_admin).and_return(double('Admin', uid: 'different_uid'))
 
-      patch "/users/#{user.id}", params: { user: { organizational_role_id: ai_team.id } }
+      patch "/users/#{user.id}", params: { user: { organizational_role_ids: [ai_team.id, design_team.id] } }
       user.reload
-      expect(user.organizational_role).to eq(ai_team)
+      expect(user.organizational_roles).to include(ai_team, design_team)
+      expect(user.organizational_roles.count).to eq(2)
     end
   end
 
@@ -100,17 +102,19 @@ RSpec.describe 'Users', type: :request do
       expect(response).to redirect_to(admin_user)
     end
 
-    it 'allows admin to change their own organizational role' do
+    it 'allows admin to change their own organizational roles' do
       ai_team = OrganizationalRole.create!(name: 'AI Team')
+      design_team = OrganizationalRole.create!(name: 'Design Team')
       admin_user = create_user(role: 'admin', uid: 'admin123')
       controller = UsersController.new
       allow(UsersController).to receive(:new).and_return(controller)
       allow(controller).to receive(:current_admin).and_return(double('Admin', uid: 'admin123'))
 
-      patch "/users/#{admin_user.id}", params: { user: { organizational_role_id: ai_team.id } }
+      patch "/users/#{admin_user.id}", params: { user: { organizational_role_ids: [ai_team.id, design_team.id] } }
       admin_user.reload
 
-      expect(admin_user.organizational_role).to eq(ai_team)
+      expect(admin_user.organizational_roles).to include(ai_team, design_team)
+      expect(admin_user.organizational_roles.count).to eq(2)
     end
   end
 end
