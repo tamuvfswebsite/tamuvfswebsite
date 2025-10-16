@@ -2,7 +2,59 @@
 
 <h1>Editing resume</h1>
 
-<%= render "form", resume: @resume %>
+<h2>Edit resume information</h2>
+<% form_url = @user ? user_resume_path(@user) : resume_path(@resume) %>
+<%= form_with(model: @resume, url: form_url, method: :patch, local: true) do |form| %>
+  <% if @resume.errors.any? %>
+    <div style="color: red; background-color: #ffebee; border: 1px solid red; padding: 10px; margin-bottom: 15px;">
+      <h2>Cannot save resume, <%= pluralize(@resume.errors.count, "error") %> found:</h2>
+
+      <ul>
+        <% @resume.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="gpa">
+    <%= form.label :gpa, "GPA" %>
+    <%= form.number_field :gpa, step: 0.01, min: 0, max: 4 %>
+  </div>
+
+  <div class="graduation-date">
+    <%= form.label :graduation_date, "Graduation Year" %>
+    <%= form.select :graduation_date, ((Date.today.year - 4)...(Date.today.year + 8)).to_a.reverse, prompt: "Select Graduation Year" %>
+  </div>
+
+  <div class="major">
+    <%= form.label :major, "Major" %>
+    <%= form.select :major, ["Aerospace Engineering", "Civil Engineering", "Computer Science", "Computer Engineering", "Mechanical Engineering"], prompt: "Select Major" %>
+  </div>
+
+  <div class="organizational-role">
+    <%= form.label :organizational_role, "Organizational Role" %>
+    <%= form.select :organizational_role, ["X Team", "Y Team", "Z Team", "Student"], prompt: "Select VFS Team" %>
+  </div>
+
+  <div>
+    <%= form.submit "Save Info" %>
+  </div>
+<% end %>
+
+<hr />
+
+<h2>Re-upload resume file</h2>
+<%= form_with(model: @resume, url: form_url, method: :patch, local: true, html: { multipart: true }) do |form| %>
+  <%= hidden_field_tag :file_only, true %>
+  <div class="field">
+    <%= form.label :file, "Upload New Resume (PDF only)" %>
+    <%= form.file_field :file, accept: 'application/pdf' %>
+  </div>
+  <div>
+    <%= form.submit "Upload File" %>
+  </div>
+<% end %>
 
 <br>
 
