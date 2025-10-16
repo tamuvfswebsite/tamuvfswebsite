@@ -53,14 +53,14 @@ RSpec.describe 'AdminPanel::OrganizationalRoles', type: :request do
       expect(role.name).to eq('Accounting Team')
     end
 
-    it 'deletes an organizational role and nullifies user references' do
+    it 'deletes an organizational role and removes user associations' do
       role = OrganizationalRole.create!(name: 'Operations Team')
-      user = create_user(organizational_role: role)
+      user = create_user(organizational_roles: [role])
 
       delete "/admin_panel/organizational_roles/#{role.id}"
       user.reload
 
-      expect(user.organizational_role_id).to be_nil
+      expect(user.organizational_roles).to be_empty
       expect(OrganizationalRole.find_by(id: role.id)).to be_nil
     end
 
