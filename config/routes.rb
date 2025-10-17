@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     # get "events/destroy"
     # get "dashboard/index"
     get 'dashboard', to: 'dashboard#index'
+    get 'leaderboard', to: 'dashboard#leaderboard'
     resources :events
     resources :attendance_links, only: %i[new create]
     resources :organizational_roles

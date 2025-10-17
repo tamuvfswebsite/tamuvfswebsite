@@ -1,0 +1,33 @@
+<h1>Attendance Leaderboard</h1>
+
+<% if @leaders.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Points</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @leaders.each_with_index do |user, idx| %>
+        <tr>
+          <td><%= idx + 1 %></td>
+          <td><%= [user.first_name, user.last_name].compact.join(' ') %></td>
+          <td><%= user.email %></td>
+          <td><%= user.points %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No users yet.</p>
+<% end %>
+
+<div class="actions">
+  <%= link_to 'Back to Admin Dashboard', admin_panel_root_path %>
+  <%= link_to 'Manage Events', admin_panel_events_path %>
+ </div>
+
+
