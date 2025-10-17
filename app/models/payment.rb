@@ -1,4 +1,2 @@
 class Payment < ApplicationRecord
 end
-
-
