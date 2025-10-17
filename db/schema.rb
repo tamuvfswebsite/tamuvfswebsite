@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_13_000003) do
+ActiveRecord::Schema[8.0].define(version: 20_251_016_000_000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -62,41 +62,50 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_13_000003) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "organizational_roles", force: :cascade do |t|
-    t.string "name", null: false
-    t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_organizational_roles_on_name", unique: true
+  create_table 'organizational_role_users', force: :cascade do |t|
+    t.bigint 'user_id', null: false
+    t.bigint 'organizational_role_id', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['organizational_role_id'], name: 'index_organizational_role_users_on_organizational_role_id'
+    t.index %w[user_id organizational_role_id], name: 'index_org_role_users_on_user_and_role', unique: true
+    t.index ['user_id'], name: 'index_organizational_role_users_on_user_id'
   end
 
-  create_table "resumes", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.float "gpa"
-    t.integer "graduation_date"
-    t.string "major"
-    t.string "organizational_role"
-    t.index ["user_id"], name: "index_resumes_on_user_id"
+  create_table 'organizational_roles', force: :cascade do |t|
+    t.string 'name', null: false
+    t.text 'description'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['name'], name: 'index_organizational_roles_on_name', unique: true
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string "first_name"
-    t.string "last_name"
-    t.string "email"
-    t.string "role"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "google_uid"
-    t.string "google_avatar_url"
-    t.bigint "organizational_role_id"
-    t.index ["google_uid"], name: "index_users_on_google_uid", unique: true
-    t.index ["organizational_role_id"], name: "index_users_on_organizational_role_id"
+  create_table 'resumes', force: :cascade do |t|
+    t.bigint 'user_id', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.float 'gpa'
+    t.integer 'graduation_date'
+    t.string 'major'
+    t.string 'organizational_role'
+    t.index ['user_id'], name: 'index_resumes_on_user_id'
   end
 
-  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "resumes", "users"
-  add_foreign_key "users", "organizational_roles"
+  create_table 'users', force: :cascade do |t|
+    t.string 'first_name'
+    t.string 'last_name'
+    t.string 'email'
+    t.string 'role'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.string 'google_uid'
+    t.string 'google_avatar_url'
+    t.index ['google_uid'], name: 'index_users_on_google_uid', unique: true
+  end
+
+  add_foreign_key 'active_storage_attachments', 'active_storage_blobs', column: 'blob_id'
+  add_foreign_key 'active_storage_variant_records', 'active_storage_blobs', column: 'blob_id'
+  add_foreign_key 'organizational_role_users', 'organizational_roles'
+  add_foreign_key 'organizational_role_users', 'users'
+  add_foreign_key 'resumes', 'users'
 end
