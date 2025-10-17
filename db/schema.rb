@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 20_251_016_103_200) do
+ActiveRecord::Schema[8.0].define(version: 20_251_017_193_000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_catalog.plpgsql'
 
@@ -87,6 +87,19 @@ ActiveRecord::Schema[8.0].define(version: 20_251_016_103_200) do
     t.boolean 'is_published', default: true, null: false
   end
 
+  create_table 'images', id: :uuid, default: -> { 'gen_random_uuid()' }, force: :cascade do |t|
+    t.string 'url'
+    t.string 'processed_variant'
+    t.datetime 'created_at'
+  end
+
+  create_table 'messages', id: :uuid, default: -> { 'gen_random_uuid()' }, force: :cascade do |t|
+    t.uuid 'sender_id'
+    t.uuid 'receiver_id'
+    t.text 'body'
+    t.datetime 'created_at'
+  end
+
   create_table 'organizational_role_users', force: :cascade do |t|
     t.bigint 'user_id', null: false
     t.bigint 'organizational_role_id', null: false
@@ -105,6 +118,13 @@ ActiveRecord::Schema[8.0].define(version: 20_251_016_103_200) do
     t.index ['name'], name: 'index_organizational_roles_on_name', unique: true
   end
 
+  create_table 'payments', id: :uuid, default: -> { 'gen_random_uuid()' }, force: :cascade do |t|
+    t.uuid 'user_id'
+    t.decimal 'amount'
+    t.string 'status'
+    t.datetime 'created_at'
+  end
+
   create_table 'resumes', force: :cascade do |t|
     t.bigint 'user_id', null: false
     t.datetime 'created_at', null: false
@@ -114,6 +134,12 @@ ActiveRecord::Schema[8.0].define(version: 20_251_016_103_200) do
     t.string 'major'
     t.string 'organizational_role'
     t.index ['user_id'], name: 'index_resumes_on_user_id'
+  end
+
+  create_table 'translations', id: :uuid, default: -> { 'gen_random_uuid()' }, force: :cascade do |t|
+    t.string 'locale'
+    t.string 'key'
+    t.text 'value'
   end
 
   create_table 'users', force: :cascade do |t|
