@@ -117,4 +117,4 @@ gem 'kaminari'
 gem 'aws-sdk-s3', '~> 1.0'
 
 # dotenv
-gem 'dotenv-rails', groups: [:development, :test]
+gem 'dotenv-rails', groups: %i[development test]
