@@ -4,14 +4,52 @@
 
 <h1>Resumes</h1>
 
-<div id="resumes">
-  <% @resumes.each do |resume| %>
-    <%= render resume %>
-    <p>
-      <%= link_to "Show this resume", resume %>
-    </p>
-  <% end %>
-</div>
+<table id="resumes" border="1">
+  <thead>
+    <tr>
+      <th>
+        User
+        <%= link_to "↑", resumes_path(request.query_parameters.merge(sort: 'user', direction: 'asc')), title: 'Sort user asc' %>
+        <%= link_to "↓", resumes_path(request.query_parameters.merge(sort: 'user', direction: 'desc')), title: 'Sort user desc' %>
+      </th>
+      <th>
+        GPA
+        <%= link_to "↑", resumes_path(request.query_parameters.merge(sort: 'gpa', direction: 'asc')), title: 'Sort gpa asc' %>
+        <%= link_to "↓", resumes_path(request.query_parameters.merge(sort: 'gpa', direction: 'desc')), title: 'Sort gpa desc' %>
+      </th>
+      <th>
+        Graduation Year
+        <%= link_to "↑", resumes_path(request.query_parameters.merge(sort: 'graduation_date', direction: 'asc')), title: 'Sort graduation_date asc' %>
+        <%= link_to "↓", resumes_path(request.query_parameters.merge(sort: 'graduation_date', direction: 'desc')), title: 'Sort graduation_date desc' %>
+      </th>
+      <th>
+        Major
+        <%= link_to "↑", resumes_path(request.query_parameters.merge(sort: 'major', direction: 'asc')), title: 'Sort major asc' %>
+        <%= link_to "↓", resumes_path(request.query_parameters.merge(sort: 'major', direction: 'desc')), title: 'Sort major desc' %>
+      </th>
+      <th>
+        Organizational Role
+        <%= link_to "↑", resumes_path(request.query_parameters.merge(sort: 'organizational_role', direction: 'asc')), title: 'Sort organizational_role asc' %>
+        <%= link_to "↓", resumes_path(request.query_parameters.merge(sort: 'organizational_role', direction: 'desc')), title: 'Sort organizational_role desc' %>
+      </th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @resumes.each do |resume| %>
+      <tr>
+        <td><%= resume.user.email %></td>
+        <td><%= resume.gpa %></td>
+        <td><%= resume.graduation_date %></td>
+        <td><%= resume.major %></td>
+        <td><%= resume.organizational_role %></td>
+        <td><%= link_to "Show", resume_path(resume) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= paginate @resumes, params: request.query_parameters.except(:page) %>
 
 <div>
   <%= link_to "Home", root_path %>
