@@ -86,6 +86,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_103200) do
     t.boolean "is_published", default: true, null: false
   end
 
+  create_table "organizational_role_users", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "organizational_role_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organizational_role_id"], name: "index_organizational_role_users_on_organizational_role_id"
+    t.index ["user_id", "organizational_role_id"], name: "index_org_role_users_on_user_and_role", unique: true
+    t.index ["user_id"], name: "index_organizational_role_users_on_user_id"
+  end
+
   create_table "organizational_roles", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -114,10 +124,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_103200) do
     t.datetime "updated_at", null: false
     t.string "google_uid"
     t.string "google_avatar_url"
-    t.bigint "organizational_role_id"
     t.integer "points", default: 0, null: false
     t.index ["google_uid"], name: "index_users_on_google_uid", unique: true
-    t.index ["organizational_role_id"], name: "index_users_on_organizational_role_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -126,6 +134,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_103200) do
   add_foreign_key "attendances", "users"
   add_foreign_key "event_rsvps", "events"
   add_foreign_key "event_rsvps", "users"
+  add_foreign_key "organizational_role_users", "organizational_roles"
+  add_foreign_key "organizational_role_users", "users"
   add_foreign_key "resumes", "users"
-  add_foreign_key "users", "organizational_roles"
 end
