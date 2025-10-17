@@ -1,0 +1,40 @@
+<h1><%= @event.title %></h1>
+<p><%= @event.formatted_date %> • <%= @event.location %></p>
+<p><%= @event.description %></p>
+
+<h3>RSVP</h3>
+<p>Your status: <strong><%= @rsvp&.status || 'none' %></strong></p>
+
+<% if @event.event_date > Time.current %>
+  <div class="rsvp-actions">
+    <% if admin_signed_in? %>
+      <%= form_with url: event_rsvp_path(@event), method: @rsvp.present? ? :patch : :post, local: true do |f| %>
+        <%= hidden_field_tag :status, 'yes' %>
+        <%= submit_tag 'Yes' %>
+      <% end %>
+
+      <%= form_with url: event_rsvp_path(@event), method: @rsvp.present? ? :patch : :post, local: true do |f| %>
+        <%= hidden_field_tag :status, 'maybe' %>
+        <%= submit_tag 'Maybe' %>
+      <% end %>
+
+      <%= form_with url: event_rsvp_path(@event), method: @rsvp.present? ? :patch : :post, local: true do |f| %>
+        <%= hidden_field_tag :status, 'no' %>
+        <%= submit_tag 'No' %>
+      <% end %>
+    <% else %>
+      <p>Please <%= link_to 'sign in', new_admin_session_path %> to RSVP.</p>
+    <% end %>
+  </div>
+<% else %>
+  <p>RSVP is closed for this event.</p>
+<% end %>
+
+<h3>RSVP counts</h3>
+<ul>
+  <li>Yes: <%= @yes_count %></li>
+  <li>Maybe: <%= @maybe_count %></li>
+  <li>No: <%= @no_count %></li>
+ </ul>
+
+

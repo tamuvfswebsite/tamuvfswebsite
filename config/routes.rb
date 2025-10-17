@@ -9,6 +9,11 @@ Rails.application.routes.draw do
   # Allow viewing all resumes
   resources :resumes, only: %i[index show edit update destroy]
 
+  resources :events, only: %i[index show] do
+    # RSVP create/update
+    resource :rsvp, only: %i[create update], controller: 'event_rsvps'
+  end
+
   # Nested resume routes for user-specific actions
   resources :users do
     resource :resume, only: %i[new create show edit update destroy]

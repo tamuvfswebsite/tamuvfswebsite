@@ -30,7 +30,8 @@ class CheckinsController < ApplicationController
     Attendance.transaction do
       attendance.checked_in_at = Time.current
       attendance.save!
-      user.update!(points: user.points + 1)
+      points_to_award = @event.respond_to?(:attendance_points) && @event.attendance_points.present? ? @event.attendance_points : 1
+      user.update!(points: user.points + points_to_award)
     end
 
     redirect_to root_path, notice: 'Checked in! Points awarded.'
