@@ -112,3 +112,9 @@ gem 'record_tag_helper', '~> 1.0'
 
 # Pagination
 gem 'kaminari'
+
+# AWS
+gem 'aws-sdk-s3', '~> 1.0'
+
+# dotenv
+gem 'dotenv-rails', groups: [:development, :test]
