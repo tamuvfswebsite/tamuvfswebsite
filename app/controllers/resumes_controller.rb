@@ -1,4 +1,11 @@
 class ResumesController < ApplicationController
+  # Handle authentication within authorization methods for index/show to prevent auto-redirect
+  before_action :authorize_admin_or_sponsor, only: %i[index]
+  before_action :authorize_own_resume, only: %i[show]
+  
+  # Require explicit authentication for create/update/delete actions
+  before_action :authenticate_admin!, only: %i[new create edit update destroy]
+
   before_action :set_user
   before_action :set_resume, only: %i[show edit update destroy]
 
@@ -118,5 +125,36 @@ class ResumesController < ApplicationController
 
   def resume_params
     params.require(:resume).permit(:file, :gpa, :graduation_date, :major, :organizational_role)
+  end
+
+  # Only admins and sponsors can view all resumes
+  def authorize_admin_or_sponsor
+    unless admin_signed_in?
+      redirect_to root_path, alert: "Access denied. Please sign in."
+      return
+    end
+
+    current_user = User.find_by(google_uid: current_admin.uid)
+    unless current_user&.role&.in?(['admin', 'sponsor'])
+      redirect_to root_path, alert: "Access denied. Admins and sponsors only."
+    end
+  end
+
+  # Users can view their own resume, admins can view any resume
+  def authorize_own_resume
+    unless admin_signed_in?
+      redirect_to root_path, alert: "Access denied. Please sign in."
+      return
+    end
+
+    current_user = User.find_by(google_uid: current_admin.uid)
+    
+    # Allow if user is an admin
+    return if current_user&.role == 'admin'
+    
+    # Otherwise, only allow viewing own resume
+    unless @resume&.user == current_user
+      redirect_to root_path, alert: "You can only view your own resume."
+    end
   end
 end

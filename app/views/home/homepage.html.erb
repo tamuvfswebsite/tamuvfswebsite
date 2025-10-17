@@ -13,6 +13,24 @@
     <% if admin_user? %>
       <%= link_to "Admin Dashboard", admin_panel_root_path, class: "btn" %>
     <% end %>
+    
+    <%# Resume-related links based on user role %>
+    <% if admin_signed_in? %>
+      <% current_user = User.find_by(google_uid: current_admin.uid) %>
+      <% if current_user %>
+        <%# Admins and sponsors can view all resumes %>
+        <% if current_user.role&.in?(['admin', 'sponsor']) %>
+          <%= link_to "Browse Resumes", resumes_path, class: "btn btn-resume-index" %>
+        <% end %>
+        
+        <%# All users (including admins) can view their own resume if they have one %>
+        <% if current_user.resume.present? %>
+          <%= link_to "My Resume", resume_path(current_user.resume), class: "btn btn-my-resume" %>
+        <% else %>
+          <%= link_to "Upload Resume", new_user_resume_path(current_user), class: "btn btn-my-resume" %>
+        <% end %>
+      <% end %>
+    <% end %>
   </div>
 </div>
 
@@ -51,9 +69,13 @@
   .homepage-simple { max-width: 720px; margin: 48px auto; padding: 24px; }
   .homepage-simple h1 { margin: 0 0 12px; }
   .homepage-simple p { color: #4b5563; }
-  .actions { margin-top: 16px; }
-  .actions .btn + .btn { margin-left: 8px; }
-  .btn { padding: 8px 14px; border: 1px solid #d1d5db; border-radius: 8px; text-decoration: none; }
+  .actions { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .btn { padding: 8px 14px; border: 1px solid #d1d5db; border-radius: 8px; text-decoration: none; background: #fff; color: #374151; display: inline-block; }
+  .btn:hover { background: #f9fafb; }
+  .btn-resume-index { background: #500000; color: #fff; border-color: #500000; }
+  .btn-resume-index:hover { background: #6a0000; }
+  .btn-my-resume { background: #f0f9ff; color: #075985; border-color: #bae6fd; }
+  .btn-my-resume:hover { background: #e0f2fe; }
   .events-section { max-width: 720px; margin: 24px auto 48px; padding: 0 24px; }
   .events-container { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; }
   .events-title { margin: 0 0 12px; font-size: 20px; }
