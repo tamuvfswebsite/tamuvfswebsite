@@ -12,14 +12,15 @@ RSpec.describe 'resumes/index', type: :view do
       resume.save!
       resumes << resume
     end
-    assign(:resumes, resumes)
+    # Provide a paginated collection so the view's `paginate` helper works in tests
+    assign(:resumes, Kaminari.paginate_array(resumes).page(1).per(25))
   end
 
   it 'renders a list of resumes' do
     render
-    assert_select 'div#resumes' do
-      assert_select 'div.resume', count: 2
-      assert_select 'a', text: 'Show this resume', count: 2
+    assert_select 'table#resumes' do
+      assert_select 'tbody tr', count: 2
+      assert_select 'a', text: 'Show', count: 2
     end
   end
 end

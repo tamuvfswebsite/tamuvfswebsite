@@ -5,6 +5,21 @@
     <h1>Users</h1>
   </div>
 
+  <div class="filter-section">
+    <%= form_with url: users_path, method: :get, local: true, class: 'filter-form' do |f| %>
+      <div class="filter-group">
+        <%= f.label :organizational_role_id, 'Filter by Organizational Role:', class: 'filter-label' %>
+        <%= f.select :organizational_role_id,
+            options_for_select(
+              [['All Users', '']] + @organizational_roles.map { |r| [r.name, r.id] },
+              params[:organizational_role_id]
+            ),
+            {},
+            { class: 'filter-select', onchange: 'this.form.submit();' } %>
+      </div>
+    <% end %>
+  </div>
+
   <div id="users" class="users-grid">
     <% @users.each do |user| %>
       <div class="user-card-wrapper">

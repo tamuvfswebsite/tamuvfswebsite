@@ -93,3 +93,11 @@ This project is provided as-is without formal support. Issues and PRs are welcom
 - Devise: [https://github.com/heartcombo/devise](https://github.com/heartcombo/devise)
 - OmniAuth Google OAuth2: [https://github.com/zquestz/omniauth-google-oauth2](https://github.com/zquestz/omniauth-google-oauth2)
 - Hotwire: [https://hotwired.dev](https://hotwired.dev)
+
+### Documentation
+-- Documentation Plan: `docs/DOCUMENTATION_PLAN.md`
+-- Admin Guide (internal): `docs/ADMIN_GUIDE.md`
+-- Installation / Setup: `docs/INSTALLATION.md`
+-- Restart Runbook (failsafe): `docs/RESTART_RUNBOOK.md`
+-- Online Help Approach: `docs/ONLINE_HELP_GUIDE.md`
+-- References: `docs/REFERENCES.md`

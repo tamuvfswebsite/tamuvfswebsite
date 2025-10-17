@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
     return if admin_user?
 
     flash[:alert] = 'Access denied. Admin privileges required.'
-    redirect_to root_path
+    redirect_to homepage_path
   end
 
   def ensure_sponsor_user
