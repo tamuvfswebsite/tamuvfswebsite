@@ -3,5 +3,3 @@ class AddPointsToUsers < ActiveRecord::Migration[8.0]
     add_column :users, :points, :integer, null: false, default: 0
   end
 end
-
-

@@ -6,5 +6,3 @@ class EventRsvp < ApplicationRecord
 
   validates :status, inclusion: { in: STATUSES }
 end
-
-

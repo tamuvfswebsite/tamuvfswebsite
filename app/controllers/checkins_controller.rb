@@ -8,36 +8,53 @@ class CheckinsController < ApplicationController
   end
 
   def create
-    @event = Event.find_signed!(params.require(:token), purpose: 'checkin')
+    @event = find_event_from_token!
 
-    unless admin_signed_in?
-      redirect_to new_admin_session_path, alert: 'Please sign in to check in.'
-      return
-    end
+    user = require_member!
+    return unless user
 
-    user = User.find_by(google_uid: current_admin.uid)
-    if user.nil?
-      redirect_to root_path, alert: 'No linked user account found.'
-      return
-    end
-
-    attendance = Attendance.find_or_initialize_by(user: user, event: @event)
-    if attendance.persisted?
+    if Attendance.exists?(user: user, event: @event)
       redirect_to root_path, notice: 'You are already checked in for this event.'
       return
     end
 
-    Attendance.transaction do
-      attendance.checked_in_at = Time.current
-      attendance.save!
-      points_to_award = @event.respond_to?(:attendance_points) && @event.attendance_points.present? ? @event.attendance_points : 1
-      user.update!(points: user.points + points_to_award)
-    end
+    award_points_for_checkin!(user)
 
     redirect_to root_path, notice: 'Checked in! Points awarded.'
   rescue ActiveSupport::MessageVerifier::InvalidSignature, ActiveSupport::MessageEncryptor::InvalidMessage
     head :gone
   end
+
+  private
+
+  def find_event_from_token!
+    Event.find_signed!(params.require(:token), purpose: 'checkin')
+  end
+
+  def require_member!
+    unless admin_signed_in?
+      redirect_to new_admin_session_path, alert: 'Please sign in to check in.'
+      return nil
+    end
+
+    user = User.find_by(google_uid: current_admin.uid)
+    unless user
+      redirect_to root_path, alert: 'No linked user account found.'
+      return nil
+    end
+
+    user
+  end
+
+  def award_points_for_checkin!(user)
+    Attendance.transaction do
+      Attendance.create!(user: user, event: @event, checked_in_at: Time.current)
+      user.update!(points: user.points + event_points(@event))
+    end
+  end
+
+  def event_points(event)
+    points = event.respond_to?(:attendance_points) ? event.attendance_points : nil
+    points.present? ? points : 1
+  end
 end
-
-

@@ -12,5 +12,3 @@ class EventsController < ApplicationController
     @maybe_count = EventRsvp.where(event: @event, status: 'maybe').count
   end
 end
-
-

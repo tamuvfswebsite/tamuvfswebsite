@@ -16,9 +16,9 @@ class EventRsvpsController < ApplicationController
   private
 
   def require_login
-    unless admin_signed_in?
-      redirect_to new_admin_session_path, alert: 'Please sign in first.'
-    end
+    return if admin_signed_in?
+
+    redirect_to new_admin_session_path, alert: 'Please sign in first.'
   end
 
   def set_event
@@ -38,5 +38,3 @@ class EventRsvpsController < ApplicationController
     redirect_to @event, alert: 'RSVP is closed for this event.'
   end
 end
-
-

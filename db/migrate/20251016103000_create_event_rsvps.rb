@@ -10,5 +10,3 @@ class CreateEventRsvps < ActiveRecord::Migration[8.0]
     add_index :event_rsvps, %i[event_id user_id], unique: true
   end
 end
-
-

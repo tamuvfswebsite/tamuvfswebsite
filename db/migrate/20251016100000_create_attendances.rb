@@ -11,5 +11,3 @@ class CreateAttendances < ActiveRecord::Migration[8.0]
     add_index :attendances, %i[user_id event_id], unique: true
   end
 end
-
-

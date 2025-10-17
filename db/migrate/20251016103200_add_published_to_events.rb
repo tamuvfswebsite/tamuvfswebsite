@@ -3,5 +3,3 @@ class AddPublishedToEvents < ActiveRecord::Migration[8.0]
     add_column :events, :is_published, :boolean, null: false, default: true
   end
 end
-
-
