@@ -30,7 +30,7 @@
         <% @upcoming_events.each do |event| %>
           <li class="event-item">
             <div class="event-main">
-              <span class="event-title"><%= event.title %></span>
+              <span class="event-title"><%= link_to event.title, event_path(event) %></span>
               <span class="event-date"><%= event.formatted_date %></span>
             </div>
             <div class="event-meta">
@@ -38,6 +38,9 @@
               <% if event.capacity.present? %>
                 <span class="event-capacity">Capacity: <%= event.capacity %></span>
               <% end %>
+            </div>
+            <div class="event-actions">
+              <%= link_to "View & RSVP", event_path(event), class: "btn" %>
             </div>
           </li>
         <% end %>

@@ -1,0 +1,16 @@
+<h1>Events</h1>
+
+<% if @events.any? %>
+  <ul>
+    <% @events.each do |event| %>
+      <li>
+        <%= link_to event.title, event_path(event) %>
+        — <%= event.formatted_date %> • <%= event.location %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No upcoming events.</p>
+<% end %>
+
+

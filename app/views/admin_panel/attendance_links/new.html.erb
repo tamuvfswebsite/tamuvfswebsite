@@ -1,0 +1,27 @@
+<h1>Create Attendance Link</h1>
+
+<% if @events.any? %>
+  <%= form_with url: admin_panel_attendance_links_path, method: :post, local: true do |f| %>
+    <div class="field">
+      <label for="event_id">Select Event</label>
+      <select name="event_id" id="event_id">
+        <% @events.each do |event| %>
+          <option value="<%= event.id %>"><%= event.title %> — <%= event.formatted_date %></option>
+        <% end %>
+      </select>
+    </div>
+
+    <div class="actions">
+      <%= f.submit "Generate Link" %>
+    </div>
+  <% end %>
+<% else %>
+  <p>No upcoming events available.</p>
+<% end %>
+
+<div class="actions">
+  <%= link_to 'Back to Events', admin_panel_events_path %>
+  <%= link_to 'Back to Admin Dashboard', admin_panel_root_path %>
+  </div>
+
+

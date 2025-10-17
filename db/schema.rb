@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 20_251_016_000_000) do
+ActiveRecord::Schema[8.0].define(version: 20_251_016_103_200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_catalog.plpgsql'
 
@@ -53,6 +53,28 @@ ActiveRecord::Schema[8.0].define(version: 20_251_016_000_000) do
     t.index ['email'], name: 'index_admins_on_email', unique: true
   end
 
+  create_table 'attendances', force: :cascade do |t|
+    t.bigint 'user_id', null: false
+    t.bigint 'event_id', null: false
+    t.datetime 'checked_in_at', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['event_id'], name: 'index_attendances_on_event_id'
+    t.index %w[user_id event_id], name: 'index_attendances_on_user_id_and_event_id', unique: true
+    t.index ['user_id'], name: 'index_attendances_on_user_id'
+  end
+
+  create_table 'event_rsvps', id: :uuid, default: -> { 'gen_random_uuid()' }, force: :cascade do |t|
+    t.bigint 'event_id', null: false
+    t.bigint 'user_id', null: false
+    t.string 'status', default: 'yes', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index %w[event_id user_id], name: 'index_event_rsvps_on_event_id_and_user_id', unique: true
+    t.index ['event_id'], name: 'index_event_rsvps_on_event_id'
+    t.index ['user_id'], name: 'index_event_rsvps_on_user_id'
+  end
+
   create_table 'events', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -61,6 +83,8 @@ ActiveRecord::Schema[8.0].define(version: 20_251_016_000_000) do
     t.integer 'capacity'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
+    t.integer 'attendance_points', default: 1, null: false
+    t.boolean 'is_published', default: true, null: false
   end
 
   create_table 'organizational_role_users', force: :cascade do |t|
@@ -101,11 +125,16 @@ ActiveRecord::Schema[8.0].define(version: 20_251_016_000_000) do
     t.datetime 'updated_at', null: false
     t.string 'google_uid'
     t.string 'google_avatar_url'
+    t.integer 'points', default: 0, null: false
     t.index ['google_uid'], name: 'index_users_on_google_uid', unique: true
   end
 
   add_foreign_key 'active_storage_attachments', 'active_storage_blobs', column: 'blob_id'
   add_foreign_key 'active_storage_variant_records', 'active_storage_blobs', column: 'blob_id'
+  add_foreign_key 'attendances', 'events'
+  add_foreign_key 'attendances', 'users'
+  add_foreign_key 'event_rsvps', 'events'
+  add_foreign_key 'event_rsvps', 'users'
   add_foreign_key 'organizational_role_users', 'organizational_roles'
   add_foreign_key 'organizational_role_users', 'users'
   add_foreign_key 'resumes', 'users'
