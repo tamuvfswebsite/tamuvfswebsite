@@ -2,8 +2,17 @@ Rails.application.routes.draw do
   root 'home#index'
   get 'homepage', to: 'home#homepage', as: :homepage
 
+  # Public check-in endpoint (token-based)
+  get  'checkin', to: 'checkins#new',    as: :checkin
+  post 'checkin', to: 'checkins#create', as: :perform_checkin
+
   # Allow viewing all resumes
   resources :resumes, only: %i[index show edit update destroy]
+
+  resources :events, only: %i[index show] do
+    # RSVP create/update
+    resource :rsvp, only: %i[create update], controller: 'event_rsvps'
+  end
 
   # Nested resume routes for user-specific actions
   resources :users do
@@ -28,7 +37,9 @@ Rails.application.routes.draw do
     # get "events/destroy"
     # get "dashboard/index"
     get 'dashboard', to: 'dashboard#index'
+    get 'leaderboard', to: 'dashboard#leaderboard'
     resources :events
+    resources :attendance_links, only: %i[new create]
     resources :organizational_roles
     # resources :sponsors
     # resources :resumes, only: [:index]
