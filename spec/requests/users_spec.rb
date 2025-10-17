@@ -123,9 +123,9 @@ RSpec.describe 'Users', type: :request do
     let(:design_team) { OrganizationalRole.create!(name: 'Design Team') }
 
     it 'shows all users when no filter is applied' do
-      user1 = create_user(organizational_roles: [ai_team], email: 'user1@test.com')
-      user2 = create_user(organizational_roles: [design_team], email: 'user2@test.com')
-      user3 = create_user(email: 'user3@test.com')
+      create_user(organizational_roles: [ai_team], email: 'user1@test.com')
+      create_user(organizational_roles: [design_team], email: 'user2@test.com')
+      create_user(email: 'user3@test.com')
 
       get '/users'
       expect(response).to have_http_status(:success)
@@ -135,9 +135,9 @@ RSpec.describe 'Users', type: :request do
     end
 
     it 'filters users by organizational role' do
-      user1 = create_user(organizational_roles: [ai_team], email: 'aiuser@test.com')
-      user2 = create_user(organizational_roles: [design_team], email: 'designuser@test.com')
-      user3 = create_user(organizational_roles: [ai_team, design_team], email: 'bothuser@test.com')
+      create_user(organizational_roles: [ai_team], email: 'aiuser@test.com')
+      create_user(organizational_roles: [design_team], email: 'designuser@test.com')
+      create_user(organizational_roles: [ai_team, design_team], email: 'bothuser@test.com')
       create_user(email: 'noorguser@test.com')
 
       get '/users', params: { organizational_role_id: ai_team.id }
@@ -148,7 +148,7 @@ RSpec.describe 'Users', type: :request do
     end
 
     it 'returns only users with the selected organizational role' do
-      user1 = create_user(organizational_roles: [design_team], email: 'onlydesign@test.com')
+      create_user(organizational_roles: [design_team], email: 'onlydesign@test.com')
       create_user(organizational_roles: [ai_team], email: 'onlyai@test.com')
       create_user(email: 'norole@test.com')
 
