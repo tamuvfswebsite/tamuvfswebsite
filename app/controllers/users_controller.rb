@@ -6,6 +6,15 @@ class UsersController < ApplicationController
   # GET /users or /users.json
   def index
     @users = User.all
+
+    # Filter by organizational role if provided
+    if params[:organizational_role_id].present?
+      @users = @users.joins(:organizational_roles)
+                     .where(organizational_roles: { id: params[:organizational_role_id] })
+                     .distinct
+    end
+
+    @organizational_roles = OrganizationalRole.all.order(:name)
   end
 
   # GET /users/1 or /users/1.json
