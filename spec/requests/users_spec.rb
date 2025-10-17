@@ -117,4 +117,67 @@ RSpec.describe 'Users', type: :request do
       expect(admin_user.organizational_roles.count).to eq(2)
     end
   end
+
+  describe 'filtering by organizational role' do
+    let(:ai_team) { OrganizationalRole.create!(name: 'AI Team') }
+    let(:design_team) { OrganizationalRole.create!(name: 'Design Team') }
+
+    it 'shows all users when no filter is applied' do
+      create_user(organizational_roles: [ai_team], email: 'user1@test.com')
+      create_user(organizational_roles: [design_team], email: 'user2@test.com')
+      create_user(email: 'user3@test.com')
+
+      get '/users'
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include('user1@test.com')
+      expect(response.body).to include('user2@test.com')
+      expect(response.body).to include('user3@test.com')
+    end
+
+    it 'filters users by organizational role' do
+      create_user(organizational_roles: [ai_team], email: 'aiuser@test.com')
+      create_user(organizational_roles: [design_team], email: 'designuser@test.com')
+      create_user(organizational_roles: [ai_team, design_team], email: 'bothuser@test.com')
+      create_user(email: 'noorguser@test.com')
+
+      get '/users', params: { organizational_role_id: ai_team.id }
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include('aiuser@test.com')
+      expect(response.body).to include('bothuser@test.com')
+      expect(response.body).not_to include('designuser@test.com')
+    end
+
+    it 'returns only users with the selected organizational role' do
+      create_user(organizational_roles: [design_team], email: 'onlydesign@test.com')
+      create_user(organizational_roles: [ai_team], email: 'onlyai@test.com')
+      create_user(email: 'norole@test.com')
+
+      get '/users', params: { organizational_role_id: design_team.id }
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include('onlydesign@test.com')
+      expect(response.body).not_to include('onlyai@test.com')
+      expect(response.body).not_to include('norole@test.com')
+    end
+
+    it 'handles users with no organizational roles when filtering' do
+      create_user(organizational_roles: [ai_team], email: 'withrole@test.com')
+      create_user(email: 'withoutrole@test.com')
+
+      get '/users', params: { organizational_role_id: ai_team.id }
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include('withrole@test.com')
+      expect(response.body).not_to include('withoutrole@test.com')
+    end
+
+    it 'displays the filter dropdown with organizational roles' do
+      ai_team # Force creation of ai_team
+      design_team # Force creation of design_team
+
+      get '/users'
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include('Filter by Organizational Role')
+      expect(response.body).to include('AI Team')
+      expect(response.body).to include('Design Team')
+    end
+  end
 end
