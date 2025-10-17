@@ -41,12 +41,14 @@
   </div>
 
   <div class="form-group">
-    <%= form.label :organizational_role_id, "Organizational Role", class: "form-label" %>
-    <%= form.select :organizational_role_id,
-        options_for_select(OrganizationalRole.all.map { |r| [r.name, r.id] }, user.organizational_role_id),
-        { prompt: 'Select an organizational role', include_blank: true },
-        { class: "form-select" } %>
-    <small class="form-text">Choose the user's organizational team or role.</small>
+    <%= form.label :organizational_role_ids, "Organizational Roles", class: "form-label" %>
+    <%= form.collection_check_boxes :organizational_role_ids, OrganizationalRole.all, :id, :name do |b| %>
+      <div class="form-check">
+        <%= b.check_box class: "form-check-input" %>
+        <%= b.label class: "form-check-label" %>
+      </div>
+    <% end %>
+    <small class="form-text">Choose the user's organizational teams or roles.</small>
   </div>
 
   <div class="form-actions">
