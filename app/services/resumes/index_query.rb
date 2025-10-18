@@ -1,27 +1,53 @@
 module Resumes
   class IndexQuery
-    def self.call(sort: nil, direction: nil, major: nil, organizational_role: nil, graduation_year: nil, gpa_operator: nil, gpa_value: nil)
-      direction = direction == 'desc' ? 'desc' : 'asc'
+    def self.call(filters = {})
+      new(filters).call
+    end
 
-      # Start with base query
+    def initialize(filters = {})
+      @filters = filters
+      @sort = filters[:sort]
+      @direction = filters[:direction] == 'desc' ? 'desc' : 'asc'
+    end
+
+    def call
       resumes = Resume.includes(:user)
+      resumes = apply_filters(resumes)
+      apply_sorting(resumes)
+    end
 
-      # Apply filters
-      resumes = resumes.where(major: major) if major.present?
-      resumes = resumes.where(organizational_role: organizational_role) if organizational_role.present?
-      resumes = resumes.where(graduation_date: graduation_year) if graduation_year.present?
+    private
 
-      # Apply GPA filter with operator
-      if gpa_value.present? && gpa_operator.present?
-        case gpa_operator
-        when '>='
-          resumes = resumes.where('gpa >= ?', gpa_value.to_f)
-        when '<='
-          resumes = resumes.where('gpa <= ?', gpa_value.to_f)
-        end
+    attr_reader :filters, :sort, :direction
+
+    def apply_filters(resumes)
+      resumes = apply_basic_filters(resumes)
+      apply_gpa_filter(resumes)
+    end
+
+    def apply_basic_filters(resumes)
+      resumes = resumes.where(major: filters[:major]) if filters[:major].present?
+      if filters[:organizational_role].present?
+        resumes = resumes.where(organizational_role: filters[:organizational_role])
       end
+      resumes = resumes.where(graduation_date: filters[:graduation_year]) if filters[:graduation_year].present?
+      resumes
+    end
 
-      # Apply sorting
+    def apply_gpa_filter(resumes)
+      return resumes unless filters[:gpa_value].present? && filters[:gpa_operator].present?
+
+      case filters[:gpa_operator]
+      when '>='
+        resumes.where('gpa >= ?', filters[:gpa_value].to_f)
+      when '<='
+        resumes.where('gpa <= ?', filters[:gpa_value].to_f)
+      else
+        resumes
+      end
+    end
+
+    def apply_sorting(resumes)
       case sort
       when 'user'
         resumes.joins(:user).order("users.email #{direction}")
@@ -33,4 +59,3 @@ module Resumes
     end
   end
 end
-

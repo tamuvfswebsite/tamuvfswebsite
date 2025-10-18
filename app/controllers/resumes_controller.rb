@@ -13,23 +13,8 @@ class ResumesController < ApplicationController
   before_action :authorize_own_resume, only: %i[show]
 
   def index
-    per = (params[:per] || 20).to_i
-    per = 100 if per > 100
-
-    @resumes = Resumes::IndexQuery.call(
-      sort: params[:sort],
-      direction: params[:direction],
-      major: params[:major],
-      organizational_role: params[:organizational_role],
-      graduation_year: params[:graduation_year],
-      gpa_operator: params[:gpa_operator],
-      gpa_value: params[:gpa_value]
-    ).page(params[:page]).per(per)
-
-    # Get unique values for filter dropdowns
-    @majors = Resume.where.not(major: [nil, '']).distinct.pluck(:major).sort
-    @organizational_roles = Resume.where.not(organizational_role: [nil, '']).distinct.pluck(:organizational_role).sort
-    @graduation_years = Resume.where.not(graduation_date: nil).distinct.pluck(:graduation_date).sort.reverse
+    @resumes = fetch_filtered_resumes
+    load_filter_options
   end
 
   def show; end
@@ -112,5 +97,35 @@ class ResumesController < ApplicationController
 
   def resume_params
     params.require(:resume).permit(:file, :gpa, :graduation_date, :major, :organizational_role)
+  end
+
+  def fetch_filtered_resumes
+    per = calculate_per_page
+    filter_params = build_filter_params
+
+    Resumes::IndexQuery.call(filter_params).page(params[:page]).per(per)
+  end
+
+  def calculate_per_page
+    per = (params[:per] || 20).to_i
+    [per, 100].min
+  end
+
+  def build_filter_params
+    {
+      sort: params[:sort],
+      direction: params[:direction],
+      major: params[:major],
+      organizational_role: params[:organizational_role],
+      graduation_year: params[:graduation_year],
+      gpa_operator: params[:gpa_operator],
+      gpa_value: params[:gpa_value]
+    }
+  end
+
+  def load_filter_options
+    @majors = Resume.where.not(major: [nil, '']).distinct.pluck(:major).sort
+    @organizational_roles = Resume.where.not(organizational_role: [nil, '']).distinct.pluck(:organizational_role).sort
+    @graduation_years = Resume.where.not(graduation_date: nil).distinct.pluck(:graduation_date).sort.reverse
   end
 end
