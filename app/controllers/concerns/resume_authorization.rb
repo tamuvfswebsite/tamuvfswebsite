@@ -27,11 +27,16 @@ module ResumeAuthorization
 
     current_user = User.find_by(google_uid: current_admin.uid)
 
-    # Allow if user is an admin
-    return if current_user&.role == 'admin'
+    unless current_user
+      redirect_to root_path, alert: 'User account not found. Please contact support.'
+      return
+    end
 
-    # Otherwise, only allow viewing own resume
-    return if @resume&.user == current_user
+    # Allow if user is an admin
+    return if current_user.role == 'admin'
+
+    # Otherwise, only allow viewing own resume (compare by ID for reliable comparison)
+    return if @resume&.user_id == current_user.id
 
     redirect_to root_path, alert: 'You can only view your own resume.'
   end

@@ -4,13 +4,13 @@ class ResumesController < ApplicationController
 
   # Handle authentication within authorization methods for index/show to prevent auto-redirect
   before_action :authorize_admin_or_sponsor, only: %i[index]
-  before_action :authorize_own_resume, only: %i[show]
 
   # Require explicit authentication for create/update/delete actions
   before_action :authenticate_admin!, only: %i[new create edit update destroy]
 
   before_action :set_user
   before_action :set_resume, only: %i[show edit update destroy]
+  before_action :authorize_own_resume, only: %i[show]
 
   def index
     per = (params[:per] || 20).to_i

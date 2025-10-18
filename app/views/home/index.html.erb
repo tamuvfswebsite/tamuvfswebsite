@@ -9,12 +9,12 @@
 
       <div class="cta-row">
         <%= link_to "Apply Now", "#", class: "btn btn-primary" %>
-    <%= button_to "Member Sign In", 
-          admin_google_oauth2_omniauth_authorize_path,
-          method: :post,
-          form: { style: "display:inline-block;" },
-          data: { turbo: false },
-          class: "btn btn-outline" %>
+        <%= button_to "Member Sign In", 
+              admin_google_oauth2_omniauth_authorize_path,
+              method: :post,
+              form: { style: "display:inline-block;" },
+              data: { turbo: false },
+              class: "btn btn-outline" %>
       </div>
     </div>
 
@@ -25,41 +25,3 @@
     </div>
   </div>
 </div>
-
-<style>
-  .landing-page { padding: 48px 24px; }
-  .landing-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 48px;
-    align-items: center;
-  }
-  .brand { color: #9fb3c8; letter-spacing: .06em; font-weight: 600; margin-bottom: 12px; }
-  .headline { font-size: 42px; line-height: 1.2; margin: 0 0 12px; }
-  .subhead { color: #5b6b7a; margin: 0 0 24px; }
-  .cta-row { display: flex; gap: 16px; }
-  .btn { padding: 10px 18px; border-radius: 999px; text-decoration: none; font-weight: 600; }
-  .btn-primary { background: #500000; color: #fff; border: 2px solid #500000; }
-  .btn-primary:hover { background: #6a0000; border-color: #6a0000; }
-  .btn-outline { background: transparent; color: #500000; border: 2px solid #500000; }
-  .btn-outline:hover { background: #5000000d; }
-  .right { display: flex; justify-content: center; }
-  .image-placeholder {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    background: #e6edf5;
-    border: 2px dashed #9fb3c8;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #74879b;
-    font-weight: 600;
-  }
-  @media (max-width: 900px) {
-    .landing-content { grid-template-columns: 1fr; }
-    .right { order: -1; }
-  }
-</style>
