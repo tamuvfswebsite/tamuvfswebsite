@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_17_193000) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_18_194628) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -135,6 +135,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_17_193000) do
     t.index ["user_id"], name: "index_resumes_on_user_id"
   end
 
+  create_table "role_applications", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "org_role"
+    t.text "essay"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_role_applications_on_user_id"
+  end
+
   create_table "translations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "locale"
     t.string "key"
@@ -163,4 +172,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_17_193000) do
   add_foreign_key "organizational_role_users", "organizational_roles"
   add_foreign_key "organizational_role_users", "users"
   add_foreign_key "resumes", "users"
+  add_foreign_key "role_applications", "users"
 end

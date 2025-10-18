@@ -16,8 +16,20 @@ class ResumesController < ApplicationController
     per = (params[:per] || 20).to_i
     per = 100 if per > 100
 
-    @resumes = Resumes::IndexQuery.call(sort: params[:sort], direction: params[:direction])
-                                  .page(params[:page]).per(per)
+    @resumes = Resumes::IndexQuery.call(
+      sort: params[:sort],
+      direction: params[:direction],
+      major: params[:major],
+      organizational_role: params[:organizational_role],
+      graduation_year: params[:graduation_year],
+      gpa_operator: params[:gpa_operator],
+      gpa_value: params[:gpa_value]
+    ).page(params[:page]).per(per)
+
+    # Get unique values for filter dropdowns
+    @majors = Resume.where.not(major: [nil, '']).distinct.pluck(:major).sort
+    @organizational_roles = Resume.where.not(organizational_role: [nil, '']).distinct.pluck(:organizational_role).sort
+    @graduation_years = Resume.where.not(graduation_date: nil).distinct.pluck(:graduation_date).sort.reverse
   end
 
   def show; end

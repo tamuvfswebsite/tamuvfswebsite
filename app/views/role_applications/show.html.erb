@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @role_application %>
+
+<div>
+  <%= link_to "Edit this role application", edit_role_application_path(@role_application) %> |
+  <%= link_to "Back to role applications", role_applications_path %>
+
+  <%= button_to "Destroy this role application", @role_application, method: :delete %>
+</div>
