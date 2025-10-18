@@ -1,7 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe 'resumes/index', type: :view do
+  let(:admin_user) { create_user(role: 'admin') }
+  let(:admin) do
+    Admin.create!(
+      email: admin_user.email,
+      uid: admin_user.google_uid,
+      full_name: "#{admin_user.first_name} #{admin_user.last_name}"
+    )
+  end
+
   before do
+    # Stub the Devise helper methods for views
+    allow(view).to receive(:admin_signed_in?).and_return(true)
+    allow(view).to receive(:current_admin).and_return(admin)
+
     @user1 = User.create!(email: 'test1@example.com', google_uid: '12345')
     @user2 = User.create!(email: 'test2@example.com', google_uid: '67890')
     resumes = []
