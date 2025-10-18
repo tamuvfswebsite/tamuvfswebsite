@@ -118,6 +118,41 @@ RSpec.describe 'Users', type: :request do
     end
   end
 
+  describe 'points display' do
+    it 'displays user points on the index page' do
+      user = create_user(email: 'points_user@test.com')
+      user.update!(points: 42)
+
+      get '/users'
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include('Points:')
+      expect(response.body).to include('42')
+    end
+
+    it 'displays user points on the show page' do
+      user = create_user(email: 'points_user@test.com')
+      user.update!(points: 100)
+
+      controller = UsersController.new
+      allow(UsersController).to receive(:new).and_return(controller)
+      allow(controller).to receive(:admin_user?).and_return(true)
+
+      get "/users/#{user.id}"
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include('Points:')
+      expect(response.body).to include('100')
+    end
+
+    it 'displays zero points for users with no points' do
+      create_user(email: 'zero_points@test.com')
+
+      get '/users'
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include('Points:')
+      expect(response.body).to include('0')
+    end
+  end
+
   describe 'filtering by organizational role' do
     let(:ai_team) { OrganizationalRole.create!(name: 'AI Team') }
     let(:design_team) { OrganizationalRole.create!(name: 'Design Team') }
