@@ -2,6 +2,9 @@ class RoleApplicationsController < ApplicationController
   before_action :authenticate_user_for_application, only: %i[new create edit update]
   before_action :set_role_application, only: %i[show edit update]
   before_action :authorize_role_application_access, only: %i[show edit update]
+  before_action :check_existing_application, only: %i[new create]
+  before_action :check_resume_present, only: %i[new create]
+  before_action :load_organizational_roles, only: %i[new edit]
 
   # GET /role_applications or /role_applications.json
   def index
@@ -14,54 +17,26 @@ class RoleApplicationsController < ApplicationController
 
   # GET /role_applications/new
   def new
-    # Check if user already has an application
-    if current_user.role_application.present?
-      redirect_to root_path, alert: 'You have already submitted an application.'
-      return
-    end
-
-    # Check if user has a resume
-    unless current_user.resume&.file&.attached?
-      redirect_to new_user_resume_path(current_user, return_to: 'application'),
-                  alert: 'Please upload your resume before applying.'
-      return
-    end
-
     @role_application = RoleApplication.new
-    @organizational_roles = OrganizationalRole.all
   end
 
   # GET /role_applications/1/edit
-  def edit
-    @organizational_roles = OrganizationalRole.all
-  end
+  def edit; end
 
   # POST /role_applications or /role_applications.json
   def create
-    # Check if user already has an application
-    if current_user.role_application.present?
-      redirect_to root_path, alert: 'You have already submitted an application.'
-      return
-    end
-
-    # Check if user has a resume
-    unless current_user.resume&.file&.attached?
-      redirect_to new_user_resume_path(current_user, return_to: 'application'),
-                  alert: 'Please upload your resume before applying.'
-      return
-    end
-
     @role_application = current_user.build_role_application(role_application_params)
 
     respond_to do |format|
       if @role_application.save
         format.html do
           redirect_to @role_application,
-                      notice: 'Your application has been successfully submitted! We will review it and get back to you soon.'
+                      notice: 'Your application has been successfully submitted! ' \
+                              'We will review it and get back to you soon.'
         end
         format.json { render :show, status: :created, location: @role_application }
       else
-        @organizational_roles = OrganizationalRole.all
+        load_organizational_roles
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @role_application.errors, status: :unprocessable_entity }
       end
@@ -78,7 +53,7 @@ class RoleApplicationsController < ApplicationController
         end
         format.json { render :show, status: :ok, location: @role_application }
       else
-        @organizational_roles = OrganizationalRole.all
+        load_organizational_roles
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @role_application.errors, status: :unprocessable_entity }
       end
@@ -93,20 +68,36 @@ class RoleApplicationsController < ApplicationController
 
     # Store the location they're trying to access
     session[:applying_for_role] = true
-    # Redirect to OAuth for authentication  
+    # Redirect to OAuth for authentication
     redirect_to admin_google_oauth2_omniauth_authorize_path, alert: 'Please sign in to apply.'
   end
 
+  # Check if user already has an application (used in new/create)
+  def check_existing_application
+    return unless current_user.role_application.present?
+
+    redirect_to root_path, alert: 'You have already submitted an application.'
+  end
+
+  # Check if user has a resume (used in new/create)
+  def check_resume_present
+    return if current_user.resume&.file&.attached?
+
+    redirect_to new_user_resume_path(current_user, return_to: 'application'),
+                alert: 'Please upload your resume before applying.'
+  end
+
+  # Load organizational roles for the form
+  def load_organizational_roles
+    @organizational_roles = OrganizationalRole.all
+  end
+
   def current_user
-    # First, check if there's an admin signed in (Devise session)
-    if admin_signed_in?
-      @current_user ||= User.find_by(google_uid: current_admin.uid)
-    # Otherwise, check for session-based user (for non-admin applicants)
-    elsif session[:user_id]
-      @current_user ||= User.find_by(id: session[:user_id])
-    end
-    
-    @current_user
+    @current_user ||= if admin_signed_in?
+                        User.find_by(google_uid: current_admin.uid)
+                      elsif session[:user_id]
+                        User.find_by(id: session[:user_id])
+                      end
   end
   helper_method :current_user
 
@@ -116,30 +107,20 @@ class RoleApplicationsController < ApplicationController
   end
 
   def authorize_role_application_access
-    # Get the current user (either from admin session or user session)
-    logged_in_user = current_user
-
-    unless logged_in_user
-      # If no user at all, redirect to sign in
+    unless current_user
       session[:applying_for_role] = true
       redirect_to admin_google_oauth2_omniauth_authorize_path, alert: 'Please sign in to view this application.'
       return
     end
 
-    # Allow if user is an admin (check both admin session AND user role)
-    return if admin_signed_in? && logged_in_user.role == 'admin'
+    # Allow admins to view any application
+    return if admin_signed_in? && current_user.role == 'admin'
 
-    # Otherwise, only allow viewing own application (compare by ID for reliable comparison)
-    return if @role_application&.user_id == logged_in_user.id
+    # Allow users to view only their own application
+    return if @role_application&.user_id == current_user.id
 
     redirect_to root_path, alert: 'You can only view your own application.'
   end
-
-  def current_admin
-    # Devise provides this for admins
-    @current_admin ||= super if defined?(super)
-  end
-  helper_method :current_admin
 
   # Only allow a list of trusted parameters through.
   def role_application_params

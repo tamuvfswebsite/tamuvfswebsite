@@ -1,10 +1,9 @@
 class RoleApplication < ApplicationRecord
   belongs_to :user
-  belongs_to :organizational_role, foreign_key: :org_role_id, optional: false
+  belongs_to :organizational_role, foreign_key: :org_role_id
 
   validates :essay, presence: true, length: { minimum: 50 }
   validates :user_id, uniqueness: { message: 'has already submitted an application' }
-  
   validate :user_must_have_resume
 
   private

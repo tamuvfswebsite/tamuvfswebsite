@@ -11,32 +11,40 @@
     </div>
   <% end %>
 
-  <div class="gpa">
-    <%= form.label :gpa, "GPA" %>
-    <%= form.number_field :gpa, step: 0.01, min: 0, max: 4 %>
+  <div class="gpa" style="margin-bottom: 15px;">
+    <%= form.label :gpa, "GPA *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+    <%= form.number_field :gpa, step: 0.01, min: 0, max: 4, required: true, 
+        style: "padding: 8px; width: 200px; border: 1px solid #ccc; border-radius: 4px;" %>
   </div>
 
-  <div class="graduation-date">
-    <%= form.label :graduation_date, "Graduation Year" %>
-    <%= form.select :graduation_date, ((Date.today.year - 4)...(Date.today.year + 8)).to_a.reverse, prompt: "Select Graduation Year" %>
+  <div class="graduation-date" style="margin-bottom: 15px;">
+    <%= form.label :graduation_date, "Graduation Year *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+    <%= form.select :graduation_date, ((Date.today.year - 4)...(Date.today.year + 8)).to_a.reverse, 
+        { prompt: "Select Graduation Year" }, 
+        { required: true, style: "padding: 8px; width: 250px; border: 1px solid #ccc; border-radius: 4px;" } %>
   </div>
 
-  <div class="major">
-    <%= form.label :major, "Major" %>
-    <%= form.select :major, ["Aerospace Engineering", "Civil Engineering", "Computer Science", "Computer Engineering", "Mechanical Engineering"], prompt: "Select Major" %>
+  <div class="major" style="margin-bottom: 15px;">
+    <%= form.label :major, "Major *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+    <%= form.select :major, ["Aerospace Engineering", "Civil Engineering", "Computer Science", "Computer Engineering", "Mechanical Engineering"], 
+        { prompt: "Select Major" }, 
+        { required: true, style: "padding: 8px; width: 250px; border: 1px solid #ccc; border-radius: 4px;" } %>
   </div>
 
-  <div class="organizational-role">
-    <%= form.label :organizational_role, "Organizational Role" %>
-    <%= form.select :organizational_role, ["X Team", "Y Team", "Z Team", "Student"], prompt: "Select VFS Team" %>
+  <div class="organizational-role" style="margin-bottom: 15px;">
+    <%= form.label :organizational_role, "Organizational Role *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+    <%= form.select :organizational_role, ["X Team", "Y Team", "Z Team", "Student"], 
+        { prompt: "Select VFS Team" }, 
+        { required: true, style: "padding: 8px; width: 250px; border: 1px solid #ccc; border-radius: 4px;" } %>
   </div>
 
-  <div class="field">
-    <%= form.label :file, "Upload Resume" %>
-    <%= form.file_field :file, accept: 'application/pdf' %>
+  <div class="field" style="margin-bottom: 15px;">
+    <%= form.label :file, "Upload Resume (PDF only) *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+    <%= form.file_field :file, accept: 'application/pdf', required: true,
+        style: "padding: 8px; border: 1px solid #ccc; border-radius: 4px;" %>
   </div>
 
   <div>
-    <%= form.submit %>
+    <%= form.submit "Submit Resume", style: "padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;" %>
   </div>
 <% end %>

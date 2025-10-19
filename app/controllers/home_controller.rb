@@ -31,7 +31,7 @@ class HomeController < ApplicationController
 
   def current_user
     return nil unless admin_signed_in?
-    
+
     @current_user ||= User.find_by(google_uid: current_admin.uid)
   end
 end

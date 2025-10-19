@@ -11,13 +11,13 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     # Check if they're trying to apply for a role
     if session[:applying_for_role]
       session.delete(:applying_for_role)
-      
+
       # Sign in the admin if they are one (maintains admin session)
       if admin.present?
         sign_out_all_scopes
         sign_in(:admin, admin)
       end
-      
+
       # Check if user already has an application
       if user.role_application.present?
         flash[:alert] = 'You have already submitted an application.'
@@ -81,7 +81,7 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
     # Update avatar URL on each login to keep it fresh
     user.update(google_avatar_url: auth.info.image) if user.persisted?
-    
+
     user
   end
 end

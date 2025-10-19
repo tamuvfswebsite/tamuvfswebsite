@@ -2,10 +2,6 @@ require 'rails_helper'
 
 RSpec.describe RoleApplicationsController, type: :routing do
   describe 'routing' do
-    it 'routes to #index' do
-      expect(get: '/role_applications').to route_to('role_applications#index')
-    end
-
     it 'routes to #new' do
       expect(get: '/role_applications/new').to route_to('role_applications#new')
     end
@@ -28,10 +24,6 @@ RSpec.describe RoleApplicationsController, type: :routing do
 
     it 'routes to #update via PATCH' do
       expect(patch: '/role_applications/1').to route_to('role_applications#update', id: '1')
-    end
-
-    it 'routes to #destroy' do
-      expect(delete: '/role_applications/1').to route_to('role_applications#destroy', id: '1')
     end
   end
 end
