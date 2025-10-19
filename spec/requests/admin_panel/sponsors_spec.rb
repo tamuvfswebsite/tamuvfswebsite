@@ -2,20 +2,22 @@ require 'rails_helper'
 
 RSpec.describe 'AdminPanel::Sponsors', type: :request do
   before do
-    # Skip the authentication entirely for tests
-    allow_any_instance_of(AdminPanel::BaseController).to receive(:ensure_admin_user).and_return(true)
+    # Skip authentication for tests
+    allow_any_instance_of(ApplicationController).to receive(:admin_user?).and_return(true)
+    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(double('AdminUser'))
   end
 
   describe 'GET /index' do
     it 'returns http success' do
-      get '/admin_panel/sponsors/index'
+      get '/admin_panel/sponsors'
       expect(response).to have_http_status(:success)
     end
   end
 
   describe 'GET /show' do
     it 'returns http success' do
-      get '/admin_panel/sponsors/show'
+      sponsor = Sponsor.create!(company_name: 'Test Co', website: 'https://example.com', logo_url: 'https://logo.png')
+      get "/admin_panel/sponsors/#{sponsor.id}"
       expect(response).to have_http_status(:success)
     end
   end
@@ -29,7 +31,8 @@ RSpec.describe 'AdminPanel::Sponsors', type: :request do
 
   describe 'GET /edit' do
     it 'returns http success' do
-      get '/admin_panel/sponsors/edit'
+      sponsor = Sponsor.create!(company_name: 'Test Co', website: 'https://example.com', logo_url: 'https://logo.png')
+      get "/admin_panel/sponsors/#{sponsor.id}/edit"
       expect(response).to have_http_status(:success)
     end
   end

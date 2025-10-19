@@ -136,12 +136,6 @@ ActiveRecord::Schema[8.0].define(version: 20_251_017_193_000) do
     t.index ['user_id'], name: 'index_resumes_on_user_id'
   end
 
-  create_table 'translations', id: :uuid, default: -> { 'gen_random_uuid()' }, force: :cascade do |t|
-    t.string 'locale'
-    t.string 'key'
-    t.text 'value'
-  end
-
   create_table 'sponsor_user_joins', force: :cascade do |t|
     t.bigint 'user_id', null: false
     t.bigint 'sponsor_id', null: false
@@ -157,6 +151,12 @@ ActiveRecord::Schema[8.0].define(version: 20_251_017_193_000) do
     t.string 'website'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
+  end
+
+  create_table 'translations', id: :uuid, default: -> { 'gen_random_uuid()' }, force: :cascade do |t|
+    t.string 'locale'
+    t.string 'key'
+    t.text 'value'
   end
 
   create_table 'users', force: :cascade do |t|
