@@ -1,49 +1,49 @@
-class AdminPanel::SponsorsController < ApplicationController
-  before_action :set_sponsor, only: [:show, :edit, :update, :destroy]
+module AdminPanel
+  class SponsorsController < ApplicationController
+    before_action :set_sponsor, only: %i[show edit update destroy]
 
-  def index
-    @sponsors = Sponsor.all
-  end
-
-  def show
-  end
-
-  def new
-    @sponsor = Sponsor.new
-  end
-
-  def edit
-  end
-
-  def create
-    @sponsor = Sponsor.new(sponsor_params)
-    if @sponsor.save
-      redirect_to admin_panel_sponsor_path(@sponsor), notice: 'Sponsor was successfully created.'
-    else
-      render :new
+    def index
+      @sponsors = Sponsor.all
     end
-  end
 
-  def update
-    if @sponsor.update(sponsor_params)
-      redirect_to admin_panel_sponsor_path(@sponsor), notice: 'Sponsor was successfully updated.'
-    else
-      render :edit
+    def show; end
+
+    def new
+      @sponsor = Sponsor.new
     end
-  end
 
-  def destroy
-    @sponsor.destroy
-    redirect_to admin_panel_sponsors_path, notice: 'Sponsor was successfully deleted.'
-  end
+    def edit; end
 
-  private
+    def create
+      @sponsor = Sponsor.new(sponsor_params)
+      if @sponsor.save
+        redirect_to admin_panel_sponsor_path(@sponsor), notice: 'Sponsor was successfully created.'
+      else
+        render :new
+      end
+    end
 
-  def set_sponsor
-    @sponsor = Sponsor.find(params[:id])
-  end
+    def update
+      if @sponsor.update(sponsor_params)
+        redirect_to admin_panel_sponsor_path(@sponsor), notice: 'Sponsor was successfully updated.'
+      else
+        render :edit
+      end
+    end
 
-  def sponsor_params
-    params.require(:sponsor).permit(:company_name, :website, :logo_url)
+    def destroy
+      @sponsor.destroy
+      redirect_to admin_panel_sponsors_path, notice: 'Sponsor was successfully deleted.'
+    end
+
+    private
+
+    def set_sponsor
+      @sponsor = Sponsor.find(params[:id])
+    end
+
+    def sponsor_params
+      params.require(:sponsor).permit(:company_name, :website, :logo_url)
+    end
   end
 end

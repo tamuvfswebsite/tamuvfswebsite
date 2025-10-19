@@ -128,5 +128,4 @@ ActiveRecord::Schema[8.0].define(version: 20_251_016_000_000) do
   add_foreign_key 'resumes', 'users'
   add_foreign_key 'sponsor_user_joins', 'sponsors'
   add_foreign_key 'sponsor_user_joins', 'users'
-  add_foreign_key 'users', 'organizational_roles'
 end

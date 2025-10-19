@@ -1,2 +1,4 @@
-module AdminPanel::SponsorsHelper
+module AdminPanel
+  module SponsorsHelper
+  end
 end
