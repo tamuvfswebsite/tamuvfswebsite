@@ -1,4 +1,14 @@
 class ResumesController < ApplicationController
+  include ResumeAuthorization
+  include ResumeValidations
+
+  # Handle authentication within authorization methods for index/show to prevent auto-redirect
+  before_action :authorize_admin_or_sponsor, only: %i[index]
+  before_action :authorize_own_resume, only: %i[show]
+
+  # Require explicit authentication for create/update/delete actions
+  before_action :authenticate_admin!, only: %i[new create edit update destroy]
+
   before_action :set_user
   before_action :set_resume, only: %i[show edit update destroy]
 
@@ -86,34 +96,6 @@ class ResumesController < ApplicationController
     return if @resume
 
     redirect_to (@user ? user_path(@user) : resumes_path), alert: 'Resume not found.'
-  end
-
-  def validate_user_for_create
-    unless @user
-      redirect_to root_path, alert: 'User not found'
-      return false
-    end
-
-    if @user.resume.present?
-      redirect_to @user, alert: 'You already have a resume.'
-      return false
-    end
-
-    true
-  end
-
-  def validate_user_and_resume_for_update
-    unless @user && @resume
-      redirect_to root_path, alert: 'Resume not found'
-      return false
-    end
-
-    if @resume.user != @user
-      redirect_to user_path(@user), alert: 'You can only update your own resume.'
-      return false
-    end
-
-    true
   end
 
   def resume_params

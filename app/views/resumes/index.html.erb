@@ -2,6 +2,12 @@
 
 <% content_for :title, "Resumes" %>
 
+<% if admin_signed_in? %>
+    <p>You are signed in with <strong><%= current_admin.email %></strong>.</p>
+<% else %>
+    <p>You are not signed in.</p>
+<% end %>
+
 <h1>Resumes</h1>
 
 <table id="resumes" border="1">

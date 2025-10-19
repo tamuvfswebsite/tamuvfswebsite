@@ -8,6 +8,7 @@ class Event < ApplicationRecord
 
   scope :future_events, -> { where('event_date > ?', Time.current) }
   scope :past_events, -> { where('event_date <= ?', Time.current) }
+  scope :published, -> { where(is_published: true) }
 
   def formatted_date
     event_date&.strftime('%B %d, %Y at %I:%M %p')

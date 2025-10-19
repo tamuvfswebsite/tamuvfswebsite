@@ -13,7 +13,18 @@ require 'rails_helper'
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe '/resumes', type: :request do
-  let(:user) { User.create!(email: 'test@example.com', google_uid: '12345') }
+  let(:user) { create_user(role: 'admin') }
+  let(:admin) do
+    Admin.find_or_create_by!(
+      email: user.email,
+      uid: user.google_uid,
+      full_name: "#{user.first_name} #{user.last_name}"
+    )
+  end
+
+  before do
+    sign_in admin
+  end
 
   let(:valid_attributes) do
     {

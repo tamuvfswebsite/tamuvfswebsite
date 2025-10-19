@@ -35,6 +35,10 @@ RSpec.configure do |config|
   config.include ActionDispatch::TestProcess
   # Include auth helpers
   config.include AuthHelpers
+  # Include Devise test helpers
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :view
+  config.include Devise::Test::IntegrationHelpers, type: :request
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [
