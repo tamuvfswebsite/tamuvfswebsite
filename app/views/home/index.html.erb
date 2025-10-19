@@ -8,7 +8,12 @@
       <p class="subhead">Advancing rotorcraft and VTOL innovation at Texas A&M University.</p>
 
       <div class="cta-row">
-        <%= link_to "Apply Now", "#", class: "btn btn-primary" %>
+        <%= button_to "Apply Now",
+              apply_path,
+              method: :get,
+              form: { style: "display:inline-block;" },
+              data: { turbo: false },
+              class: "btn btn-primary" %>
         <%= button_to "Member Sign In", 
               admin_google_oauth2_omniauth_authorize_path,
               method: :post,

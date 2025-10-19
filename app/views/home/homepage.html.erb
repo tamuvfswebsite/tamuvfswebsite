@@ -35,6 +35,11 @@
         <% else %>
           <%= link_to "Upload Resume", new_user_resume_path(current_user), class: "btn btn-my-resume" %>
         <% end %>
+        
+        <%# Show application status/link if user has submitted one %>
+        <% if current_user.role_application.present? %>
+          <%= link_to "Review My Application", role_application_path(current_user.role_application), class: "btn btn-application" %>
+        <% end %>
       <% end %>
     <% end %>
   </div>

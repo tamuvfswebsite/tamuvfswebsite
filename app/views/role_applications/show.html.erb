@@ -1,10 +1,21 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, "Application Submitted" %>
 
-<%= render @role_application %>
+<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+  <% if notice %>
+    <div style="background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+      <%= notice %>
+    </div>
+  <% end %>
 
-<div>
-  <%= link_to "Edit this role application", edit_role_application_path(@role_application) %> |
-  <%= link_to "Back to role applications", role_applications_path %>
+  <h1>Application Details</h1>
 
-  <%= button_to "Destroy this role application", @role_application, method: :delete %>
+  <%= render @role_application %>
+
+  <div style="margin-top: 30px; display: flex; gap: 15px;">
+    <%= link_to "← Back to Home", root_path, class: "btn btn-primary", style: "display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;" %>
+    
+    <% if current_user && @role_application.user == current_user %>
+      <%= link_to "Edit Application", edit_role_application_path(@role_application), class: "btn btn-secondary", style: "display: inline-block; padding: 10px 20px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 4px;" %>
+    <% end %>
+  </div>
 </div>

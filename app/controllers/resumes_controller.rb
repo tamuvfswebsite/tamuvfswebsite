@@ -24,12 +24,14 @@ class ResumesController < ApplicationController
       redirect_to @user, alert: 'You already have a resume.'
     else
       @resume = @user.build_resume
+      @return_to = params[:return_to] # Store for form submission
     end
   end
 
   def edit
     # Load the resume's user if we don't have it
     @user ||= @resume.user
+    @return_to = params[:return_to] # Store for form submission
     return if @resume.user == @user
 
     redirect_to resumes_path, alert: 'You can only edit your own resume.'
@@ -43,8 +45,10 @@ class ResumesController < ApplicationController
     @resume.file.attach(params[:resume][:file]) if params[:resume]&.dig(:file)&.present?
 
     if @resume.save
-      redirect_to @user, notice: 'Resume was successfully created.'
+      redirect_path = determine_redirect_path(params[:return_to], @user)
+      redirect_to redirect_path, notice: 'Resume was successfully created.'
     else
+      @return_to = params[:return_to]
       render :new, status: :unprocessable_entity
     end
   end
@@ -55,8 +59,10 @@ class ResumesController < ApplicationController
     result = Resumes::Updater.new(@resume, @user, params).call
 
     if result[:success]
-      redirect_to result[:redirect_to], notice: result[:notice]
+      redirect_path = determine_redirect_path(params[:return_to], result[:redirect_to])
+      redirect_to redirect_path, notice: result[:notice]
     else
+      @return_to = params[:return_to]
       render :edit, status: result[:status]
     end
   end
@@ -127,5 +133,13 @@ class ResumesController < ApplicationController
     @majors = Resume.where.not(major: [nil, '']).distinct.pluck(:major).sort
     @organizational_roles = Resume.where.not(organizational_role: [nil, '']).distinct.pluck(:organizational_role).sort
     @graduation_years = Resume.where.not(graduation_date: nil).distinct.pluck(:graduation_date).sort.reverse
+  end
+
+  def determine_redirect_path(return_to_param, default_path)
+    if return_to_param == 'application'
+      new_role_application_path
+    else
+      default_path
+    end
   end
 end

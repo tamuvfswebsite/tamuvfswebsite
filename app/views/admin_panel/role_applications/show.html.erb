@@ -1,0 +1,56 @@
+<% content_for :title, "Application Details" %>
+
+<div style="padding: 20px; max-width: 900px; margin: 0 auto;">
+  <h1>Application Details</h1>
+
+  <div style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 30px; margin-top: 20px;">
+    <div style="margin-bottom: 25px;">
+      <h2 style="margin: 0 0 10px 0;"><%= @role_application.user.first_name %> <%= @role_application.user.last_name %></h2>
+      <p style="color: #6c757d; margin: 0;"><%= @role_application.user.email %></p>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <strong>Applied For:</strong>
+      <span style="background-color: #007bff; color: white; padding: 5px 15px; border-radius: 20px; font-size: 14px; margin-left: 10px;">
+        <%= @role_application.organizational_role.name %>
+      </span>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <strong>Submitted:</strong> <%= @role_application.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <strong>Resume:</strong>
+      <% if @role_application.user.resume&.file&.attached? %>
+        <%= link_to @role_application.user.resume.file.filename, user_resume_path(@role_application.user), 
+            target: "_blank", 
+            style: "color: #007bff; margin-left: 10px;" %>
+        <br>
+        <small style="color: #6c757d;">
+          GPA: <%= @role_application.user.resume.gpa || 'N/A' %> | 
+          Major: <%= @role_application.user.resume.major || 'N/A' %> | 
+          Graduation: <%= @role_application.user.resume.graduation_date || 'N/A' %>
+        </small>
+      <% else %>
+        <span style="color: #dc3545;">No resume attached</span>
+      <% end %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <strong>Essay Response:</strong>
+      <div style="background-color: white; border: 1px solid #dee2e6; border-radius: 4px; padding: 15px; margin-top: 10px; white-space: pre-wrap;">
+        <%= @role_application.essay %>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 30px; display: flex; gap: 15px;">
+    <%= link_to "← Back to Applications", admin_panel_role_applications_path, 
+        style: "display: inline-block; padding: 10px 20px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 4px;" %>
+    <%= button_to "Delete Application", admin_panel_role_application_path(@role_application), 
+        method: :delete,
+        data: { turbo_confirm: "Are you sure you want to delete this application? This action cannot be undone." },
+        style: "display: inline-block; padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;" %>
+  </div>
+</div>

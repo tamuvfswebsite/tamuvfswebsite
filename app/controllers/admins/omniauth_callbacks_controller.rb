@@ -3,13 +3,37 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     admin = Admin.from_google(**from_google_params)
 
     # Create or update user record
-    create_or_update_user
+    user = create_or_update_user
 
-    if admin.present?
+    # Store user session for application flow (for non-admin users)
+    session[:user_id] = user.id if user.present?
+
+    # Check if they're trying to apply for a role
+    if session[:applying_for_role]
+      session.delete(:applying_for_role)
+      
+      # Sign in the admin if they are one (maintains admin session)
+      if admin.present?
+        sign_out_all_scopes
+        sign_in(:admin, admin)
+      end
+      
+      # Check if user already has an application
+      if user.role_application.present?
+        flash[:alert] = 'You have already submitted an application.'
+        redirect_to root_path
+      else
+        # Redirect to application page
+        # Session is now properly established for both admins and users
+        redirect_to new_role_application_path
+      end
+    elsif admin.present?
+      # Normal admin sign-in flow
       sign_out_all_scopes
       flash[:success] = t 'devise.omniauth_callbacks.success', kind: 'Google'
       sign_in_and_redirect admin, event: :authentication
     else
+      # Not an admin and not applying - deny access
       flash[:alert] =
         t 'devise.omniauth_callbacks.failure', kind: 'Google', reason: "#{auth.info.email} is not authorized."
       redirect_to new_admin_session_path
@@ -57,5 +81,7 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
     # Update avatar URL on each login to keep it fresh
     user.update(google_avatar_url: auth.info.image) if user.persisted?
+    
+    user
   end
 end
