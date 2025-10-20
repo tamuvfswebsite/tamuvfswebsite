@@ -121,7 +121,7 @@ RSpec.describe ResumeAuthorization, type: :controller do
     end
 
     it 'allows admin users to access any resume' do
-      admin_user = create_user(uid: 'admin123', role: 'admin')
+      create_user(uid: 'admin123', role: 'admin')
       admin = double('Admin', uid: 'admin123')
 
       allow(controller).to receive(:admin_signed_in?).and_return(true)
@@ -133,7 +133,7 @@ RSpec.describe ResumeAuthorization, type: :controller do
     end
 
     it 'allows sponsor users to access any resume' do
-      sponsor_user = create_user(uid: 'sponsor123', role: 'sponsor')
+      create_user(uid: 'sponsor123', role: 'sponsor')
       admin = double('Admin', uid: 'sponsor123')
 
       allow(controller).to receive(:admin_signed_in?).and_return(true)
