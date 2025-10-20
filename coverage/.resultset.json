@@ -1,7 +1,7 @@
 {
   "RSpec": {
     "coverage": {
-      "/Land-502/app/helpers/admin_panel/dashboard_helper.rb": {
+      "/csce431/Land-502/app/helpers/admin_panel/dashboard_helper.rb": {
         "lines": [
           1,
           1,
@@ -9,7 +9,7 @@
           null
         ]
       },
-      "/Land-502/app/helpers/admin_panel/events_helper.rb": {
+      "/csce431/Land-502/app/helpers/admin_panel/events_helper.rb": {
         "lines": [
           1,
           1,
@@ -17,25 +17,39 @@
           null
         ]
       },
-      "/Land-502/app/helpers/application_helper.rb": {
+      "/csce431/Land-502/app/helpers/admin_panel/sponsors_helper.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          null
+        ]
+      },
+      "/csce431/Land-502/app/helpers/application_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/Land-502/app/helpers/resumes_helper.rb": {
+      "/csce431/Land-502/app/helpers/resumes_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/Land-502/app/helpers/users_helper.rb": {
+      "/csce431/Land-502/app/helpers/sponsor_dashboard_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/Land-502/app/models/admin.rb": {
+      "/csce431/Land-502/app/helpers/users_helper.rb": {
+        "lines": [
+          1,
+          null
+        ]
+      },
+      "/csce431/Land-502/app/models/admin.rb": {
         "lines": [
           1,
           null,
@@ -48,14 +62,14 @@
           null
         ]
       },
-      "/Land-502/app/models/application_record.rb": {
+      "/csce431/Land-502/app/models/application_record.rb": {
         "lines": [
           1,
           1,
           null
         ]
       },
-      "/Land-502/app/models/event.rb": {
+      "/csce431/Land-502/app/models/event.rb": {
         "lines": [
           1,
           1,
@@ -87,7 +101,7 @@
           null
         ]
       },
-      "/Land-502/app/models/organizational_role.rb": {
+      "/csce431/Land-502/app/models/organizational_role.rb": {
         "lines": [
           1,
           1,
@@ -97,7 +111,7 @@
           null
         ]
       },
-      "/Land-502/app/models/resume.rb": {
+      "/csce431/Land-502/app/models/resume.rb": {
         "lines": [
           1,
           1,
@@ -128,8 +142,35 @@
           null
         ]
       },
-      "/Land-502/app/models/user.rb": {
+      "/csce431/Land-502/app/models/sponsor.rb": {
         "lines": [
+          1,
+          1,
+          1,
+          null
+        ]
+      },
+      "/csce431/Land-502/app/models/sponsor_user_join.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          1,
+          null,
+          1,
+          null,
+          1,
+          0,
+          null,
+          null
+        ]
+      },
+      "/csce431/Land-502/app/models/user.rb": {
+        "lines": [
+          1,
+          1,
+          1,
           1,
           1,
           1,
@@ -140,27 +181,24 @@
           null
         ]
       },
-      "/Land-502/app/controllers/application_controller.rb": {
+      "/csce431/Land-502/app/controllers/application_controller.rb": {
         "lines": [
           1,
-          null,
-          1,
-          null,
           1,
           null,
           1,
           6,
-          2,
-          2,
-          2,
           null,
           null,
-          4,
+          1,
           null,
-          4,
           null,
-          3,
-          3,
+          null,
+          1,
+          6,
+          null,
+          5,
+          5,
           null,
           null,
           1,
@@ -168,11 +206,22 @@
           null,
           0,
           0,
+          0,
+          null,
+          null,
+          null,
+          null,
+          1,
+          6,
+          null,
+          null,
+          1,
+          0,
           null,
           null
         ]
       },
-      "/Land-502/app/controllers/resumes_controller.rb": {
+      "/csce431/Land-502/app/controllers/resumes_controller.rb": {
         "lines": [
           1,
           1,
@@ -280,7 +329,7 @@
           null
         ]
       },
-      "/Land-502/app/controllers/concerns/resume_authorization.rb": {
+      "/csce431/Land-502/app/controllers/concerns/resume_authorization.rb": {
         "lines": [
           null,
           null,
@@ -322,7 +371,7 @@
           null
         ]
       },
-      "/Land-502/app/controllers/concerns/resume_validations.rb": {
+      "/csce431/Land-502/app/controllers/concerns/resume_validations.rb": {
         "lines": [
           null,
           null,
@@ -361,7 +410,7 @@
           null
         ]
       },
-      "/Land-502/app/models/organizational_role_user.rb": {
+      "/csce431/Land-502/app/models/organizational_role_user.rb": {
         "lines": [
           1,
           1,
@@ -371,7 +420,7 @@
           null
         ]
       },
-      "/Land-502/app/controllers/admin_panel/base_controller.rb": {
+      "/csce431/Land-502/app/controllers/admin_panel/base_controller.rb": {
         "lines": [
           1,
           1,
@@ -380,7 +429,7 @@
           null
         ]
       },
-      "/Land-502/app/controllers/admin_panel/dashboard_controller.rb": {
+      "/csce431/Land-502/app/controllers/admin_panel/dashboard_controller.rb": {
         "lines": [
           1,
           1,
@@ -390,7 +439,7 @@
           1,
           1,
           null,
-          null,
+          1,
           null,
           null,
           1,
@@ -400,7 +449,7 @@
           null
         ]
       },
-      "/Land-502/app/controllers/admin_panel/events_controller.rb": {
+      "/csce431/Land-502/app/controllers/admin_panel/events_controller.rb": {
         "lines": [
           1,
           1,
@@ -461,7 +510,7 @@
           null
         ]
       },
-      "/Land-502/app/models/event_rsvp.rb": {
+      "/csce431/Land-502/app/models/event_rsvp.rb": {
         "lines": [
           1,
           1,
@@ -473,7 +522,7 @@
           null
         ]
       },
-      "/Land-502/app/controllers/admin_panel/organizational_roles_controller.rb": {
+      "/csce431/Land-502/app/controllers/admin_panel/organizational_roles_controller.rb": {
         "lines": [
           1,
           1,
@@ -555,7 +604,60 @@
           null
         ]
       },
-      "/Land-502/app/controllers/users_controller.rb": {
+      "/csce431/Land-502/app/controllers/admin_panel/sponsors_controller.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          1,
+          1,
+          null,
+          null,
+          1,
+          null,
+          1,
+          1,
+          null,
+          null,
+          1,
+          null,
+          1,
+          0,
+          0,
+          0,
+          null,
+          0,
+          null,
+          null,
+          null,
+          1,
+          0,
+          0,
+          null,
+          0,
+          null,
+          null,
+          null,
+          1,
+          0,
+          0,
+          null,
+          null,
+          1,
+          null,
+          1,
+          2,
+          null,
+          null,
+          1,
+          0,
+          null,
+          null,
+          null
+        ]
+      },
+      "/csce431/Land-502/app/controllers/users_controller.rb": {
         "lines": [
           1,
           1,
@@ -637,7 +739,7 @@
           null
         ]
       },
-      "/Land-502/app/services/resumes/index_query.rb": {
+      "/csce431/Land-502/app/services/resumes/index_query.rb": {
         "lines": [
           1,
           1,
@@ -657,7 +759,7 @@
           null
         ]
       },
-      "/Land-502/app/services/resumes/updater.rb": {
+      "/csce431/Land-502/app/services/resumes/updater.rb": {
         "lines": [
           1,
           1,
@@ -723,7 +825,16 @@
           null
         ]
       },
-      "/Land-502/app/channels/application_cable/channel.rb": {
+      "/csce431/Land-502/app/controllers/sponsor_dashboard_controller.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          1,
+          null
+        ]
+      },
+      "/csce431/Land-502/app/channels/application_cable/channel.rb": {
         "lines": [
           0,
           0,
@@ -732,7 +843,7 @@
         ],
         "branches": {}
       },
-      "/Land-502/app/channels/application_cable/connection.rb": {
+      "/csce431/Land-502/app/channels/application_cable/connection.rb": {
         "lines": [
           0,
           0,
@@ -741,7 +852,7 @@
         ],
         "branches": {}
       },
-      "/Land-502/app/controllers/admin_panel/attendance_links_controller.rb": {
+      "/csce431/Land-502/app/controllers/admin_panel/attendance_links_controller.rb": {
         "lines": [
           0,
           0,
@@ -749,86 +860,6 @@
           0,
           0,
           null,
-          0,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0
-        ],
-        "branches": {}
-      },
-      "/Land-502/app/controllers/admins/omniauth_callbacks_controller.rb": {
-        "lines": [
-          0,
-          0,
-          0,
-          null,
-          null,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          null,
-          0,
-          null,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          null,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          null,
-          0,
-          null,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          null,
-          null,
-          0,
-          0,
-          0
-        ],
-        "branches": {}
-      },
-      "/Land-502/app/controllers/admins/sessions_controller.rb": {
-        "lines": [
           0,
           0,
           0,
@@ -841,7 +872,87 @@
         ],
         "branches": {}
       },
-      "/Land-502/app/controllers/checkins_controller.rb": {
+      "/csce431/Land-502/app/controllers/admins/omniauth_callbacks_controller.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          null,
+          null,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          null,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/csce431/Land-502/app/controllers/admins/sessions_controller.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/csce431/Land-502/app/controllers/checkins_controller.rb": {
         "lines": [
           0,
           0,
@@ -906,7 +1017,7 @@
         ],
         "branches": {}
       },
-      "/Land-502/app/controllers/event_rsvps_controller.rb": {
+      "/csce431/Land-502/app/controllers/event_rsvps_controller.rb": {
         "lines": [
           0,
           0,
@@ -951,7 +1062,7 @@
         ],
         "branches": {}
       },
-      "/Land-502/app/controllers/events_controller.rb": {
+      "/csce431/Land-502/app/controllers/events_controller.rb": {
         "lines": [
           0,
           0,
@@ -970,7 +1081,7 @@
         ],
         "branches": {}
       },
-      "/Land-502/app/controllers/home_controller.rb": {
+      "/csce431/Land-502/app/controllers/home_controller.rb": {
         "lines": [
           0,
           0,
@@ -995,7 +1106,7 @@
         ],
         "branches": {}
       },
-      "/Land-502/app/jobs/application_job.rb": {
+      "/csce431/Land-502/app/jobs/application_job.rb": {
         "lines": [
           0,
           null,
@@ -1007,7 +1118,7 @@
         ],
         "branches": {}
       },
-      "/Land-502/app/mailers/application_mailer.rb": {
+      "/csce431/Land-502/app/mailers/application_mailer.rb": {
         "lines": [
           0,
           0,
@@ -1016,7 +1127,7 @@
         ],
         "branches": {}
       },
-      "/Land-502/app/models/attendance.rb": {
+      "/csce431/Land-502/app/models/attendance.rb": {
         "lines": [
           0,
           0,
@@ -1027,28 +1138,28 @@
         ],
         "branches": {}
       },
-      "/Land-502/app/models/image.rb": {
+      "/csce431/Land-502/app/models/image.rb": {
         "lines": [
           0,
           0
         ],
         "branches": {}
       },
-      "/Land-502/app/models/message.rb": {
+      "/csce431/Land-502/app/models/message.rb": {
         "lines": [
           0,
           0
         ],
         "branches": {}
       },
-      "/Land-502/app/models/payment.rb": {
+      "/csce431/Land-502/app/models/payment.rb": {
         "lines": [
           0,
           0
         ],
         "branches": {}
       },
-      "/Land-502/app/models/translation.rb": {
+      "/csce431/Land-502/app/models/translation.rb": {
         "lines": [
           0,
           0
@@ -1056,6 +1167,6 @@
         "branches": {}
       }
     },
-    "timestamp": 1760737791
+    "timestamp": 1760910709
   }
 }

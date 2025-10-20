@@ -6,7 +6,7 @@ module AdminPanel
       @upcoming_events = Event.where('event_date >= ?', Time.current).order(:event_date).limit(5)
       @recent_events = Event.order(created_at: :desc).limit(5)
       # @recent_applications = Application.order(created_at: :desc).limit(5)
-      # @resume_count = Resume.count
+      @resume_count = Resume.count
     end
 
     def leaderboard
