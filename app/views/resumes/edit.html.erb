@@ -40,7 +40,7 @@
 
   <h2>Edit resume information</h2>
 <% form_url = @user ? user_resume_path(@user, return_to: @return_to) : resume_path(@resume, return_to: @return_to) %>
-<%= form_with(model: @resume, url: form_url, method: :patch, local: true) do |form| %>
+<%= form_with(model: @resume, url: form_url, method: :patch, local: true, data: { turbo: false }) do |form| %>
   <%= hidden_field_tag :stay_on_page, true %>
   <%= hidden_field_tag :return_to, @return_to %>
   
@@ -91,7 +91,7 @@
 <hr style="margin: 30px 0;" />
 
 <h2>Re-upload resume file</h2>
-<%= form_with(model: @resume, url: form_url, method: :patch, local: true, html: { multipart: true }) do |form| %>
+<%= form_with(model: @resume, url: form_url, method: :patch, local: true, html: { multipart: true }, data: { turbo: false }) do |form| %>
   <%= hidden_field_tag :file_only, true %>
   <%= hidden_field_tag :stay_on_page, true %>
   <%= hidden_field_tag :return_to, @return_to %>
