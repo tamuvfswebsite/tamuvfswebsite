@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'sponsor_dashboard/index'
   root 'home#index'
   get 'homepage', to: 'home#homepage', as: :homepage
 
@@ -27,6 +28,10 @@ Rails.application.routes.draw do
   end
 
   namespace :admin_panel do
+    # get "sponsors/index"
+    # get "sponsors/show"
+    # get "sponsors/new"
+    # get "sponsors/edit"
     root to: 'dashboard#index'
     # get "events/index"
     # get "events/show"
@@ -41,7 +46,7 @@ Rails.application.routes.draw do
     resources :events
     resources :attendance_links, only: %i[new create]
     resources :organizational_roles
-    # resources :sponsors
+    resources :sponsors
     # resources :resumes, only: [:index]
     # resources :applications, only: [:index]
   end

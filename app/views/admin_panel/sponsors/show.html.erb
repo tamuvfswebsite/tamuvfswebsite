@@ -1,0 +1,14 @@
+<h1><%= @sponsor.company_name %></h1>
+
+<div class="sponsor-details">
+  <p><strong>Website:</strong> <%= @sponsor.website %></p>
+  <p><strong>Logo URL:</strong> <%= @sponsor.logo_url %></p>
+</div>
+
+<div class="actions">
+  <%= link_to 'Edit Sponsor', edit_admin_panel_sponsor_path(@sponsor) %>
+  <%= button_to 'Delete Sponsor', admin_panel_sponsor_path(@sponsor),
+              method: :delete,
+              data: { confirm: "Are you sure you want to delete this sponsor?" } %>
+  <%= link_to 'Back to Sponsors', admin_panel_sponsors_path %>
+</div>

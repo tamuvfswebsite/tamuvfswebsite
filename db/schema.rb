@@ -136,6 +136,23 @@ ActiveRecord::Schema[8.0].define(version: 20_251_017_193_000) do
     t.index ['user_id'], name: 'index_resumes_on_user_id'
   end
 
+  create_table 'sponsor_user_joins', force: :cascade do |t|
+    t.bigint 'user_id', null: false
+    t.bigint 'sponsor_id', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['sponsor_id'], name: 'index_sponsor_user_joins_on_sponsor_id'
+    t.index ['user_id'], name: 'index_sponsor_user_joins_on_user_id'
+  end
+
+  create_table 'sponsors', force: :cascade do |t|
+    t.string 'company_name'
+    t.string 'logo_url'
+    t.string 'website'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+  end
+
   create_table 'translations', id: :uuid, default: -> { 'gen_random_uuid()' }, force: :cascade do |t|
     t.string 'locale'
     t.string 'key'
@@ -164,4 +181,6 @@ ActiveRecord::Schema[8.0].define(version: 20_251_017_193_000) do
   add_foreign_key 'organizational_role_users', 'organizational_roles'
   add_foreign_key 'organizational_role_users', 'users'
   add_foreign_key 'resumes', 'users'
+  add_foreign_key 'sponsor_user_joins', 'sponsors'
+  add_foreign_key 'sponsor_user_joins', 'users'
 end
