@@ -5,6 +5,12 @@ module ResumeAuthorization
 
   private
 
+  def current_authenticated_user
+    return unless admin_signed_in?
+
+    @current_authenticated_user ||= User.find_by(google_uid: current_admin.uid)
+  end
+
   # Only admins and sponsors can view all resumes
   def authorize_admin_or_sponsor
     unless admin_signed_in?
@@ -12,8 +18,7 @@ module ResumeAuthorization
       return
     end
 
-    current_user = User.find_by(google_uid: current_admin.uid)
-    return if current_user&.role&.in?(%w[admin sponsor])
+    return if current_authenticated_user&.role&.in?(%w[admin sponsor])
 
     redirect_to root_path, alert: 'Access denied. Admins and sponsors only.'
   end
@@ -25,13 +30,16 @@ module ResumeAuthorization
       return
     end
 
-    current_user = User.find_by(google_uid: current_admin.uid)
+    unless current_authenticated_user
+      redirect_to root_path, alert: 'User account not found. Please contact support.'
+      return
+    end
 
     # Allow if user is an admin
-    return if current_user&.role == 'admin'
+    return if current_authenticated_user.role == 'admin'
 
     # Otherwise, only allow viewing own resume
-    return if @resume&.user == current_user
+    return if @resume&.user_id == current_authenticated_user.id
 
     redirect_to root_path, alert: 'You can only view your own resume.'
   end

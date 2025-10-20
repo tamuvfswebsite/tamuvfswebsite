@@ -3,14 +3,19 @@ class Resume < ApplicationRecord
   has_one_attached :file
 
   validates :file, presence: true
-  validates :gpa, numericality: { greater_than_or_equal_to: 0.0, less_than_or_equal_to: 4.0 }, allow_nil: true
-  validates :graduation_date, numericality: {
-    only_integer: true,
-    greater_than_or_equal_to: 1900,
-    less_than_or_equal_to: Date.today.year + 8
-  }, allow_nil: true
+  validates :gpa,
+            numericality: { greater_than_or_equal_to: 0.0, less_than_or_equal_to: 4.0 },
+            allow_nil: true
+  validates :graduation_date,
+            numericality: {
+              only_integer: true,
+              greater_than_or_equal_to: 1900,
+              less_than_or_equal_to: -> { Date.today.year + 8 }
+            },
+            allow_nil: true
   validates :major, length: { maximum: 100 }, allow_blank: true
   validates :organizational_role, length: { maximum: 100 }, allow_blank: true
+
   validate :file_format
 
   private
@@ -18,7 +23,7 @@ class Resume < ApplicationRecord
   def file_format
     return unless file.attached?
 
-    errors.add(:file, 'must be a PDF') unless file.content_type.in?(%w[application/pdf])
+    errors.add(:file, 'must be a PDF') unless file.content_type == 'application/pdf'
 
     return unless file.byte_size > 5.megabytes
 

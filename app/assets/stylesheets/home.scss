@@ -175,3 +175,179 @@
     width: 90%;
   }
 }
+
+// Landing page styles (home/index.html.erb)
+.landing-page {
+  padding: 48px 24px;
+}
+
+.landing-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 48px;
+  align-items: center;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+
+    .right {
+      order: -1;
+    }
+  }
+}
+
+.brand {
+  color: #9fb3c8;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.headline {
+  font-size: 42px;
+  line-height: 1.2;
+  margin: 0 0 12px;
+}
+
+.subhead {
+  color: #5b6b7a;
+  margin: 0 0 24px;
+}
+
+.cta-row {
+  display: flex;
+  gap: 16px;
+}
+
+.btn-primary {
+  background: #500000;
+  color: #fff;
+  border: 2px solid #500000;
+
+  &:hover {
+    background: #6a0000;
+    border-color: #6a0000;
+  }
+}
+
+.btn-outline {
+  background: transparent;
+  color: #500000;
+  border: 2px solid #500000;
+
+  &:hover {
+    background: rgba(80, 0, 0, 0.05);
+  }
+}
+
+.right {
+  display: flex;
+  justify-content: center;
+}
+
+.image-placeholder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #e6edf5;
+  border: 2px dashed #9fb3c8;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #74879b;
+  font-weight: 600;
+}
+
+// Homepage styles (home/homepage.html.erb)
+.homepage-simple {
+  max-width: 720px;
+  margin: 48px auto;
+  padding: 24px;
+
+  h1 {
+    margin: 0 0 12px;
+  }
+
+  p {
+    color: #4b5563;
+  }
+}
+
+.actions {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.events-section {
+  max-width: 720px;
+  margin: 24px auto 48px;
+  padding: 0 24px;
+}
+
+.events-container {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.events-title {
+  margin: 0 0 12px;
+  font-size: 20px;
+}
+
+.events-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.event-item {
+  padding: 12px 0;
+  border-top: 1px solid #f0f2f5;
+
+  &:first-child {
+    border-top: none;
+  }
+}
+
+.event-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.event-title {
+  font-weight: 600;
+}
+
+.event-date {
+  color: #5b6b7a;
+  font-size: 14px;
+}
+
+.event-meta {
+  color: #6b7280;
+  font-size: 14px;
+  margin-top: 4px;
+  display: flex;
+  gap: 12px;
+}
+
+.event-actions {
+  margin-top: 8px;
+}
+
+.events-empty {
+  color: #6b7280;
+  margin: 8px 0 0;
+}
+
+.events-actions {
+  margin-top: 8px;
+}

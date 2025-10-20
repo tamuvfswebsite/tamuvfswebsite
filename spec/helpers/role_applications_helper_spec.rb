@@ -1,19 +1,19 @@
 require 'rails_helper'
 
 # Specs in this file have access to a helper object that includes
-# the ResumesHelper. For example:
+# the RoleApplicationsHelper. For example:
 #
-# describe ResumesHelper do
+# describe RoleApplicationsHelper do
 #   describe "string concat" do
 #     it "concats two strings with spaces" do
 #       expect(helper.concat_strings("this","that")).to eq("this that")
 #     end
 #   end
 # end
-RSpec.describe ResumesHelper, type: :helper do
+RSpec.describe RoleApplicationsHelper, type: :helper do
   describe 'module inclusion' do
     it 'is included in the helper object' do
-      expect(helper.class.ancestors).to include(ResumesHelper)
+      expect(helper.class.ancestors).to include(RoleApplicationsHelper)
     end
   end
 end

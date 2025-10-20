@@ -1,5 +1,7 @@
 module Resumes
   class Updater
+    attr_reader :resume, :user, :params
+
     def initialize(resume, user, params)
       @resume = resume
       @user = user
@@ -7,26 +9,24 @@ module Resumes
     end
 
     def call
-      return validation_error if file_required_but_missing?
+      return file_missing_error if file_required_but_missing?
 
       attach_file_if_present
 
       if file_only_update?
-        process_file_only_update
+        update_file_only
       else
-        process_metadata_update
+        update_metadata
       end
     end
 
     private
 
-    attr_reader :resume, :user, :params
-
     def file_required_but_missing?
       !resume.file.attached? && params.dig(:resume, :file).nil?
     end
 
-    def validation_error
+    def file_missing_error
       resume.errors.add(:file, "can't be blank")
       { success: false, status: :unprocessable_entity }
     end
@@ -41,22 +41,32 @@ module Resumes
       params[:file_only].present?
     end
 
-    def process_file_only_update
+    def update_file_only
       if resume.save
-        { success: true, redirect_to: user, notice: 'Resume file was successfully updated.' }
+        success_response('Resume file was successfully updated.')
       else
-        { success: false, status: :unprocessable_entity }
+        error_response
       end
     end
 
-    def process_metadata_update
-      permitted_params = params.require(:resume).permit(:file, :gpa, :graduation_date, :major, :organizational_role)
-
-      if resume.update(permitted_params.except(:file))
-        { success: true, redirect_to: user, notice: 'Resume was successfully updated.' }
+    def update_metadata
+      if resume.update(permitted_params)
+        success_response('Resume was successfully updated.')
       else
-        { success: false, status: :unprocessable_entity }
+        error_response
       end
+    end
+
+    def permitted_params
+      params.require(:resume).permit(:gpa, :graduation_date, :major, :organizational_role)
+    end
+
+    def success_response(message)
+      { success: true, redirect_to: user, notice: message }
+    end
+
+    def error_response
+      { success: false, status: :unprocessable_entity }
     end
   end
 end

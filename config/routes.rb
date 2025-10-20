@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   get 'sponsor_dashboard/index'
   root 'home#index'
   get 'homepage', to: 'home#homepage', as: :homepage
+  get 'apply', to: 'home#apply', as: :apply
 
   # Public check-in endpoint (token-based)
   get  'checkin', to: 'checkins#new',    as: :checkin
@@ -19,6 +20,9 @@ Rails.application.routes.draw do
   resources :users do
     resource :resume, only: %i[new create show edit update destroy]
   end
+
+  # Role applications - users can create/view their own, admins can view all
+  resources :role_applications, only: %i[new create show edit update]
 
   devise_for :admins, controllers: { omniauth_callbacks: 'admins/omniauth_callbacks' }
   devise_scope :admin do
@@ -46,6 +50,9 @@ Rails.application.routes.draw do
     resources :events
     resources :attendance_links, only: %i[new create]
     resources :organizational_roles
+    resources :role_applications, only: %i[index show destroy] do
+      patch :update_status, on: :member
+    end
     resources :sponsors
     # resources :resumes, only: [:index]
     # resources :applications, only: [:index]
