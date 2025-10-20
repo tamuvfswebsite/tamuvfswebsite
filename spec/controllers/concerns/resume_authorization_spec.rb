@@ -120,6 +120,30 @@ RSpec.describe ResumeAuthorization, type: :controller do
       expect(response).to have_http_status(:success)
     end
 
+    it 'allows admin users to access any resume' do
+      admin_user = create_user(uid: 'admin123', role: 'admin')
+      admin = double('Admin', uid: 'admin123')
+
+      allow(controller).to receive(:admin_signed_in?).and_return(true)
+      allow(controller).to receive(:current_admin).and_return(admin)
+      controller.instance_variable_set(:@resume, resume)
+
+      get :test_authorize_own_resume
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'allows sponsor users to access any resume' do
+      sponsor_user = create_user(uid: 'sponsor123', role: 'sponsor')
+      admin = double('Admin', uid: 'sponsor123')
+
+      allow(controller).to receive(:admin_signed_in?).and_return(true)
+      allow(controller).to receive(:current_admin).and_return(admin)
+      controller.instance_variable_set(:@resume, resume)
+
+      get :test_authorize_own_resume
+      expect(response).to have_http_status(:success)
+    end
+
     it 'redirects when user tries to access another user\'s resume' do
       create_user(uid: 'other123')
       admin = double('Admin', uid: 'other123')
