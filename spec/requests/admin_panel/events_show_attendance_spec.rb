@@ -5,7 +5,7 @@ RSpec.describe 'AdminPanel::Events show attendance and RSVPs', type: :request do
     Event.create!(title: 'Workshop', description: 'desc', event_date: 1.day.from_now, location: 'Lab', capacity: 20,
                   attendance_points: 2, is_published: true)
   end
-  let!(:user) { create_user(email: 'rsvpuser@test.com') }
+  let!(:user) { create_user(email: 'rsvpuser@test.com', role: 'admin') }
 
   before do
     # Sign in as an admin (using the same user for convenience)

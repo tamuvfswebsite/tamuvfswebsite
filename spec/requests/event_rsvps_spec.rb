@@ -29,11 +29,14 @@ RSpec.describe 'Event RSVPs', type: :request do
     end
 
     it 'disallows RSVP when event is closed' do
-      past_event = Event.create!(title: 'Past', description: 'd', event_date: 1.day.ago, location: 'Hall',
+      # create an event in the future (to pass validation) then freeze time to after it
+      past_event = Event.create!(title: 'Past', description: 'd', event_date: 1.hour.from_now, location: 'Hall',
                                  capacity: 50, attendance_points: 1, is_published: true)
       sign_in_as_admin(user)
 
-      post "/events/#{past_event.id}/rsvp", params: { status: 'yes' }
+      travel_to 2.hours.from_now do
+        post "/events/#{past_event.id}/rsvp", params: { status: 'yes' }
+      end
       expect(response).to redirect_to(past_event)
       follow_redirect!
       expect(response.body).to include('RSVP is closed')
