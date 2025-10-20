@@ -6,7 +6,7 @@ RSpec.describe ApplicationController, type: :request do
       allow_any_instance_of(ApplicationController).to receive(:admin_signed_in?).and_return(false)
 
       get '/users'
-      expect(response).to redirect_to(root_path)
+      expect(response).to redirect_to(homepage_path)
       expect(flash[:alert]).to include('Admin privileges required')
     end
 

@@ -136,6 +136,7 @@ ActiveRecord::Schema[8.0].define(version: 20_251_019_211_128) do
     t.index ['user_id'], name: 'index_resumes_on_user_id'
   end
 
+<<<<<<< HEAD
   create_table 'role_applications', force: :cascade do |t|
     t.bigint 'user_id', null: false
     t.text 'essay'
@@ -145,6 +146,23 @@ ActiveRecord::Schema[8.0].define(version: 20_251_019_211_128) do
     t.integer 'status', default: 0, null: false
     t.index ['org_role_id'], name: 'index_role_applications_on_org_role_id'
     t.index ['user_id'], name: 'index_role_applications_on_user_id'
+=======
+  create_table 'sponsor_user_joins', force: :cascade do |t|
+    t.bigint 'user_id', null: false
+    t.bigint 'sponsor_id', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['sponsor_id'], name: 'index_sponsor_user_joins_on_sponsor_id'
+    t.index ['user_id'], name: 'index_sponsor_user_joins_on_user_id'
+  end
+
+  create_table 'sponsors', force: :cascade do |t|
+    t.string 'company_name'
+    t.string 'logo_url'
+    t.string 'website'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+>>>>>>> 1011a5f88750183191b397d0d3a6ad1ce494dd47
   end
 
   create_table 'translations', id: :uuid, default: -> { 'gen_random_uuid()' }, force: :cascade do |t|
@@ -175,6 +193,11 @@ ActiveRecord::Schema[8.0].define(version: 20_251_019_211_128) do
   add_foreign_key 'organizational_role_users', 'organizational_roles'
   add_foreign_key 'organizational_role_users', 'users'
   add_foreign_key 'resumes', 'users'
+<<<<<<< HEAD
   add_foreign_key 'role_applications', 'organizational_roles', column: 'org_role_id'
   add_foreign_key 'role_applications', 'users'
+=======
+  add_foreign_key 'sponsor_user_joins', 'sponsors'
+  add_foreign_key 'sponsor_user_joins', 'users'
+>>>>>>> 1011a5f88750183191b397d0d3a6ad1ce494dd47
 end

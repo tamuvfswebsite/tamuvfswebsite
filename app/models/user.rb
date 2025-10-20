@@ -1,6 +1,12 @@
 class User < ApplicationRecord
   has_one :resume, dependent: :destroy
+<<<<<<< HEAD
   has_one :role_application, dependent: :destroy
+=======
+  has_many :sponsor_user_joins
+  has_many :sponsors, through: :sponsor_user_joins
+  scope :sponsor_role, -> { where(role: 'sponsor') }
+>>>>>>> 1011a5f88750183191b397d0d3a6ad1ce494dd47
   has_many :organizational_role_users, dependent: :destroy
   has_many :organizational_roles, through: :organizational_role_users
 
