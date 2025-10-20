@@ -25,6 +25,12 @@
     <%= form.url_field :website %>
   </div>
 
+  <div class="field">
+    <%= form.label :resume_access, "Resume Access" %>
+    <%= form.check_box :resume_access %>
+    <span>Allow this sponsor to access student resumes</span>
+  </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>

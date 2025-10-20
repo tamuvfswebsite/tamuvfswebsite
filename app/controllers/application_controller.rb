@@ -17,11 +17,18 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_sponsor_user
-    return if sponsor_user? || admin_user? # Admins can access sponsor areas
+    return if admin_user? # Admins can access sponsor areas
+    return if sponsor_user? && current_user&.resume_access == true
+
+    if sponsor_user? && current_user&.resume_access != true
+      flash[:alert] = 'Access denied. Resume access not granted by admin.'
+      redirect_to homepage_path
+      return
+    end
 
     flash[:alert] =
       current_user.present? ? 'Access denied. Sponsor privileges required.' : 'You need to sign in first.'
-    redirect_to root_path
+    redirect_to homepage_path  
   end
 
   # --- Role Check Helpers ---
