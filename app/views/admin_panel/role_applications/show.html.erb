@@ -17,6 +17,11 @@
     </div>
 
     <div style="margin-bottom: 20px;">
+      <strong>Status:</strong>
+      <%= status_badge(@role_application.status) %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
       <strong>Submitted:</strong> <%= @role_application.created_at.strftime("%B %d, %Y at %I:%M %p") %>
     </div>
 

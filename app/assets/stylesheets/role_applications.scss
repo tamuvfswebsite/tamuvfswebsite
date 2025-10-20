@@ -1,0 +1,328 @@
+// Role Applications styles
+
+.back-to-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  margin-right: 15px;
+
+  &:hover {
+    background-color: #f3f4f6;
+    color: #374151;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.back-to-dashboard {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #f3f4f6;
+    color: #374151;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.role-applications-admin-index {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  .navigation-buttons {
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    color: #6c757d;
+    margin-bottom: 30px;
+    font-size: 14px;
+  }
+
+  .filter-section {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+
+    h3 {
+      margin: 0 0 15px 0;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .filter-checkboxes {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+
+      label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 14px;
+        cursor: pointer;
+
+        input[type="checkbox"] {
+          cursor: pointer;
+        }
+
+        .status-label {
+          &.not-reviewed { color: #6c757d; }
+          &.in-review { color: #0dcaf0; }
+          &.accepted { color: #198754; }
+          &.rejected { color: #dc3545; }
+        }
+      }
+    }
+
+    .filter-actions {
+      display: flex;
+      gap: 10px;
+
+      .btn-apply-filters {
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+
+      .btn-clear-filters {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: #6c757d;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: #5a6268;
+        }
+      }
+    }
+  }
+
+  .applications-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  .application-card {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    transition: box-shadow 0.2s ease;
+
+    &:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 15px;
+
+      .applicant-info {
+        h3 {
+          margin: 0 0 5px 0;
+          font-size: 18px;
+        }
+
+        .email {
+          color: #6c757d;
+          margin: 0;
+          font-size: 14px;
+        }
+      }
+
+      .role-badge {
+        background-color: #007bff;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 14px;
+        white-space: nowrap;
+      }
+    }
+
+    .card-field {
+      margin-bottom: 15px;
+      font-size: 14px;
+
+      strong {
+        font-weight: 600;
+      }
+
+      .status-controls {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-left: 10px;
+
+        .status-dropdown {
+          padding: 5px 10px;
+          border: 1px solid #dee2e6;
+          border-radius: 4px;
+          background-color: white;
+          font-size: 14px;
+          cursor: pointer;
+          transition: border-color 0.2s ease;
+
+          &:hover {
+            border-color: #007bff;
+          }
+
+          &:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+          }
+        }
+      }
+    }
+
+    .resume-link {
+      color: #007bff;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .no-resume {
+      color: #dc3545;
+    }
+
+    .essay-preview {
+      background-color: white;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      padding: 10px;
+      margin-top: 5px;
+      max-height: 150px;
+      overflow-y: auto;
+      font-size: 14px;
+      line-height: 1.5;
+
+      p {
+        margin: 0 0 10px 0;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+
+      .btn-view {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+
+      .btn-delete {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: #c82333;
+        }
+      }
+    }
+  }
+
+  .no-applications {
+    background-color: #fff3cd;
+    border: 1px solid #ffc107;
+    color: #856404;
+    padding: 15px;
+    border-radius: 4px;
+    text-align: center;
+  }
+}
+
+// Status badges
+.status-badge {
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+
+  &.not-reviewed {
+    background-color: #6c757d;
+  }
+
+  &.in-review {
+    background-color: #0dcaf0;
+  }
+
+  &.accepted {
+    background-color: #198754;
+  }
+
+  &.rejected {
+    background-color: #dc3545;
+  }
+}

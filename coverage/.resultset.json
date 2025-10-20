@@ -32,6 +32,19 @@
       "/Land-502/app/helpers/role_applications_helper.rb": {
         "lines": [
           1,
+          1,
+          null,
+          4,
+          null,
+          null,
+          null,
+          null,
+          null,
+          4,
+          4,
+          null,
+          4,
+          null,
           null
         ]
       },
@@ -144,6 +157,13 @@
           1,
           1,
           1,
+          null,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
           null,
           1,
           1,
@@ -1047,10 +1067,26 @@
           null,
           0,
           0,
+          null,
+          null,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
           0,
           null,
           0,
           null,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
           0,
           null,
           0,
@@ -1406,6 +1442,6 @@
         "branches": {}
       }
     },
-    "timestamp": 1760907655
+    "timestamp": 1760919025
   }
 }

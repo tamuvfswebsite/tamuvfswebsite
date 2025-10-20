@@ -10,6 +10,11 @@
   </p>
 
   <p style="margin-bottom: 15px;">
+    <strong>Status:</strong>
+    <%= status_badge(role_application.status) %>
+  </p>
+
+  <p style="margin-bottom: 15px;">
     <strong>Resume:</strong>
     <% if role_application.user.resume&.file&.attached? %>
       <%= link_to role_application.user.resume.file.filename, user_resume_path(role_application.user), target: "_blank", style: "color: #007bff;" %>

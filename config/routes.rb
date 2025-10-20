@@ -45,7 +45,9 @@ Rails.application.routes.draw do
     resources :events
     resources :attendance_links, only: %i[new create]
     resources :organizational_roles
-    resources :role_applications, only: %i[index show destroy]
+    resources :role_applications, only: %i[index show destroy] do
+      patch :update_status, on: :member
+    end
     # resources :sponsors
     # resources :resumes, only: [:index]
     # resources :applications, only: [:index]

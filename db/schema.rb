@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 20_251_018_204_040) do
+ActiveRecord::Schema[8.0].define(version: 20_251_019_211_128) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_catalog.plpgsql'
 
@@ -142,6 +142,7 @@ ActiveRecord::Schema[8.0].define(version: 20_251_018_204_040) do
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.bigint 'org_role_id', null: false
+    t.integer 'status', default: 0, null: false
     t.index ['org_role_id'], name: 'index_role_applications_on_org_role_id'
     t.index ['user_id'], name: 'index_role_applications_on_user_id'
   end
