@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Redirecting to Application...</title>
+</head>
+<body>
+  <p>Redirecting to sign in...</p>
+  <%= form_with url: admin_google_oauth2_omniauth_authorize_path, method: :post, local: true, id: "apply-form" do %>
+  <% end %>
+  <script>
+    document.getElementById('apply-form').submit();
+  </script>
+</body>
+</html>

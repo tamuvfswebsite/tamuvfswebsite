@@ -31,6 +31,8 @@ rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
 RSpec.configure do |config|
+  # Include time helpers for travel_to / travel_back in examples
+  config.include ActiveSupport::Testing::TimeHelpers
   # Include ActionDispatch::TestProcess for file upload helpers
   config.include ActionDispatch::TestProcess
   # Include auth helpers

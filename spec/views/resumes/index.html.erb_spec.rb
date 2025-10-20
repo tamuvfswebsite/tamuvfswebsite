@@ -27,6 +27,11 @@ RSpec.describe 'resumes/index', type: :view do
     end
     # Provide a paginated collection so the view's `paginate` helper works in tests
     assign(:resumes, Kaminari.paginate_array(resumes).page(1).per(25))
+
+    # Assign filter options that the view expects
+    assign(:majors, [])
+    assign(:organizational_roles, [])
+    assign(:graduation_years, [])
   end
 
   it 'renders a list of resumes' do

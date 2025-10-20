@@ -1,0 +1,372 @@
+// Resume view styles
+
+.justify-center {
+    display: flex;
+    justify-content: center;
+}
+
+.back-to-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  margin-bottom: 16px;
+
+  &:hover {
+    background-color: #f3f4f6;
+    color: #374151;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.resume-show {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+
+  .notice {
+    color: green;
+  }
+
+  .resume-user-info {
+    margin-bottom: 16px;
+
+    strong {
+      font-weight: 600;
+    }
+  }
+
+  .resume-file-section {
+    margin-bottom: 24px;
+
+    strong {
+      font-weight: 600;
+    }
+  }
+
+  .resume-preview {
+    margin-top: 24px;
+
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+
+    iframe {
+      border: none;
+      width: 100%;
+      height: 600px;
+    }
+  }
+
+  .resume-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .vertical-divider {
+    width: 1px;
+    height: 24px;
+    background-color: #d1d5db;
+    margin: 0 4px;
+  }
+}
+
+// Resume index page styles
+.resumes-index {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+
+  h1 {
+    margin-bottom: 24px;
+  }
+
+  .filter-section {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+    border: 1px solid #e1e5e9;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .filter-form {
+    margin: 0;
+  }
+
+  .filter-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+
+    &.filter-row-second {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+    }
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 200px;
+
+    @media (max-width: 768px) {
+      min-width: 100%;
+    }
+  }
+
+  .filter-group-gpa {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 300px;
+
+    @media (max-width: 768px) {
+      min-width: 100%;
+    }
+  }
+
+  .gpa-filter-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .filter-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    margin-left: auto;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+
+  .filter-label {
+    color: #333;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .filter-select {
+    padding: 8px 32px 8px 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    background-color: white;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: #500000;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #500000;
+      box-shadow: 0 0 0 3px rgba(80, 0, 0, 0.1);
+    }
+  }
+
+  .filter-select-small {
+    padding: 8px 32px 8px 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    background-color: white;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 100px;
+
+    &:hover {
+      border-color: #500000;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #500000;
+      box-shadow: 0 0 0 3px rgba(80, 0, 0, 0.1);
+    }
+  }
+
+  .filter-input {
+    padding: 8px 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    background-color: white;
+    transition: all 0.2s ease;
+    flex: 1;
+    min-width: 150px;
+
+    &:hover {
+      border-color: #500000;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #500000;
+      box-shadow: 0 0 0 3px rgba(80, 0, 0, 0.1);
+    }
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+
+  .btn-clear-filters {
+    padding: 8px 16px;
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+
+    &:hover {
+      background: #e5e7eb;
+    }
+  }
+
+  .btn-apply-filters {
+    padding: 8px 20px;
+    background: #500000;
+    color: #ffffff;
+    border: 1px solid #500000;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    cursor: pointer;
+
+    &:hover {
+      background: #6a0000;
+      border-color: #6a0000;
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+
+  table {
+    width: 100%;
+    background: white;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border: 1px solid #e1e5e9;
+    }
+
+    th {
+      background: #f8f9fa;
+      font-weight: 600;
+      color: #333;
+
+      a {
+        color: #500000;
+        text-decoration: none;
+        margin-left: 4px;
+        
+        &:hover {
+          color: #6a0000;
+        }
+      }
+    }
+
+    tbody tr {
+      &:hover {
+        background: #f9fafb;
+      }
+    }
+  }
+}
+
+// Resume button styles
+.btn-resume-download {
+  background: #2288ff;
+  color: #ffffff;
+  border-color: #2288ff;
+
+  &:hover {
+    background: #1d6fff;
+  }
+
+  &:visited {
+    color: #ffffff;
+  }
+}
+
+.btn-resume-index {
+  background: #ffffff;
+  color: #500000;
+  border-color: #ffffff;
+
+  &:hover {
+    color: #6a0000;
+  }
+}
+
+.btn-resume-edit {
+  background: #500000;
+  color: #ffffff;
+  border-color: #500000;
+
+  &:hover {
+    background: #6a0000;
+  }
+
+  &:visited {
+    color: #ffffff;
+  }
+}
+
+.btn-my-resume {
+  background: #f0f9ff;
+  color: #075985;
+  border-color: #bae6fd;
+
+  &:hover {
+    background: #e0f2fe;
+  }
+}

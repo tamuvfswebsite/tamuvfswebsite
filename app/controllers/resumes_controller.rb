@@ -1,28 +1,28 @@
 class ResumesController < ApplicationController
   include ResumeAuthorization
   include ResumeValidations
+  include ResumeFiltering
 
   # Handle authentication within authorization methods for index/show to prevent auto-redirect
   before_action :authorize_admin_or_sponsor, only: %i[index]
-  before_action :authorize_own_resume, only: %i[show]
 
   # Require explicit authentication for create/update/delete actions
   before_action :authenticate_admin!, only: %i[new create edit update destroy]
 
   before_action :set_user
   before_action :set_resume, only: %i[show edit update destroy]
+  before_action :authorize_own_resume, only: %i[show]
 
   def index
-    per = (params[:per] || 20).to_i
-    per = 100 if per > 100
-
-    @resumes = Resumes::IndexQuery.call(sort: params[:sort], direction: params[:direction])
-                                  .page(params[:page]).per(per)
+    @resumes = fetch_filtered_resumes
+    load_filter_options
   end
 
   def show; end
 
   def new
+    @return_to = params[:return_to]
+
     if @user.resume.present?
       redirect_to @user, alert: 'You already have a resume.'
     else
@@ -31,12 +31,12 @@ class ResumesController < ApplicationController
   end
 
   def edit
-    # Load the resume's user if we don't have it
     @user ||= @resume.user
+    @return_to = params[:return_to]
+
     return if @resume.user == @user
 
     redirect_to resumes_path, alert: 'You can only edit your own resume.'
-    nil
   end
 
   def create
@@ -46,8 +46,10 @@ class ResumesController < ApplicationController
     @resume.file.attach(params[:resume][:file]) if params[:resume]&.dig(:file)&.present?
 
     if @resume.save
-      redirect_to @user, notice: 'Resume was successfully created.'
+      redirect_path = determine_redirect_path(params[:return_to], @user)
+      redirect_to redirect_path, notice: 'Resume was successfully created.'
     else
+      @return_to = params[:return_to]
       render :new, status: :unprocessable_entity
     end
   end
@@ -57,15 +59,21 @@ class ResumesController < ApplicationController
 
     result = Resumes::Updater.new(@resume, @user, params).call
 
+    @return_to = params[:return_to]
     if result[:success]
-      redirect_to result[:redirect_to], notice: result[:notice]
+      if params[:stay_on_page]
+        flash.now[:notice] = result[:notice]
+        render :edit
+      else
+        redirect_path = determine_redirect_path(@return_to, result[:redirect_to])
+        redirect_to redirect_path, notice: result[:notice]
+      end
     else
       render :edit, status: result[:status]
     end
   end
 
   def destroy
-    # @resume is set by set_resume before_action, @user by set_user before_action
     if @resume.user != @user
       redirect_to user_path(@user), alert: 'You can only delete your own resume.'
       return
@@ -83,13 +91,10 @@ class ResumesController < ApplicationController
 
   def set_resume
     @resume = if params[:id]
-                # For routes like /resumes/:id
-                resume = Resume.find_by(id: params[:id])
-                # Set @user from the resume if we don't have it from params
-                @user ||= resume&.user
-                resume
+                Resume.find_by(id: params[:id]).tap do |resume|
+                  @user ||= resume&.user
+                end
               elsif @user
-                # For nested routes like /users/:user_id/resume
                 @user.resume
               end
 
@@ -100,5 +105,16 @@ class ResumesController < ApplicationController
 
   def resume_params
     params.require(:resume).permit(:file, :gpa, :graduation_date, :major, :organizational_role)
+  end
+
+  def determine_redirect_path(return_to_param, default_path)
+    if return_to_param == 'application'
+      new_role_application_path
+    elsif return_to_param&.start_with?('application_edit_')
+      application_id = return_to_param.split('_').last
+      edit_role_application_path(application_id)
+    else
+      default_path
+    end
   end
 end

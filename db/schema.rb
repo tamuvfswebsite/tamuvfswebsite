@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_20_185037) do
+ActiveRecord::Schema[8.0].define(version: 20_251_019_211_128) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -144,6 +144,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_185037) do
     t.integer "status", default: 0, null: false
     t.index ["org_role_id"], name: "index_role_applications_on_org_role_id"
     t.index ["user_id"], name: "index_role_applications_on_user_id"
+  end
+
+  create_table 'sponsor_user_joins', force: :cascade do |t|
+    t.bigint 'user_id', null: false
+    t.bigint 'sponsor_id', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['sponsor_id'], name: 'index_sponsor_user_joins_on_sponsor_id'
+    t.index ['user_id'], name: 'index_sponsor_user_joins_on_user_id'
   end
 
   create_table "sponsor_user_joins", force: :cascade do |t|

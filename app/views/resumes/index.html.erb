@@ -2,15 +2,85 @@
 
 <% content_for :title, "Resumes" %>
 
-<% if admin_signed_in? %>
-    <p>You are signed in with <strong><%= current_admin.email %></strong>.</p>
-<% else %>
-    <p>You are not signed in.</p>
-<% end %>
+<div class="resumes-index">
+  <%= link_to homepage_path, class: "back-to-home" do %>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+      <polyline points="9 22 9 12 15 12 15 22"></polyline>
+    </svg>
+    <span>Home</span>
+  <% end %>
 
-<h1>Resumes</h1>
+  <% if admin_signed_in? %>
+      <p>You are signed in with <strong><%= current_admin.email %></strong>.</p>
+  <% else %>
+      <p>You are not signed in.</p>
+  <% end %>
 
-<table id="resumes" border="1">
+  <h1>Resumes</h1>
+
+  <!-- Filter Section -->
+  <div class="filter-section">
+    <%= form_with url: resumes_path, method: :get, class: "filter-form" do |f| %>
+      <div class="filter-row">
+        <div class="filter-group">
+          <%= f.label :major, "Filter by Major:", class: "filter-label" %>
+          <%= f.select :major, 
+              options_for_select([["All Majors", ""]] + @majors.map { |m| [m, m] }, params[:major]),
+              {}, 
+              class: "filter-select" %>
+        </div>
+
+        <div class="filter-group">
+          <%= f.label :organizational_role, "Filter by Role:", class: "filter-label" %>
+          <%= f.select :organizational_role,
+              options_for_select([["All Roles", ""]] + @organizational_roles.map { |r| [r, r] }, params[:organizational_role]),
+              {},
+              class: "filter-select" %>
+        </div>
+
+        <div class="filter-group">
+          <%= f.label :graduation_year, "Graduation Year:", class: "filter-label" %>
+          <%= f.select :graduation_year,
+              options_for_select([["All Years", ""]] + @graduation_years.map { |y| [y, y] }, params[:graduation_year]),
+              {},
+              class: "filter-select" %>
+        </div>
+      </div>
+
+      <div class="filter-row filter-row-second">
+        <div class="filter-group-gpa">
+          <%= f.label :gpa_value, "Filter by GPA:", class: "filter-label" %>
+          <div class="gpa-filter-controls">
+            <%= f.select :gpa_operator,
+                options_for_select([[">=", ">="], ["<=", "<="]], params[:gpa_operator]),
+                { include_blank: "Operator" },
+                class: "filter-select-small" %>
+            <%= f.number_field :gpa_value,
+                value: params[:gpa_value],
+                placeholder: "GPA (0.0-4.0)",
+                step: 0.01,
+                min: 0.0,
+                max: 4.0,
+                class: "filter-input" %>
+          </div>
+        </div>
+
+        <div class="filter-buttons">
+          <%= f.submit "Apply Filters", class: "btn btn-apply-filters" %>
+          <% if params[:major].present? || params[:organizational_role].present? || params[:graduation_year].present? || params[:gpa_value].present? %>
+            <%= link_to "Clear Filters", resumes_path(request.query_parameters.except(:major, :organizational_role, :graduation_year, :gpa_operator, :gpa_value)), class: "btn btn-clear-filters" %>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Preserve sort and direction params -->
+      <%= hidden_field_tag :sort, params[:sort] %>
+      <%= hidden_field_tag :direction, params[:direction] %>
+    <% end %>
+  </div>
+
+  <table id="resumes" border="1">
   <thead>
     <tr>
       <th>
@@ -56,8 +126,5 @@
 </table>
 
 <%= paginate @resumes, params: request.query_parameters.except(:page) %>
-
-<div>
-  <%= link_to "Home", root_path %>
 </div>
 

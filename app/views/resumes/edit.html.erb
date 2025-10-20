@@ -1,10 +1,49 @@
 <% content_for :title, "Editing resume" %>
+<% current_user = admin_signed_in? ? User.find_by(google_uid: current_admin.uid) : nil %>
 
-<h1>Editing resume</h1>
+<div class="resume-show">
+  <!-- Navigation Header -->
+  <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+    <%= link_to homepage_path, class: "back-to-home", style: "display: flex; align-items: center; gap: 8px; padding: 10px 16px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      <span>Home</span>
+    <% end %>
+    
+    <% back_path = if @return_to == "application"
+                     new_role_application_path
+                   elsif @return_to&.start_with?("application_edit_")
+                     application_id = @return_to.split("_").last
+                     edit_role_application_path(application_id)
+                   else
+                     :back
+                   end %>
+    <%= link_to back_path, style: "display: flex; align-items: center; gap: 8px; padding: 10px 16px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      <span>Back</span>
+    <% end %>
+  </div>
 
-<h2>Edit resume information</h2>
-<% form_url = @user ? user_resume_path(@user) : resume_path(@resume) %>
-<%= form_with(model: @resume, url: form_url, method: :patch, local: true) do |form| %>
+  <!-- Success Notice -->
+  <% if notice || flash[:notice] %>
+    <div style="background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+      <strong>✓ Success!</strong> <%= notice || flash[:notice] %>
+    </div>
+  <% end %>
+
+  <h1 style="margin-bottom: 30px;">Editing Resume</h1>
+
+  <h2>Edit resume information</h2>
+<% form_url = @user ? user_resume_path(@user, return_to: @return_to) : resume_path(@resume, return_to: @return_to) %>
+<%= form_with(model: @resume, url: form_url, method: :patch, local: true, data: { turbo: false }) do |form| %>
+  <%= hidden_field_tag :stay_on_page, true %>
+  <%= hidden_field_tag :return_to, @return_to %>
+  
   <% if @resume.errors.any? %>
     <div style="color: red; background-color: #ffebee; border: 1px solid red; padding: 10px; margin-bottom: 15px;">
       <h2>Cannot save resume, <%= pluralize(@resume.errors.count, "error") %> found:</h2>
@@ -17,48 +56,61 @@
     </div>
   <% end %>
 
-  <div class="gpa">
-    <%= form.label :gpa, "GPA" %>
-    <%= form.number_field :gpa, step: 0.01, min: 0, max: 4 %>
+  <div class="gpa" style="margin-bottom: 15px;">
+    <%= form.label :gpa, "GPA *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+    <%= form.number_field :gpa, step: 0.01, min: 0, max: 4, required: true, 
+        style: "padding: 8px; width: 200px; border: 1px solid #ccc; border-radius: 4px;" %>
   </div>
 
-  <div class="graduation-date">
-    <%= form.label :graduation_date, "Graduation Year" %>
-    <%= form.select :graduation_date, ((Date.today.year - 4)...(Date.today.year + 8)).to_a.reverse, prompt: "Select Graduation Year" %>
+  <div class="graduation-date" style="margin-bottom: 15px;">
+    <%= form.label :graduation_date, "Graduation Year *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+    <%= form.select :graduation_date, ((Date.today.year - 4)...(Date.today.year + 8)).to_a.reverse, 
+        { prompt: "Select Graduation Year" }, 
+        { required: true, style: "padding: 8px; width: 250px; border: 1px solid #ccc; border-radius: 4px;" } %>
   </div>
 
-  <div class="major">
-    <%= form.label :major, "Major" %>
-    <%= form.select :major, ["Aerospace Engineering", "Civil Engineering", "Computer Science", "Computer Engineering", "Mechanical Engineering"], prompt: "Select Major" %>
+  <div class="major" style="margin-bottom: 15px;">
+    <%= form.label :major, "Major *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+    <%= form.select :major, ["Aerospace Engineering", "Civil Engineering", "Computer Science", "Computer Engineering", "Mechanical Engineering"], 
+        { prompt: "Select Major" }, 
+        { required: true, style: "padding: 8px; width: 250px; border: 1px solid #ccc; border-radius: 4px;" } %>
   </div>
 
-  <div class="organizational-role">
-    <%= form.label :organizational_role, "Organizational Role" %>
-    <%= form.select :organizational_role, ["X Team", "Y Team", "Z Team", "Student"], prompt: "Select VFS Team" %>
+  <div class="organizational-role" style="margin-bottom: 15px;">
+    <%= form.label :organizational_role, "Organizational Role *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+    <%= form.select :organizational_role, ["X Team", "Y Team", "Z Team", "Student"], 
+        { prompt: "Select VFS Team" }, 
+        { required: true, style: "padding: 8px; width: 250px; border: 1px solid #ccc; border-radius: 4px;" } %>
   </div>
 
   <div>
-    <%= form.submit "Save Info" %>
+    <%= form.submit "Save Info", style: "padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;" %>
   </div>
 <% end %>
 
-<hr />
+<hr style="margin: 30px 0;" />
 
 <h2>Re-upload resume file</h2>
-<%= form_with(model: @resume, url: form_url, method: :patch, local: true, html: { multipart: true }) do |form| %>
+<%= form_with(model: @resume, url: form_url, method: :patch, local: true, html: { multipart: true }, data: { turbo: false }) do |form| %>
   <%= hidden_field_tag :file_only, true %>
-  <div class="field">
-    <%= form.label :file, "Upload New Resume (PDF only)" %>
-    <%= form.file_field :file, accept: 'application/pdf' %>
+  <%= hidden_field_tag :stay_on_page, true %>
+  <%= hidden_field_tag :return_to, @return_to %>
+  
+  <div class="field" style="margin-bottom: 15px;">
+    <%= form.label :file, "Upload New Resume (PDF only) *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+    <%= form.file_field :file, accept: 'application/pdf', required: true,
+        style: "padding: 8px; border: 1px solid #ccc; border-radius: 4px;" %>
   </div>
   <div>
-    <%= form.submit "Upload File" %>
+    <%= form.submit "Upload File", style: "padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;" %>
   </div>
 <% end %>
 
 <br>
 
-<div>
-  <%= link_to "Show this resume", @resume %> |
-  <%= link_to "Back to resumes", resumes_path %>
+<div style="display: flex; gap: 15px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #dee2e6;">
+  <% if current_user&.role&.in?(['admin', 'sponsor']) %>
+    <%= link_to "Back to resumes", resumes_path, style: "color: #007bff; text-decoration: none; font-weight: 500;" %>
+  <% end %>
+</div>
 </div>
