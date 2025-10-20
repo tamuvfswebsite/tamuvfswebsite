@@ -87,7 +87,7 @@ RSpec.describe '/role_applications', type: :request do
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         sign_in_user
         post role_applications_url, params: { role_application: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
@@ -121,8 +121,136 @@ RSpec.describe '/role_applications', type: :request do
         sign_in_user
         role_application = user.create_role_application!(valid_attributes)
         patch role_application_url(role_application), params: { role_application: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
+    end
+  end
+
+  describe 'authorization' do
+    let(:other_user) do
+      User.create!(email: 'other@example.com', first_name: 'Other', last_name: 'User', google_uid: '456')
+    end
+    let(:admin_user) do
+      User.create!(email: 'admin@example.com', first_name: 'Admin', last_name: 'User', google_uid: '999', role: 'admin')
+    end
+
+    it 'allows admins to view any role application' do
+      role_application = user.create_role_application!(valid_attributes)
+      admin = Admin.create!(email: admin_user.email, uid: admin_user.google_uid,
+                            full_name: "#{admin_user.first_name} #{admin_user.last_name}")
+
+      allow_any_instance_of(RoleApplicationsController).to receive(:admin_signed_in?).and_return(true)
+      allow_any_instance_of(RoleApplicationsController).to receive(:current_admin).and_return(admin)
+      allow_any_instance_of(RoleApplicationsController).to receive(:current_user).and_return(admin_user)
+
+      get role_application_url(role_application)
+      expect(response).to be_successful
+    end
+
+    it 'prevents viewing another users role application' do
+      role_application = user.create_role_application!(valid_attributes)
+      allow_any_instance_of(RoleApplicationsController).to receive(:current_user).and_return(other_user)
+
+      get role_application_url(role_application)
+      expect(response).to redirect_to(root_path)
+      expect(flash[:alert]).to include('You can only view your own application')
+    end
+
+    it 'prevents editing another users role application' do
+      role_application = user.create_role_application!(valid_attributes)
+      allow_any_instance_of(RoleApplicationsController).to receive(:current_user).and_return(other_user)
+
+      get edit_role_application_url(role_application)
+      expect(response).to redirect_to(root_path)
+      expect(flash[:alert]).to include('You can only view your own application')
+    end
+
+    it 'prevents updating another users role application' do
+      role_application = user.create_role_application!(valid_attributes)
+      allow_any_instance_of(RoleApplicationsController).to receive(:current_user).and_return(other_user)
+
+      patch role_application_url(role_application), params: { role_application: { essay: 'Hacked!' } }
+      expect(response).to redirect_to(root_path)
+      expect(flash[:alert]).to include('You can only view your own application')
+      role_application.reload
+      expect(role_application.essay).not_to eq('Hacked!')
+    end
+
+    it 'redirects to sign in when not authenticated' do
+      allow_any_instance_of(RoleApplicationsController).to receive(:current_user).and_return(nil)
+
+      get new_role_application_url
+      expect(response).to redirect_to(admin_google_oauth2_omniauth_authorize_path)
+      expect(flash[:alert]).to include('Please sign in')
+    end
+
+    it 'redirects when user has no resume' do
+      user_no_resume = User.create!(email: 'noresume@example.com', first_name: 'No', last_name: 'Resume',
+                                    google_uid: '789')
+      allow_any_instance_of(RoleApplicationsController).to receive(:current_user).and_return(user_no_resume)
+
+      get new_role_application_url
+      expect(response).to redirect_to(new_user_resume_path(user_no_resume, return_to: 'application'))
+      expect(flash[:alert]).to include('Please upload your resume before applying')
+    end
+
+    it 'redirects when user already has a role application' do
+      user.create_role_application!(valid_attributes)
+      sign_in_user
+
+      get new_role_application_url
+      expect(response).to redirect_to(root_path)
+      expect(flash[:alert]).to include('You have already submitted an application')
+    end
+  end
+
+  describe 'JSON format' do
+    it 'creates role application in JSON format' do
+      sign_in_user
+
+      post role_applications_url,
+           params: { role_application: valid_attributes },
+           as: :json
+      expect(response).to have_http_status(:created)
+      expect(response.content_type).to include('application/json')
+      json = JSON.parse(response.body)
+      expect(json['essay']).to eq(valid_attributes[:essay])
+    end
+
+    it 'returns error on invalid JSON create' do
+      sign_in_user
+
+      post role_applications_url,
+           params: { role_application: invalid_attributes },
+           as: :json
+      expect(response).to have_http_status(:unprocessable_content)
+      json = JSON.parse(response.body)
+      expect(json).to have_key('essay')
+    end
+
+    it 'updates role application in JSON format' do
+      sign_in_user
+      role_application = user.create_role_application!(valid_attributes)
+      new_essay = 'This is a newly updated essay with more than fifty characters for validation.'
+
+      patch role_application_url(role_application),
+            params: { role_application: { essay: new_essay } },
+            as: :json
+      expect(response).to have_http_status(:ok)
+      json = JSON.parse(response.body)
+      expect(json['essay']).to eq(new_essay)
+    end
+
+    it 'returns error on invalid JSON update' do
+      sign_in_user
+      role_application = user.create_role_application!(valid_attributes)
+
+      patch role_application_url(role_application),
+            params: { role_application: invalid_attributes },
+            as: :json
+      expect(response).to have_http_status(:unprocessable_content)
+      json = JSON.parse(response.body)
+      expect(json).to have_key('essay')
     end
   end
 end

@@ -44,7 +44,9 @@ module AdminPanel
             redirect_to admin_panel_organizational_role_path(@organizational_role),
                         notice: 'Organizational role was successfully updated.'
           end
-          format.json { render :show, status: :ok, location: @organizational_role }
+          format.json do
+            render :show, status: :ok, location: admin_panel_organizational_role_path(@organizational_role)
+          end
         else
           format.html { render :edit, status: :unprocessable_entity }
           format.json { render json: @organizational_role.errors, status: :unprocessable_entity }
