@@ -1,3 +1,5 @@
-class AdminPanel::LogoPlacement < ApplicationRecord
-  belongs_to :sponsor, class_name: "Sponsor"
+module AdminPanel
+  class LogoPlacement < ApplicationRecord
+    belongs_to :sponsor, class_name: 'Sponsor'
+  end
 end

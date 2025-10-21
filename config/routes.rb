@@ -43,8 +43,8 @@ Rails.application.routes.draw do
     end
     resources :sponsors do
       resources :logo_placements, except: %i[index]
-    # resources :resumes, only: [:index]
-    # resources :applications, only: [:index]
+      # resources :resumes, only: [:index]
+      # resources :applications, only: [:index]
     end
   end
 end

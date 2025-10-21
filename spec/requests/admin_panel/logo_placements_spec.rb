@@ -12,124 +12,117 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/admin_panel/logo_placements", type: :request do
-  
-  # This should return the minimal set of attributes required to create a valid
-  # AdminPanel::LogoPlacement. As you add validations to AdminPanel::LogoPlacement, be sure to
-  # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+RSpec.describe '/admin_panel/logo_placements', type: :request do
+  # let(:valid_attributes) do
+  #   skip('Add a hash of attributes valid for your model')
+  # end
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  # let(:invalid_attributes) do
+  #   skip('Add a hash of attributes invalid for your model')
+  # end
 
-  describe "GET /index" do
-    it "renders a successful response" do
-      AdminPanel::LogoPlacement.create! valid_attributes
-      get admin_panel_logo_placements_url
-      expect(response).to be_successful
-    end
-  end
+  # describe 'GET /index' do
+  #   it 'renders a successful response' do
+  #     AdminPanel::LogoPlacement.create! valid_attributes
+  #     get admin_panel_logo_placements_url
+  #     expect(response).to be_successful
+  #   end
+  # end
 
-  describe "GET /show" do
-    it "renders a successful response" do
-      logo_placement = AdminPanel::LogoPlacement.create! valid_attributes
-      get admin_panel_logo_placement_url(logo_placement)
-      expect(response).to be_successful
-    end
-  end
+  # describe 'GET /show' do
+  #   it 'renders a successful response' do
+  #     logo_placement = AdminPanel::LogoPlacement.create! valid_attributes
+  #     get admin_panel_logo_placement_url(logo_placement)
+  #     expect(response).to be_successful
+  #   end
+  # end
 
-  describe "GET /new" do
-    it "renders a successful response" do
-      get new_admin_panel_logo_placement_url
-      expect(response).to be_successful
-    end
-  end
+  # describe 'GET /new' do
+  #   it 'renders a successful response' do
+  #     get new_admin_panel_logo_placement_url
+  #     expect(response).to be_successful
+  #   end
+  # end
 
-  describe "GET /edit" do
-    it "renders a successful response" do
-      logo_placement = AdminPanel::LogoPlacement.create! valid_attributes
-      get edit_admin_panel_logo_placement_url(logo_placement)
-      expect(response).to be_successful
-    end
-  end
+  # describe 'GET /edit' do
+  #   it 'renders a successful response' do
+  #     logo_placement = AdminPanel::LogoPlacement.create! valid_attributes
+  #     get edit_admin_panel_logo_placement_url(logo_placement)
+  #     expect(response).to be_successful
+  #   end
+  # end
 
-  describe "POST /create" do
-    context "with valid parameters" do
-      it "creates a new AdminPanel::LogoPlacement" do
-        expect {
-          post admin_panel_logo_placements_url, params: { admin_panel_logo_placement: valid_attributes }
-        }.to change(AdminPanel::LogoPlacement, :count).by(1)
-      end
+  # describe 'POST /create' do
+  #   context 'with valid parameters' do
+  #     it 'creates a new AdminPanel::LogoPlacement' do
+  #       expect do
+  #         post admin_panel_logo_placements_url, params: { admin_panel_logo_placement: valid_attributes }
+  #       end.to change(AdminPanel::LogoPlacement, :count).by(1)
+  #     end
 
-      it "redirects to the created admin_panel_logo_placement" do
-        post admin_panel_logo_placements_url, params: { admin_panel_logo_placement: valid_attributes }
-        expect(response).to redirect_to(admin_panel_logo_placement_url(AdminPanel::LogoPlacement.last))
-      end
-    end
+  #     it 'redirects to the created admin_panel_logo_placement' do
+  #       post admin_panel_logo_placements_url, params: { admin_panel_logo_placement: valid_attributes }
+  #       expect(response).to redirect_to(admin_panel_logo_placement_url(AdminPanel::LogoPlacement.last))
+  #     end
+  #   end
 
-    context "with invalid parameters" do
-      it "does not create a new AdminPanel::LogoPlacement" do
-        expect {
-          post admin_panel_logo_placements_url, params: { admin_panel_logo_placement: invalid_attributes }
-        }.to change(AdminPanel::LogoPlacement, :count).by(0)
-      end
+  #   context 'with invalid parameters' do
+  #     it 'does not create a new AdminPanel::LogoPlacement' do
+  #       expect do
+  #         post admin_panel_logo_placements_url, params: { admin_panel_logo_placement: invalid_attributes }
+  #       end.to change(AdminPanel::LogoPlacement, :count).by(0)
+  #     end
 
-    
-      it "renders a response with 422 status (i.e. to display the 'new' template)" do
-        post admin_panel_logo_placements_url, params: { admin_panel_logo_placement: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
-    
-    end
-  end
+  #     it "renders a response with 422 status (i.e. to display the 'new' template)" do
+  #       post admin_panel_logo_placements_url, params: { admin_panel_logo_placement: invalid_attributes }
+  #       expect(response).to have_http_status(:unprocessable_entity)
+  #     end
+  #   end
+  # end
 
-  describe "PATCH /update" do
-    context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+  # describe 'PATCH /update' do
+  #   context 'with valid parameters' do
+  #     let(:new_attributes) do
+  #       skip('Add a hash of attributes valid for your model')
+  #     end
 
-      it "updates the requested admin_panel_logo_placement" do
-        logo_placement = AdminPanel::LogoPlacement.create! valid_attributes
-        patch admin_panel_logo_placement_url(logo_placement), params: { admin_panel_logo_placement: new_attributes }
-        logo_placement.reload
-        skip("Add assertions for updated state")
-      end
+  #     it 'updates the requested admin_panel_logo_placement' do
+  #       logo_placement = AdminPanel::LogoPlacement.create! valid_attributes
+  #       patch admin_panel_logo_placement_url(logo_placement), params: { admin_panel_logo_placement: new_attributes }
+  #       logo_placement.reload
+  #       skip('Add assertions for updated state')
+  #     end
 
-      it "redirects to the admin_panel_logo_placement" do
-        logo_placement = AdminPanel::LogoPlacement.create! valid_attributes
-        patch admin_panel_logo_placement_url(logo_placement), params: { admin_panel_logo_placement: new_attributes }
-        logo_placement.reload
-        expect(response).to redirect_to(admin_panel_logo_placement_url(logo_placement))
-      end
-    end
+  #     it 'redirects to the admin_panel_logo_placement' do
+  #       logo_placement = AdminPanel::LogoPlacement.create! valid_attributes
+  #       patch admin_panel_logo_placement_url(logo_placement), params: { admin_panel_logo_placement: new_attributes }
+  #       logo_placement.reload
+  #       expect(response).to redirect_to(admin_panel_logo_placement_url(logo_placement))
+  #     end
+  #   end
 
-    context "with invalid parameters" do
-    
-      it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        logo_placement = AdminPanel::LogoPlacement.create! valid_attributes
-        patch admin_panel_logo_placement_url(logo_placement), params: { admin_panel_logo_placement: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
-    
-    end
-  end
-
-  describe "DELETE /destroy" do
-    it "destroys the requested admin_panel_logo_placement" do
-      logo_placement = AdminPanel::LogoPlacement.create! valid_attributes
-      expect {
-        delete admin_panel_logo_placement_url(logo_placement)
-      }.to change(AdminPanel::LogoPlacement, :count).by(-1)
-    end
-
-    it "redirects to the admin_panel_logo_placements list" do
-      logo_placement = AdminPanel::LogoPlacement.create! valid_attributes
-      delete admin_panel_logo_placement_url(logo_placement)
-      expect(response).to redirect_to(admin_panel_logo_placements_url)
-    end
-  end
+  #   context 'with invalid parameters' do
+  #     it "renders a response with 422 status (i.e. to display the 'edit' template)" do
+  #       logo_placement = AdminPanel::LogoPlacement.create! valid_attributes
+  #       patch admin_panel_logo_placement_url(logo_placement),
+  #       params: { admin_panel_logo_placement: invalid_attributes }
+  #       expect(response).to have_http_status(:unprocessable_entity)
+  #     end
+  #   end
+  # end
 end
+
+# describe 'DELETE /destroy' do
+#   it 'destroys the requested admin_panel_logo_placement' do
+#     logo_placement = AdminPanel::LogoPlacement.create! valid_attributes
+#     expect do
+#       delete admin_panel_logo_placement_url(logo_placement)
+#     end.to change(AdminPanel::LogoPlacement, :count).by(-1)
+#   end
+
+#   it 'redirects to the admin_panel_logo_placements list' do
+#     logo_placement = AdminPanel::LogoPlacement.create! valid_attributes
+#     delete admin_panel_logo_placement_url(logo_placement)
+#     expect(response).to redirect_to(admin_panel_logo_placements_url)
+#   end
+# end

@@ -1,2 +1,4 @@
-module AdminPanel::LogoPlacementsHelper
+module AdminPanel
+  module LogoPlacementsHelper
+  end
 end

@@ -1,5 +1,5 @@
 module AdminPanel
   def self.table_name_prefix
-    "admin_panel_"
+    'admin_panel_'
   end
 end
