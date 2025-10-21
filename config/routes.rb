@@ -32,19 +32,7 @@ Rails.application.routes.draw do
   end
 
   namespace :admin_panel do
-    # get "sponsors/index"
-    # get "sponsors/show"
-    # get "sponsors/new"
-    # get "sponsors/edit"
     root to: 'dashboard#index'
-    # get "events/index"
-    # get "events/show"
-    # get "events/new"
-    # get "events/create"
-    # get "events/edit"
-    # get "events/update"
-    # get "events/destroy"
-    # get "dashboard/index"
     get 'dashboard', to: 'dashboard#index'
     get 'leaderboard', to: 'dashboard#leaderboard'
     resources :events
@@ -53,8 +41,10 @@ Rails.application.routes.draw do
     resources :role_applications, only: %i[index show destroy] do
       patch :update_status, on: :member
     end
-    resources :sponsors
-    # resources :resumes, only: [:index]
-    # resources :applications, only: [:index]
+    resources :sponsors do
+      resources :logo_placements, except: %i[index]
+      # resources :resumes, only: [:index]
+      # resources :applications, only: [:index]
+    end
   end
 end

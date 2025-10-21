@@ -1,0 +1,32 @@
+<%= form_with(model: [@sponsor, @logo_placement], url: admin_panel_sponsor_logo_placements_path(@sponsor)) do |form| %>
+  <% if @logo_placement.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(@logo_placement.errors.count, "error") %> prohibited this logo placement from being saved:</h2>
+
+      <ul>
+        <% @logo_placement.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :page_name, style: "display: block" %>
+    <%= form.text_field :page_name %>
+  </div>
+
+  <div>
+    <%= form.label :section, style: "display: block" %>
+    <%= form.text_field :section %>
+  </div>
+
+  <div>
+    <%= form.label :displayed, style: "display: block" %>
+    <%= form.checkbox :displayed %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

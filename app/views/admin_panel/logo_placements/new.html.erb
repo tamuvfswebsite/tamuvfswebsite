@@ -1,0 +1,11 @@
+<% content_for :title, "New logo placement" %>
+
+<h1>New logo placement</h1>
+
+<%= render "form", sponsor: @sponsor, logo_placement: @logo_placement %>
+
+<br>
+
+<div>
+  <%= link_to "Back to logo placements", admin_panel_sponsor_path(@sponsor) %>
+</div>

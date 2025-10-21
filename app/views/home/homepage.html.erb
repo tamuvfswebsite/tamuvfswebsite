@@ -15,9 +15,12 @@
         <%= link_to "View My Profile", user_path(current_user), class: "btn" %>
       <% end %>
     <% end %>
-    <%= link_to "Users", users_path, class: "btn" %>
     <% if admin_user? %>
+      <%= link_to "Users", users_path, class: "btn" %>
       <%= link_to "Admin Dashboard", admin_panel_root_path, class: "btn" %>
+    <% end %>
+    <% if sponsor_user? || admin_user? %>
+      <%= link_to "Sponsor Dashboard", sponsor_dashboard_index_path, class: "btn" %>
     <% end %>
     
     <%# Resume-related links based on user role %>
@@ -30,10 +33,12 @@
         <% end %>
         
         <%# All users (including admins) can view their own resume if they have one %>
-        <% if current_user.resume.present? %>
-          <%= link_to "My Resume", resume_path(current_user.resume), class: "btn btn-my-resume" %>
-        <% else %>
-          <%= link_to "Upload Resume", new_user_resume_path(current_user), class: "btn btn-my-resume" %>
+        <% if current_user.role != 'sponsor' %>
+          <% if current_user.resume.present? %>
+            <%= link_to "My Resume", resume_path(current_user.resume), class: "btn btn-my-resume" %>
+          <% else %>
+            <%= link_to "Upload Resume", new_user_resume_path(current_user), class: "btn btn-my-resume" %>
+          <% end %>
         <% end %>
         
         <%# Show application status/link if user has submitted one %>

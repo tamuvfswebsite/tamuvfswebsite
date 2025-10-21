@@ -13,6 +13,7 @@
           <th>Company Name</th>
           <th>Website</th>
           <th>Logo URL</th>
+          <th>Resume Access</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -22,6 +23,7 @@
             <td><%= sponsor.company_name %></td>
             <td><%= sponsor.website %></td>
             <td><%= sponsor.logo_url %></td>
+            <td><%= sponsor.resume_access? ? "Yes" : "No" %></td>
             <td>
               <%= link_to "View", admin_panel_sponsor_path(sponsor) %>
               <%= link_to "Edit", edit_admin_panel_sponsor_path(sponsor) %>

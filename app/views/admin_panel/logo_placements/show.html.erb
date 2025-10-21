@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @admin_panel_logo_placement %>
+
+<div>
+  <%= link_to "Edit this logo placement", edit_admin_panel_logo_placement_path(@admin_panel_logo_placement) %> |
+  <%= link_to "Back to logo placements", admin_panel_logo_placements_path %>
+
+  <%= button_to "Destroy this logo placement", @admin_panel_logo_placement, method: :delete %>
+</div>
