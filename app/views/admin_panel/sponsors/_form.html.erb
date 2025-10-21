@@ -1,0 +1,37 @@
+<%= form_with(model: [:admin_panel, sponsor], local: true) do |form| %>
+  <% if sponsor.errors.any? %>
+    <div class="error-messages">
+      <h4><%= pluralize(sponsor.errors.count, "error") %> prohibited this sponsor from being saved:</h4>
+      <ul>
+        <% sponsor.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :company_name, "Sponsor Company Name" %>
+    <%= form.text_field :company_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :logo_url, "Logo URL" %>
+    <%= form.text_field :logo_url %>
+  </div>
+
+  <div class="field">
+    <%= form.label :website, "Sponsor Website" %>
+    <%= form.url_field :website %>
+  </div>
+
+  <div class="field">
+    <%= form.label :resume_access, "Resume Access" %>
+    <%= form.check_box :resume_access %>
+    <span>Allow this sponsor to access student resumes</span>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,14 +1,28 @@
 Rails.application.routes.draw do
+  get 'sponsor_dashboard/index'
   root 'home#index'
   get 'homepage', to: 'home#homepage', as: :homepage
+  get 'apply', to: 'home#apply', as: :apply
+
+  # Public check-in endpoint (token-based)
+  get  'checkin', to: 'checkins#new',    as: :checkin
+  post 'checkin', to: 'checkins#create', as: :perform_checkin
 
   # Allow viewing all resumes
   resources :resumes, only: %i[index show edit update destroy]
+
+  resources :events, only: %i[index show] do
+    # RSVP create/update
+    resource :rsvp, only: %i[create update], controller: 'event_rsvps'
+  end
 
   # Nested resume routes for user-specific actions
   resources :users do
     resource :resume, only: %i[new create show edit update destroy]
   end
+
+  # Role applications - users can create/view their own, admins can view all
+  resources :role_applications, only: %i[new create show edit update]
 
   devise_for :admins, controllers: { omniauth_callbacks: 'admins/omniauth_callbacks' }
   devise_scope :admin do
@@ -19,18 +33,18 @@ Rails.application.routes.draw do
 
   namespace :admin_panel do
     root to: 'dashboard#index'
-    # get "events/index"
-    # get "events/show"
-    # get "events/new"
-    # get "events/create"
-    # get "events/edit"
-    # get "events/update"
-    # get "events/destroy"
-    # get "dashboard/index"
     get 'dashboard', to: 'dashboard#index'
+    get 'leaderboard', to: 'dashboard#leaderboard'
     resources :events
-    # resources :sponsors
-    # resources :resumes, only: [:index]
-    # resources :applications, only: [:index]
+    resources :attendance_links, only: %i[new create]
+    resources :organizational_roles
+    resources :role_applications, only: %i[index show destroy] do
+      patch :update_status, on: :member
+    end
+    resources :sponsors do
+      resources :logo_placements, except: %i[index]
+      # resources :resumes, only: [:index]
+      # resources :applications, only: [:index]
+    end
   end
 end

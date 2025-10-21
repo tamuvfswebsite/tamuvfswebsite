@@ -4,10 +4,11 @@ class Event < ApplicationRecord
   validates :location, presence: true
   validates :capacity, presence: true, numericality: { greater_than: 0 }
 
-  validate :event_date_cannot_be_in_past
+  validate :event_date_cannot_be_in_past, on: :create
 
   scope :future_events, -> { where('event_date > ?', Time.current) }
   scope :past_events, -> { where('event_date <= ?', Time.current) }
+  scope :published, -> { where(is_published: true) }
 
   def formatted_date
     event_date&.strftime('%B %d, %Y at %I:%M %p')

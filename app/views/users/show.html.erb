@@ -1,22 +1,30 @@
-<% if notice %>
-  <div class="alert alert-success"><%= notice %></div>
-<% end %>
-
 <div class="user-show-page">
+  <%= link_to homepage_path, class: "back-to-home" do %>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+      <polyline points="9 22 9 12 15 12 15 22"></polyline>
+    </svg>
+    <span>Home</span>
+  <% end %>
+
   <div class="user-profile">
     <%= render @user %>
   </div>
 
   <div class="user-actions-bar">
-    <%= link_to "← Back to users", users_path, class: "btn btn-outline" %>
-    <%= link_to "Edit Profile", edit_user_path(@user), class: "btn btn-primary" %>
+    <% if admin_user? %>
+      <%= link_to "← Back to users", users_path, class: "btn btn-outline" %>
+      <%= link_to "Edit Profile", edit_user_path(@user), class: "btn btn-primary" %>
+    <% end %>
     <% if @user.resume.present? %>
       <%= link_to 'View Resume', user_resume_path(@user), class: 'btn btn-primary' %>
     <% else %>
       <%= link_to 'Create Resume', new_user_resume_path(@user), class: 'btn btn-primary' %>
     <% end %>
-    <%= button_to "Delete User", @user, method: :delete,
-                  class: "btn btn-danger",
-                  form: { data: { turbo_confirm: "Are you sure you want to delete #{@user.first_name} #{@user.last_name}?" } } %>
+    <% if admin_user? %>
+      <%= button_to "Delete User", @user, method: :delete,
+                    class: "btn btn-danger",
+                    form: { data: { turbo_confirm: "Are you sure you want to delete #{@user.first_name} #{@user.last_name}?" } } %>
+    <% end %>
   </div>
 </div>

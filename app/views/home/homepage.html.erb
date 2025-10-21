@@ -8,10 +8,44 @@
     <p>You are not signed in.</p>
   <% end %>
   <div class="actions">
-    <%= link_to "Back to Landing", root_path, class: "btn" %>
-    <%= link_to "Users", users_path, class: "btn" %>
+    <%= link_to "Sign Out", destroy_admin_session_path, class: "btn" %>
+    <% if admin_signed_in? %>
+      <% current_user = User.find_by(google_uid: current_admin.uid) %>
+      <% if current_user %>
+        <%= link_to "View My Profile", user_path(current_user), class: "btn" %>
+      <% end %>
+    <% end %>
     <% if admin_user? %>
+      <%= link_to "Users", users_path, class: "btn" %>
       <%= link_to "Admin Dashboard", admin_panel_root_path, class: "btn" %>
+    <% end %>
+    <% if sponsor_user? || admin_user? %>
+      <%= link_to "Sponsor Dashboard", sponsor_dashboard_index_path, class: "btn" %>
+    <% end %>
+    
+    <%# Resume-related links based on user role %>
+    <% if admin_signed_in? %>
+      <% current_user = User.find_by(google_uid: current_admin.uid) %>
+      <% if current_user %>
+        <%# Admins and sponsors can view all resumes %>
+        <% if current_user.role&.in?(['admin', 'sponsor']) %>
+          <%= link_to "Browse Resumes", resumes_path, class: "btn btn-resume-index" %>
+        <% end %>
+        
+        <%# All users (including admins) can view their own resume if they have one %>
+        <% if current_user.role != 'sponsor' %>
+          <% if current_user.resume.present? %>
+            <%= link_to "My Resume", resume_path(current_user.resume), class: "btn btn-my-resume" %>
+          <% else %>
+            <%= link_to "Upload Resume", new_user_resume_path(current_user), class: "btn btn-my-resume" %>
+          <% end %>
+        <% end %>
+        
+        <%# Show application status/link if user has submitted one %>
+        <% if current_user.role_application.present? %>
+          <%= link_to "Review My Application", role_application_path(current_user.role_application), class: "btn btn-application" %>
+        <% end %>
+      <% end %>
     <% end %>
   </div>
 </div>
@@ -24,7 +58,7 @@
         <% @upcoming_events.each do |event| %>
           <li class="event-item">
             <div class="event-main">
-              <span class="event-title"><%= event.title %></span>
+              <span class="event-title"><%= link_to event.title, event_path(event) %></span>
               <span class="event-date"><%= event.formatted_date %></span>
             </div>
             <div class="event-meta">
@@ -32,6 +66,9 @@
               <% if event.capacity.present? %>
                 <span class="event-capacity">Capacity: <%= event.capacity %></span>
               <% end %>
+            </div>
+            <div class="event-actions">
+              <%= link_to "View & RSVP", event_path(event), class: "btn" %>
             </div>
           </li>
         <% end %>
@@ -46,24 +83,3 @@
     </div>
   <% end %>
 </div>
-
-<style>
-  .homepage-simple { max-width: 720px; margin: 48px auto; padding: 24px; }
-  .homepage-simple h1 { margin: 0 0 12px; }
-  .homepage-simple p { color: #4b5563; }
-  .actions { margin-top: 16px; }
-  .actions .btn + .btn { margin-left: 8px; }
-  .btn { padding: 8px 14px; border: 1px solid #d1d5db; border-radius: 8px; text-decoration: none; }
-  .events-section { max-width: 720px; margin: 24px auto 48px; padding: 0 24px; }
-  .events-container { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; }
-  .events-title { margin: 0 0 12px; font-size: 20px; }
-  .events-list { list-style: none; padding: 0; margin: 0; }
-  .event-item { padding: 12px 0; border-top: 1px solid #f0f2f5; }
-  .event-item:first-child { border-top: none; }
-  .event-main { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
-  .event-title { font-weight: 600; }
-  .event-date { color: #5b6b7a; font-size: 14px; }
-  .event-meta { color: #6b7280; font-size: 14px; margin-top: 4px; display: flex; gap: 12px; }
-  .events-empty { color: #6b7280; margin: 8px 0 0; }
-  .events-actions { margin-top: 8px; }
-</style>

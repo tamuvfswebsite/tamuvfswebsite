@@ -1,0 +1,37 @@
+<div id="<%= dom_id role_application %>" style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 20px; margin-bottom: 20px;">
+  <p style="margin-bottom: 15px;">
+    <strong>Applicant:</strong>
+    <%= role_application.user.first_name %> <%= role_application.user.last_name %> (<%= role_application.user.email %>)
+  </p>
+
+  <p style="margin-bottom: 15px;">
+    <strong>Applied Role:</strong>
+    <%= role_application.organizational_role.name %>
+  </p>
+
+  <p style="margin-bottom: 15px;">
+    <strong>Status:</strong>
+    <%= status_badge(role_application.status) %>
+  </p>
+
+  <p style="margin-bottom: 15px;">
+    <strong>Resume:</strong>
+    <% if role_application.user.resume&.file&.attached? %>
+      <%= link_to role_application.user.resume.file.filename, user_resume_path(role_application.user), target: "_blank", style: "color: #007bff;" %>
+    <% else %>
+      <span style="color: #6c757d;">No resume attached</span>
+    <% end %>
+  </p>
+
+  <p style="margin-bottom: 15px;">
+    <strong>Submitted:</strong>
+    <%= role_application.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+  </p>
+
+  <div style="margin-top: 20px;">
+    <strong>Essay Response:</strong>
+    <div style="background-color: white; border: 1px solid #dee2e6; border-radius: 4px; padding: 15px; margin-top: 10px; white-space: pre-wrap;">
+<%= role_application.essay %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<% content_for :title, "Edit Your Application" %>
+
+<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+  <h1>Edit Your Application</h1>
+  <p style="color: #666; margin-bottom: 30px;">Update your application details below.</p>
+
+  <%= render "form", role_application: @role_application %>
+
+  <br>
+
+  <div>
+    <%= link_to "← Cancel", role_application_path(@role_application), style: "color: #007bff; text-decoration: none;" %>
+  </div>
+</div>

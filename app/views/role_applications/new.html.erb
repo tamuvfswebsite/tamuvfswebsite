@@ -1,0 +1,14 @@
+<% content_for :title, "Apply for Organization Role" %>
+
+<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+  <h1>Apply for Organization Role</h1>
+  <p style="color: #666; margin-bottom: 30px;">Complete the form below to submit your application to join the Texas A&M Vertical Flight Society.</p>
+
+  <%= render "form", role_application: @role_application %>
+
+  <br>
+
+  <div>
+    <%= link_to "← Back to Home", root_path, style: "color: #007bff; text-decoration: none;" %>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<h1>Sponsor Management</h1>
+
+<div class="actions">
+  <%= link_to "Create New Sponsor", new_admin_panel_sponsor_path %>
+</div>
+
+<div class="sponsors-section">
+  <h2>Sponsors</h2>
+  <% if @sponsors.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Company Name</th>
+          <th>Website</th>
+          <th>Logo URL</th>
+          <th>Resume Access</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @sponsors.each do |sponsor| %>
+          <tr>
+            <td><%= sponsor.company_name %></td>
+            <td><%= sponsor.website %></td>
+            <td><%= sponsor.logo_url %></td>
+            <td><%= sponsor.resume_access? ? "Yes" : "No" %></td>
+            <td>
+              <%= link_to "View", admin_panel_sponsor_path(sponsor) %>
+              <%= link_to "Edit", edit_admin_panel_sponsor_path(sponsor) %>
+              <%= button_to 'Delete', admin_panel_sponsor_path(sponsor),
+                method: :delete,
+                data: { confirm: "Are you sure you want to delete this sponsor?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No sponsors found.</p>
+  <% end %>
+</div>
+
+<div class="actions">
+  <%= link_to 'Back to Admin Dashboard', admin_panel_root_path %>
+</div>

@@ -13,3 +13,10 @@
  *= require_tree .
  *= require_self
  */
+
+/* Global background color for all pages */
+body {
+  background-color: #e8ecf1;
+  margin: 0;
+  padding: 0;
+}

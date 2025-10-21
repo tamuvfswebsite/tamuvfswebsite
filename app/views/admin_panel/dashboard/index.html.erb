@@ -6,7 +6,7 @@
   <ul>
     <li>Total Users: <%= @total_users %></li>
     <li>Total Events: <%= @total_events %></li>
-    <li>Total Resumes: [Data will be loaded from controller]</li>
+    <li>Total Resumes: <%= @resume_count %></li>
   </ul>
 </div>
 
@@ -32,8 +32,11 @@
   <ul>
     <li><a href="/users">Manage Users</a></li>
     <li><a href="/admin_panel/events">Manage Events</a></li>
-    <li><a>Review Applications</a></li>
+    <li><a href="/admin_panel/organizational_roles">Manage Organizational Roles</a></li>
+    <li><a href="/admin_panel/leaderboard">Attendance Leaderboard</a></li>
+    <li><a href="/admin_panel/role_applications">Review Applications</a></li>
     <li><a href="<%= resumes_path %>">View Resumes</a></li>
+    <li><a href="/admin_panel/sponsors">Manage Sponsors</a></li>
   </ul>
 </div>
 
