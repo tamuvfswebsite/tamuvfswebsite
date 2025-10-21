@@ -58,4 +58,17 @@ RSpec.describe Resume, type: :model do
     expect(resume.errors[:major]).to be_present
     expect(resume.errors[:organizational_role]).to be_present
   end
+
+  it 'rejects files larger than 5MB' do
+    resume = user.build_resume
+    # Create a large file (simulating > 5MB)
+    large_content = 'a' * (6 * 1024 * 1024) # 6MB
+    resume.file.attach(
+      io: StringIO.new(large_content),
+      filename: 'large.pdf',
+      content_type: 'application/pdf'
+    )
+    resume.validate
+    expect(resume.errors[:file]).to include('size must be less than 5MB')
+  end
 end

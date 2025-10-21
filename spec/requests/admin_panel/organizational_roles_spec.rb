@@ -53,6 +53,27 @@ RSpec.describe 'AdminPanel::OrganizationalRoles', type: :request do
       expect(role.name).to eq('Accounting Team')
     end
 
+    it 'updates an organizational role with JSON format' do
+      role = OrganizationalRole.create!(name: 'Finance Team')
+      patch "/admin_panel/organizational_roles/#{role.id}",
+            params: { organizational_role: { name: 'Accounting Team' } },
+            as: :json
+
+      expect(response).to have_http_status(:ok)
+      role.reload
+      expect(role.name).to eq('Accounting Team')
+    end
+
+    it 'renders JSON error when update fails' do
+      role = OrganizationalRole.create!(name: 'Finance Team')
+      patch "/admin_panel/organizational_roles/#{role.id}",
+            params: { organizational_role: { name: '' } },
+            as: :json
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(JSON.parse(response.body)).to have_key('name')
+    end
+
     it 'deletes an organizational role and removes user associations' do
       role = OrganizationalRole.create!(name: 'Operations Team')
       user = create_user(organizational_roles: [role])
@@ -73,7 +94,7 @@ RSpec.describe 'AdminPanel::OrganizationalRoles', type: :request do
         }
       end.not_to change(OrganizationalRole, :count)
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
 
     it 'prevents creating organizational role without name' do
@@ -83,7 +104,7 @@ RSpec.describe 'AdminPanel::OrganizationalRoles', type: :request do
         }
       end.not_to change(OrganizationalRole, :count)
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 end
