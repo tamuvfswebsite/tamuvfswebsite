@@ -1,0 +1,2 @@
+module AdminPanel::LogoPlacementsHelper
+end

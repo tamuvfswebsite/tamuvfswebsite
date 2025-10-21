@@ -1,0 +1,27 @@
+require 'rails_helper'
+
+RSpec.describe "admin_panel/logo_placements/new", type: :view do
+  before(:each) do
+    assign(:admin_panel_logo_placement, AdminPanel::LogoPlacement.new(
+      sponsor: nil,
+      page_name: "MyString",
+      section: "MyString",
+      displayed: false
+    ))
+  end
+
+  it "renders new admin_panel_logo_placement form" do
+    render
+
+    assert_select "form[action=?][method=?]", admin_panel_logo_placements_path, "post" do
+
+      assert_select "input[name=?]", "admin_panel_logo_placement[sponsor_id]"
+
+      assert_select "input[name=?]", "admin_panel_logo_placement[page_name]"
+
+      assert_select "input[name=?]", "admin_panel_logo_placement[section]"
+
+      assert_select "input[name=?]", "admin_panel_logo_placement[displayed]"
+    end
+  end
+end

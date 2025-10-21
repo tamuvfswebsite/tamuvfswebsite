@@ -1,0 +1,12 @@
+<% content_for :title, "Editing logo placement" %>
+
+<h1>Editing logo placement</h1>
+
+<%= render "form", admin_panel_logo_placement: @admin_panel_logo_placement %>
+
+<br>
+
+<div>
+  <%= link_to "Show this logo placement", @admin_panel_logo_placement %> |
+  <%= link_to "Back to logo placements", admin_panel_logo_placements_path %>
+</div>
