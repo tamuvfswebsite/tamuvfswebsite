@@ -102,6 +102,23 @@ RSpec.describe 'Users', type: :request do
       expect(response).to redirect_to(admin_user)
     end
 
+    it 'prevents admin from changing their own role via JSON' do
+      admin_user = create_user(role: 'admin', uid: 'admin123')
+      controller = UsersController.new
+      allow(UsersController).to receive(:new).and_return(controller)
+      allow(controller).to receive(:current_admin).and_return(double('Admin', uid: 'admin123'))
+
+      patch "/users/#{admin_user.id}",
+            params: { user: { role: 'user' } },
+            as: :json
+      admin_user.reload
+
+      expect(admin_user.role).to eq('admin')
+      expect(response).to have_http_status(:forbidden)
+      json = JSON.parse(response.body)
+      expect(json['error']).to include('You cannot change your own role')
+    end
+
     it 'allows admin to change their own organizational roles' do
       ai_team = OrganizationalRole.create!(name: 'AI Team')
       design_team = OrganizationalRole.create!(name: 'Design Team')
@@ -115,6 +132,27 @@ RSpec.describe 'Users', type: :request do
 
       expect(admin_user.organizational_roles).to include(ai_team, design_team)
       expect(admin_user.organizational_roles.count).to eq(2)
+    end
+  end
+
+  describe 'DELETE /users/:id' do
+    it 'deletes a user successfully' do
+      user = create_user(email: 'delete_me@test.com')
+
+      expect do
+        delete "/users/#{user.id}"
+      end.to change(User, :count).by(-1)
+      expect(response).to redirect_to(users_path)
+      expect(flash[:notice]).to include('User was successfully destroyed')
+    end
+
+    it 'deletes a user via JSON format' do
+      user = create_user(email: 'delete_json@test.com')
+
+      expect do
+        delete "/users/#{user.id}.json"
+      end.to change(User, :count).by(-1)
+      expect(response).to have_http_status(:no_content)
     end
   end
 
@@ -213,6 +251,61 @@ RSpec.describe 'Users', type: :request do
       expect(response.body).to include('Filter by Organizational Role')
       expect(response.body).to include('AI Team')
       expect(response.body).to include('Design Team')
+    end
+  end
+
+  describe 'JSON format' do
+    it 'returns users in JSON format' do
+      create_user(email: 'json_user@test.com')
+
+      get '/users.json'
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to include('application/json')
+      json = JSON.parse(response.body)
+      expect(json).to be_an(Array)
+      expect(json.any? { |u| u['email'] == 'json_user@test.com' }).to be true
+    end
+
+    it 'returns user show in JSON format' do
+      user = create_user(email: 'json_user@test.com')
+      controller = UsersController.new
+      allow(UsersController).to receive(:new).and_return(controller)
+      allow(controller).to receive(:admin_user?).and_return(true)
+
+      get "/users/#{user.id}.json"
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to include('application/json')
+      json = JSON.parse(response.body)
+      expect(json['email']).to eq('json_user@test.com')
+    end
+
+    it 'updates user via JSON' do
+      user = create_user(role: 'user')
+      controller = UsersController.new
+      allow(UsersController).to receive(:new).and_return(controller)
+      allow(controller).to receive(:current_admin).and_return(double('Admin', uid: 'different_uid'))
+
+      patch "/users/#{user.id}",
+            params: { user: { role: 'sponsor' } },
+            as: :json
+      expect(response).to have_http_status(:success)
+      user.reload
+      expect(user.role).to eq('sponsor')
+    end
+
+    it 'returns JSON response for user' do
+      user = create_user
+      controller = UsersController.new
+      allow(UsersController).to receive(:new).and_return(controller)
+      allow(controller).to receive(:current_admin).and_return(double('Admin', uid: 'different_uid'))
+
+      # Test that JSON format works properly
+      patch "/users/#{user.id}",
+            params: { user: { role: 'admin' } },
+            as: :json
+      expect(response).to have_http_status(:success)
+      json = JSON.parse(response.body)
+      expect(json['role']).to eq('admin')
     end
   end
 end

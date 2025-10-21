@@ -34,7 +34,8 @@ class ResumesController < ApplicationController
     @user ||= @resume.user
     @return_to = params[:return_to]
 
-    return if @resume.user == @user
+    # Only allow users to edit their own resume
+    return if @resume.user_id == current_authenticated_user&.id
 
     redirect_to resumes_path, alert: 'You can only edit your own resume.'
   end
@@ -74,7 +75,8 @@ class ResumesController < ApplicationController
   end
 
   def destroy
-    if @resume.user != @user
+    # Only allow users to delete their own resume
+    if @resume.user_id != current_authenticated_user&.id
       redirect_to user_path(@user), alert: 'You can only delete your own resume.'
       return
     end
