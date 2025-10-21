@@ -1,0 +1,12 @@
+<h1>Event Check-in</h1>
+
+<p>Event: <strong><%= @event.title %></strong></p>
+<p>Date: <%= @event.formatted_date %></p>
+
+<%= form_with url: perform_checkin_path(token: params[:token]), method: :post, local: true do |f| %>
+  <div class="actions">
+    <%= f.submit "Check in and earn points" %>
+  </div>
+<% end %>
+
+

@@ -2,6 +2,8 @@
 
 <div class="actions">
   <%= link_to "Create New Event", new_admin_panel_event_path %>
+  |
+  <%= link_to "Create Attendance Link", new_admin_panel_attendance_link_path %>
 </div>
 
 <div class="events-section">
@@ -14,6 +16,7 @@
           <th>Date</th>
           <th>Location</th>
           <th>Capacity</th>
+          <th>Attendance Points</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -24,6 +27,7 @@
             <td><%= event.formatted_date %></td>
             <td><%= event.location %></td>
             <td><%= event.capacity %></td>
+            <td><%= event.respond_to?(:attendance_points) ? event.attendance_points : 1 %></td>
             <td>
               <%= link_to "View", admin_panel_event_path(event) %>
               <%= link_to "Edit", edit_admin_panel_event_path(event) %>
@@ -49,6 +53,7 @@
           <th>Title</th>
           <th>Date</th>
           <th>Location</th>
+          <th>Attendance Points</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -58,6 +63,7 @@
             <td><%= event.title %></td>
             <td><%= event.formatted_date %></td>
             <td><%= event.location %></td>
+            <td><%= event.respond_to?(:attendance_points) ? event.attendance_points : 1 %></td>
             <td>
               <%= link_to "View", admin_panel_event_path(event) %>
             </td>

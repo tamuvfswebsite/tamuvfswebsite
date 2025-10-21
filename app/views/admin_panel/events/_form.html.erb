@@ -35,6 +35,11 @@
     <%= form.number_field :capacity, min: 1 %>
   </div>
 
+  <div class="field">
+    <%= form.label :attendance_points, "Attendance Points" %>
+    <%= form.number_field :attendance_points, min: 0, step: 1 %>
+  </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>

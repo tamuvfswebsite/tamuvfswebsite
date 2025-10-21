@@ -1,0 +1,8 @@
+<h1>Edit Sponsor</h1>
+
+<%= render 'form', sponsor: @sponsor %>
+
+<div class="navigation">
+  <%= link_to 'Show Sponsor', admin_panel_sponsor_path(@sponsor) %> |
+  <%= link_to 'Back to Sponsors', admin_panel_sponsors_path %>
+</div>

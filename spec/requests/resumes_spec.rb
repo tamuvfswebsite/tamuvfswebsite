@@ -13,7 +13,18 @@ require 'rails_helper'
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe '/resumes', type: :request do
-  let(:user) { User.create!(email: 'test@example.com', google_uid: '12345') }
+  let(:user) { create_user(role: 'admin') }
+  let(:admin) do
+    Admin.find_or_create_by!(
+      email: user.email,
+      uid: user.google_uid,
+      full_name: "#{user.first_name} #{user.last_name}"
+    )
+  end
+
+  before do
+    sign_in admin
+  end
 
   let(:valid_attributes) do
     {
@@ -82,7 +93,7 @@ RSpec.describe '/resumes', type: :request do
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post user_resume_url(user), params: { resume: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
@@ -110,8 +121,13 @@ RSpec.describe '/resumes', type: :request do
 
     context 'with invalid parameters' do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        patch user_resume_url(user), params: { resume: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+        # Create a new resume with a valid file
+        Resume.create!(user: user, file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf'))
+
+        # Attempt to update the resume with invalid metadata (gpa out of range)
+        patch user_resume_url(user), params: { resume: { gpa: 10.0 } }
+
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
@@ -128,6 +144,56 @@ RSpec.describe '/resumes', type: :request do
     it 'redirects to the user page' do
       delete user_resume_url(user)
       expect(response).to redirect_to(user_path(user))
+    end
+
+    it 'prevents deleting another users resume' do
+      other_user = create_user(role: 'member', uid: 'other_uid')
+      other_resume = Resume.create!(user: other_user,
+                                    file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf'))
+      sign_in admin
+
+      # Use the nested route which sets @user properly
+      delete user_resume_url(other_user)
+
+      # The controller should prevent deletion and redirect
+      expect(other_resume.reload).to be_present # Resume should still exist
+      expect(response).to redirect_to(user_path(other_user))
+      expect(flash[:alert]).to include('You can only delete your own resume')
+    end
+  end
+
+  describe 'authorization and edge cases' do
+    it 'handles resume not found gracefully' do
+      get resume_url(id: 99_999)
+      expect(response).to redirect_to(resumes_path)
+      expect(flash[:alert]).to include('Resume not found')
+    end
+
+    it 'prevents creating duplicate resume for same user' do
+      Resume.create!(user: user, file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf'))
+
+      get new_user_resume_url(user)
+      expect(response).to redirect_to(user_path(user))
+      expect(flash[:alert]).to include('You already have a resume')
+    end
+
+    it 'allows editing own resume' do
+      resume = Resume.create!(user: user, file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf'))
+
+      get edit_resume_url(resume)
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'prevents editing another users resume' do
+      other_user = create_user(role: 'member', uid: 'other_uid')
+      Resume.create!(user: other_user,
+                     file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf'))
+      sign_in admin
+
+      # Use the nested route
+      get edit_user_resume_url(other_user)
+      expect(response).to redirect_to(resumes_path)
+      expect(flash[:alert]).to include('You can only edit your own resume')
     end
   end
 end

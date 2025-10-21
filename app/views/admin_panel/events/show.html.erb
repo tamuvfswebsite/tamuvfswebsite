@@ -15,3 +15,79 @@
               data: { confirm: "Are you sure you want to delete this event?" } %>
   <%= link_to 'Back to Events', admin_panel_events_path %>
 </div>
+
+<hr>
+
+<h2>Public View + RSVP Summary</h2>
+<p><strong>Date:</strong> <%= @event.formatted_date %> • <strong>Location:</strong> <%= @event.location %></p>
+<p><%= @event.description %></p>
+
+<h3>RSVP counts</h3>
+<ul>
+  <li>Yes: <%= @yes_count %></li>
+  <li>Maybe: <%= @maybe_count %></li>
+  <li>No: <%= @no_count %></li>
+</ul>
+
+<% if @event.event_date > Time.current %>
+  <p>RSVP is currently open.</p>
+<% else %>
+  <p>RSVP is closed for this event.</p>
+<% end %>
+
+<hr>
+
+<h2>RSVPs</h2>
+<% if @rsvps.present? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Responded At</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @rsvps.each do |rsvp| %>
+        <% user = rsvp.user %>
+        <tr>
+          <td><%= [user&.first_name, user&.last_name].compact.join(' ') %></td>
+          <td><%= user&.email %></td>
+          <td><%= rsvp.status %></td>
+          <td><%= rsvp.created_at&.strftime('%Y-%m-%d %H:%M') %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No RSVPs yet.</p>
+<% end %>
+
+<hr>
+
+<h2>Attendance</h2>
+<p><strong>Attendance Stats:</strong> <%= @attended_count %> attended out of <%= @total_rsvps_yes %> RSVPs (Yes)</p>
+<% if @attendances.present? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Checked In At</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @attendances.each do |attendance| %>
+        <% user = attendance.user %>
+        <tr>
+          <td><%= [user&.first_name, user&.last_name].compact.join(' ') %></td>
+          <td><%= user&.email %></td>
+          <td><%= attendance.checked_in_at&.strftime('%Y-%m-%d %H:%M') %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No attendees have checked in yet.</p>
+<% end %>

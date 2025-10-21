@@ -100,6 +100,14 @@ RSpec.describe 'AdminPanel::Events', type: :request do
         expect(flash[:notice]).to eq('Event updated successfully!')
       end
     end
+
+    context 'with invalid parameters' do
+      it 'renders edit template with errors' do
+        patch "/admin_panel/events/#{event.id}", params: { event: { title: '' } } # Invalid - empty title
+
+        expect(response).to have_http_status(:unprocessable_content)
+      end
+    end
   end
 
   describe 'DELETE /destroy' do

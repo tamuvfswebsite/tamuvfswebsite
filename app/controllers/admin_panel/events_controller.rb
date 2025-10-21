@@ -7,7 +7,21 @@ module AdminPanel
       @past_events = Event.past_events.order(event_date: :desc)
     end
 
-    def show; end
+    def show
+      rsvp_user = admin_signed_in? ? User.find_by(google_uid: current_admin.uid) : nil
+      @rsvp = rsvp_user ? EventRsvp.find_by(event: @event, user: rsvp_user) : nil
+
+      # RSVP breakdown and list
+      @yes_count = EventRsvp.where(event: @event, status: 'yes').count
+      @no_count = EventRsvp.where(event: @event, status: 'no').count
+      @maybe_count = EventRsvp.where(event: @event, status: 'maybe').count
+      @rsvps = EventRsvp.includes(:user).where(event: @event).order(created_at: :asc)
+
+      # Attendance list and stats
+      @attendances = Attendance.includes(:user).where(event: @event).order(checked_in_at: :asc)
+      @attended_count = @attendances.size
+      @total_rsvps_yes = @yes_count
+    end
 
     def new
       @event = Event.new
@@ -45,7 +59,7 @@ module AdminPanel
     end
 
     def event_parameters
-      params.require(:event).permit(:title, :description, :event_date, :location, :capacity)
+      params.require(:event).permit(:title, :description, :event_date, :location, :capacity, :attendance_points)
     end
   end
 end

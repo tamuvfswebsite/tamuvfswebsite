@@ -53,3 +53,11 @@ yarn-debug.log*
 # something keeps regenerating this locally but isn't needed
 # heroku gets mad when there are multiple lock files in the repo (package-lock.json is the one we want heroku to use)
 yarn.lock
+
+# Ignore IntelliJ IDEA files
+.idea/
+*.iml
+/config/master.key
+
+# .env
+.env
