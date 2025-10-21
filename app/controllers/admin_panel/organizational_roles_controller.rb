@@ -24,14 +24,9 @@ module AdminPanel
 
       respond_to do |format|
         if @organizational_role.save
-          format.html do
-            redirect_to admin_panel_organizational_role_path(@organizational_role),
-                        notice: 'Organizational role was successfully created.'
-          end
-          format.json { render :show, status: :created, location: @organizational_role }
+          handle_successful_create(format)
         else
-          format.html { render :new, status: :unprocessable_entity }
-          format.json { render json: @organizational_role.errors, status: :unprocessable_entity }
+          handle_failed_create(format)
         end
       end
     end
@@ -75,6 +70,27 @@ module AdminPanel
 
     def organizational_role_params
       params.require(:organizational_role).permit(:name, :description)
+    end
+
+    def handle_successful_create(format)
+      format.html do
+        redirect_to admin_panel_organizational_role_path(@organizational_role),
+                    notice: 'Organizational role was successfully created.'
+      end
+      format.json { render :show, status: :created, location: @organizational_role }
+    end
+
+    def handle_failed_create(format)
+      format.html { render_new_or_error }
+      format.json { render json: @organizational_role.errors, status: :unprocessable_entity }
+    end
+
+    def render_new_or_error
+      if lookup_context.exists?('new', controller_path)
+        render :new, status: :unprocessable_entity
+      else
+        render plain: @organizational_role.errors.full_messages.join(', '), status: :unprocessable_entity
+      end
     end
   end
 end
