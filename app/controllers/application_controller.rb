@@ -33,6 +33,10 @@ class ApplicationController < ActionController::Base
 
   # --- Role Check Helpers ---
 
+  def admin_signed_in?
+    current_admin.present?
+  end
+
   def admin_user?
     current_user&.role == 'admin' && admin_signed_in?
   end
