@@ -18,7 +18,7 @@ module AdminPanel
         redirect_to admin_panel_sponsor_path(@sponsor),
                     notice: 'Logo placement was successfully created.'
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -27,7 +27,7 @@ module AdminPanel
         redirect_to admin_panel_sponsor_path(@sponsor),
                     notice: 'Logo placement was successfully updated.'
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 

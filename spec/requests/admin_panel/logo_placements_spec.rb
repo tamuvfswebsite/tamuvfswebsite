@@ -75,7 +75,7 @@ RSpec.describe '/admin_panel/logo_placements', type: :request do
 
   #     it "renders a response with 422 status (i.e. to display the 'new' template)" do
   #       post admin_panel_logo_placements_url, params: { admin_panel_logo_placement: invalid_attributes }
-  #       expect(response).to have_http_status(:unprocessable_entity)
+  #       expect(response).to have_http_status(:unprocessable_content)
   #     end
   #   end
   # end
@@ -106,7 +106,7 @@ RSpec.describe '/admin_panel/logo_placements', type: :request do
   #       logo_placement = AdminPanel::LogoPlacement.create! valid_attributes
   #       patch admin_panel_logo_placement_url(logo_placement),
   #       params: { admin_panel_logo_placement: invalid_attributes }
-  #       expect(response).to have_http_status(:unprocessable_entity)
+  #       expect(response).to have_http_status(:unprocessable_content)
   #     end
   #   end
   # end

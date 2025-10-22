@@ -26,7 +26,7 @@ module ResumeHelpers
       redirect_to redirect_path, notice: 'Resume was successfully created.'
     else
       @return_to = params[:return_to]
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 

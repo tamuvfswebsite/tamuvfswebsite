@@ -43,8 +43,8 @@ module AdminPanel
             render :show, status: :ok, location: admin_panel_organizational_role_path(@organizational_role)
           end
         else
-          format.html { render :edit, status: :unprocessable_entity }
-          format.json { render json: @organizational_role.errors, status: :unprocessable_entity }
+          format.html { render :edit, status: :unprocessable_content }
+          format.json { render json: @organizational_role.errors, status: :unprocessable_content }
         end
       end
     end
@@ -82,14 +82,14 @@ module AdminPanel
 
     def handle_failed_create(format)
       format.html { render_new_or_error }
-      format.json { render json: @organizational_role.errors, status: :unprocessable_entity }
+      format.json { render json: @organizational_role.errors, status: :unprocessable_content }
     end
 
     def render_new_or_error
       if lookup_context.exists?('new', controller_path)
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       else
-        render plain: @organizational_role.errors.full_messages.join(', '), status: :unprocessable_entity
+        render plain: @organizational_role.errors.full_messages.join(', '), status: :unprocessable_content
       end
     end
   end

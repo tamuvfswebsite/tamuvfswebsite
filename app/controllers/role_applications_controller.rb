@@ -37,8 +37,8 @@ class RoleApplicationsController < ApplicationController
         format.json { render :show, status: :created, location: @role_application }
       else
         load_organizational_roles
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @role_application.errors, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
+        format.json { render json: @role_application.errors, status: :unprocessable_content }
       end
     end
   end
@@ -54,8 +54,8 @@ class RoleApplicationsController < ApplicationController
         format.json { render :show, status: :ok, location: @role_application }
       else
         load_organizational_roles
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @role_application.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @role_application.errors, status: :unprocessable_content }
       end
     end
   end

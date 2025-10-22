@@ -28,7 +28,7 @@ module Resumes
 
     def file_missing_error
       resume.errors.add(:file, "can't be blank")
-      { success: false, status: :unprocessable_entity }
+      { success: false, status: :unprocessable_content }
     end
 
     def attach_file_if_present
@@ -66,7 +66,7 @@ module Resumes
     end
 
     def error_response
-      { success: false, status: :unprocessable_entity }
+      { success: false, status: :unprocessable_content }
     end
   end
 end
