@@ -16,7 +16,8 @@ module AdminPanel
 
       if @logo_placement.save
         redirect_to admin_panel_sponsor_path(@sponsor),
-                    notice: 'Logo placement was successfully created.'
+                    notice: 'Logo placement was successfully created.',
+                    status: :see_other
       else
         render :new, status: :unprocessable_content
       end
@@ -25,7 +26,8 @@ module AdminPanel
     def update
       if @logo_placement.update(logo_placement_params)
         redirect_to admin_panel_sponsor_path(@sponsor),
-                    notice: 'Logo placement was successfully updated.'
+                    notice: 'Logo placement was successfully updated.',
+                    status: :see_other
       else
         render :edit, status: :unprocessable_content
       end
