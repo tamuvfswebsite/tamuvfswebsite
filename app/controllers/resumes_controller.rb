@@ -2,6 +2,7 @@ class ResumesController < ApplicationController
   include ResumeAuthorization
   include ResumeValidations
   include ResumeFiltering
+  include ResumeHelpers
 
   # Handle authentication within authorization methods for index/show to prevent auto-redirect
   before_action :authorize_admin_or_sponsor, only: %i[index]
@@ -43,35 +44,15 @@ class ResumesController < ApplicationController
   def create
     return unless validate_user_for_create
 
-    @resume = @user.build_resume(resume_params)
-    @resume.file.attach(params[:resume][:file]) if params[:resume]&.dig(:file)&.present?
-
-    if @resume.save
-      redirect_path = determine_redirect_path(params[:return_to], @user)
-      redirect_to redirect_path, notice: 'Resume was successfully created.'
-    else
-      @return_to = params[:return_to]
-      render :new, status: :unprocessable_entity
-    end
+    @resume = build_resume_with_file
+    handle_resume_create
   end
 
   def update
     return unless validate_user_and_resume_for_update
 
     result = Resumes::Updater.new(@resume, @user, params).call
-
-    @return_to = params[:return_to]
-    if result[:success]
-      if params[:stay_on_page]
-        flash.now[:notice] = result[:notice]
-        render :edit
-      else
-        redirect_path = determine_redirect_path(@return_to, result[:redirect_to])
-        redirect_to redirect_path, notice: result[:notice]
-      end
-    else
-      render :edit, status: result[:status]
-    end
+    handle_update_result(result)
   end
 
   def destroy
@@ -109,14 +90,17 @@ class ResumesController < ApplicationController
     params.require(:resume).permit(:file, :gpa, :graduation_date, :major, :organizational_role)
   end
 
-  def determine_redirect_path(return_to_param, default_path)
-    if return_to_param == 'application'
-      new_role_application_path
-    elsif return_to_param&.start_with?('application_edit_')
-      application_id = return_to_param.split('_').last
-      edit_role_application_path(application_id)
-    else
-      default_path
+  def validate_user_for_create
+    unless @user
+      redirect_to root_path, alert: 'User not found'
+      return false
     end
+
+    if @user.resume.present?
+      redirect_to @user, alert: 'You already have a resume.'
+      return false
+    end
+
+    true
   end
 end

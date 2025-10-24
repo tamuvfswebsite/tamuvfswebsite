@@ -32,13 +32,25 @@ module AuthHelpers
 
   # Helper to sign in a user as admin in view/controller specs
   def sign_in_user(user)
-    admin = Admin.find_or_create_by!(
+    admin = create_admin_from_user(user)
+    setup_view_stubs(admin)
+    admin
+  end
+
+  private
+
+  def create_admin_from_user(user)
+    Admin.find_or_create_by!(
       email: user.email,
       uid: user.google_uid,
       full_name: "#{user.first_name} #{user.last_name}"
     )
-    allow(view).to receive(:admin_signed_in?).and_return(true) if respond_to?(:view)
-    allow(view).to receive(:current_admin).and_return(admin) if respond_to?(:view)
-    admin
+  end
+
+  def setup_view_stubs(admin)
+    return unless respond_to?(:view)
+
+    allow(view).to receive(:admin_signed_in?).and_return(true)
+    allow(view).to receive(:current_admin).and_return(admin)
   end
 end

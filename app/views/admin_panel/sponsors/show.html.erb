@@ -5,7 +5,6 @@
   <p><strong>Logo URL:</strong> <%= @sponsor.logo_url %></p>
   <p><strong>Resume Access:</strong> <%= @sponsor.resume_access? ? "Yes" : "No" %></p>
 
-  <!--
   <p>Logo Placements</p>
   <%= link_to "Add Logo Placement", new_admin_panel_sponsor_logo_placement_path(@sponsor) %>
 
@@ -14,11 +13,12 @@
       <li>
         <%= placement.page_name.titleize %> - <%= placement.section %>
         <%= link_to "Edit", edit_admin_panel_sponsor_logo_placement_path(@sponsor, placement) %>
-        <%= link_to "Delete", admin_panel_sponsor_logo_placement_path(@sponsor, placement), method: :delete, data: { confirm: "Are you sure?" } %>
+        <%= link_to "Delete", 
+    admin_panel_sponsor_logo_placement_path(@sponsor, placement), 
+    data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
       </li>
     <% end %>
   </ul>
-  -->
 </div>
 
 <div class="actions">

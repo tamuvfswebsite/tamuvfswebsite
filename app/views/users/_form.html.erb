@@ -24,12 +24,10 @@
 
   <div class="form-group">
     <%= form.label :role, "User Role", class: "form-label" %>
-    <% is_own_account = admin_signed_in? && user.google_uid == current_admin.uid %>
     <%= form.select :role,
         options_for_select([
           ['User', 'user'],
-          ['Admin', 'admin'],
-          ['Sponsor', 'sponsor']
+          ['Admin', 'admin']
         ], user.role),
         { prompt: 'Select a role' },
         { class: "form-select", disabled: is_own_account } %>

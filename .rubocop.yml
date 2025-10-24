@@ -37,7 +37,6 @@ Metrics/MethodLength:
     - 'app/controllers/admins/**/*'
 
 Metrics/AbcSize:
-  Max: 25
   Exclude:
     - 'app/controllers/admins/**/*'
 
