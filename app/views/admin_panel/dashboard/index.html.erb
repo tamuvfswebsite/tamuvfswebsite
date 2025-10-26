@@ -6,8 +6,38 @@
   <ul>
     <li>Total Users: <%= @total_users %></li>
     <li>Total Events: <%= @total_events %></li>
-    <li>Total Resumes: <%= @resume_count %></li>
   </ul>
+</div>
+
+<div class="resume-overview">
+  <h2>Resume Overview</h2>
+  <ul>
+    <li>Resume Count: <%= @resume_count %></li>
+    <li>% Users with Resumes: <%= @resume_count.to_f / @total_users * 100 %>%</li>
+  </ul>
+  <h3>Sponsor Download Statistics</h3>
+  <% if @sponsor_download_stats.any? %>
+    <table class="sponsor-stats-table">
+      <thead>
+        <tr>
+          <th>Sponsor Name</th>
+          <th>Email</th>
+          <th>Downloads</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @sponsor_download_stats.each do |stat| %>
+          <tr>
+            <td><%= "#{stat.first_name} #{stat.last_name}" %></td>
+            <td><%= stat.email %></td>
+            <td><%= stat.download_count %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No sponsor downloads recorded yet.</p>
+  <% end %>
 </div>
 
 <div class="recent-activity">

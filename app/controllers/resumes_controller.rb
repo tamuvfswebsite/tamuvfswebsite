@@ -11,7 +11,7 @@ class ResumesController < ApplicationController
   before_action :authenticate_admin!, only: %i[new create edit update destroy]
 
   before_action :set_user
-  before_action :set_resume, only: %i[show edit update destroy]
+  before_action :set_resume, only: %i[show edit update destroy download]
   before_action :authorize_own_resume, only: %i[show]
 
   def index
@@ -64,6 +64,22 @@ class ResumesController < ApplicationController
 
     @resume.destroy
     redirect_to user_path(@user), notice: 'Resume was successfully deleted.'
+  end
+
+  def download
+    current_user = admin_signed_in? ? User.find_by(google_uid: current_admin.uid) : nil
+
+    # Track download only if user is a sponsor
+    if current_user&.role == 'sponsor'
+      ResumeDownload.create!(
+        user: current_user,
+        resume: @resume,
+        downloaded_at: Time.current
+      )
+    end
+
+    # Send the file
+    redirect_to rails_blob_path(@resume.file, disposition: 'attachment'), allow_other_host: true
   end
 
   private

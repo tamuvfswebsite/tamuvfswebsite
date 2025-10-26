@@ -1,0 +1,42 @@
+/* Admin Dashboard Styles */
+
+.sponsor-stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.sponsor-stats-table thead {
+  background-color: #4a5568;
+  color: white;
+}
+
+.sponsor-stats-table th,
+.sponsor-stats-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.sponsor-stats-table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+}
+
+.sponsor-stats-table tbody tr:hover {
+  background-color: #f7fafc;
+}
+
+.sponsor-stats-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.sponsor-stats-table td:last-child {
+  font-weight: 600;
+  color: #2d3748;
+  text-align: center;
+}
