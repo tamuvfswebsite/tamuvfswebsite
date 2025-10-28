@@ -19,4 +19,5 @@ body {
   background-color: #e8ecf1;
   margin: 0;
   padding: 0;
+  padding-top: 60px; /* Account for sticky navbar */
 }

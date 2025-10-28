@@ -1,0 +1,232 @@
+/* Navigation Bar Styles */
+
+.navbar {
+  background-color: #2c3e50;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 60px;
+}
+
+.navbar-brand {
+  flex-shrink: 0;
+}
+
+.navbar-logo {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 0.5rem;
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+
+.navbar-logo:hover,
+.navbar-logo:focus {
+  color: #3498db;
+  outline: 2px solid #3498db;
+  outline-offset: 2px;
+}
+
+/* Mobile toggle button */
+.navbar-toggle {
+  display: none;
+  flex-direction: column;
+  background: transparent;
+  border: 2px solid #ffffff;
+  border-radius: 4px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.navbar-toggle:hover,
+.navbar-toggle:focus {
+  background-color: rgba(255, 255, 255, 0.1);
+  outline: 2px solid #3498db;
+  outline-offset: 2px;
+}
+
+.navbar-toggle-icon {
+  width: 24px;
+  height: 3px;
+  background-color: #ffffff;
+  margin: 3px 0;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+/* Navigation menu */
+.navbar-menu {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.nav-item {
+  position: relative;
+}
+
+/* Style the form created by button_to */
+.nav-item form {
+  margin: 0;
+  display: inline;
+}
+
+.nav-link {
+  color: #ffffff;
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  display: block;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+/* Style button_to buttons to match links */
+.nav-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: left;
+  width: 100%;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #3498db;
+}
+
+.nav-link:focus {
+  outline: 2px solid #3498db;
+  outline-offset: 2px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Active page indicator */
+.nav-link.active {
+  background-color: #3498db;
+  color: #ffffff;
+  position: relative;
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: #ffffff;
+}
+
+/* Responsive Design - Tablet and Mobile */
+@media (max-width: 768px) {
+  .navbar-toggle {
+    display: flex;
+    z-index: 1001;
+  }
+
+  .navbar-menu {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background-color: #2c3e50;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .navbar-menu.open {
+    max-height: 500px;
+  }
+
+  .navbar-nav {
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+    padding: 1rem 0;
+  }
+
+  .nav-item {
+    width: 100%;
+  }
+
+  .nav-link {
+    padding: 1rem 1.5rem;
+    border-radius: 0;
+  }
+
+  .nav-link.active::after {
+    left: 0;
+    width: 4px;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+  }
+
+  /* Animate hamburger icon when open */
+  .navbar-toggle[aria-expanded='true'] .navbar-toggle-icon:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+  }
+
+  .navbar-toggle[aria-expanded='true'] .navbar-toggle-icon:nth-child(2) {
+    opacity: 0;
+  }
+
+  .navbar-toggle[aria-expanded='true'] .navbar-toggle-icon:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+  }
+}
+
+/* Accessibility improvements */
+.nav-link:focus-visible {
+  outline: 3px solid #3498db;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-link,
+  .navbar-logo,
+  .navbar-toggle,
+  .navbar-toggle-icon,
+  .navbar-menu {
+    transition: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .navbar {
+    border-bottom: 3px solid #ffffff;
+  }
+
+  .nav-link.active {
+    border: 2px solid #ffffff;
+  }
+}
