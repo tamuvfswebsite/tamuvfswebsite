@@ -27,7 +27,8 @@
     <%= form.select :role,
         options_for_select([
           ['User', 'user'],
-          ['Admin', 'admin']
+          ['Admin', 'admin'],
+          ['Sponsor', 'sponsor']
         ], user.role),
         { prompt: 'Select a role' },
         { class: "form-select", disabled: is_own_account(user) } %>
