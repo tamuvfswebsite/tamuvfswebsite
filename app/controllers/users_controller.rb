@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
   before_action :ensure_admin_user, except: [:show]
   before_action :ensure_own_profile_or_admin, only: [:show]
+  helper_method :editing_own_profile?
 
   # GET /users or /users.json
   def index
