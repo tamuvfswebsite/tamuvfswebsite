@@ -7,6 +7,7 @@ module AdminPanel
       @recent_events = Event.order(created_at: :desc).limit(5)
       # @recent_applications = Application.order(created_at: :desc).limit(5)
       @resume_count = Resume.count
+      @sponsor_download_stats = ResumeDownload.sponsor_statistics
     end
 
     def leaderboard

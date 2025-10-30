@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 20_251_020_213_020) do
+ActiveRecord::Schema[8.0].define(version: 20_251_026_211_047) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_catalog.plpgsql'
 
@@ -135,6 +135,16 @@ ActiveRecord::Schema[8.0].define(version: 20_251_020_213_020) do
     t.datetime 'created_at'
   end
 
+  create_table 'resume_downloads', force: :cascade do |t|
+    t.bigint 'user_id', null: false
+    t.bigint 'resume_id', null: false
+    t.datetime 'downloaded_at'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['resume_id'], name: 'index_resume_downloads_on_resume_id'
+    t.index ['user_id'], name: 'index_resume_downloads_on_user_id'
+  end
+
   create_table 'resumes', force: :cascade do |t|
     t.bigint 'user_id', null: false
     t.datetime 'created_at', null: false
@@ -203,6 +213,8 @@ ActiveRecord::Schema[8.0].define(version: 20_251_020_213_020) do
   add_foreign_key 'event_rsvps', 'users'
   add_foreign_key 'organizational_role_users', 'organizational_roles'
   add_foreign_key 'organizational_role_users', 'users'
+  add_foreign_key 'resume_downloads', 'resumes'
+  add_foreign_key 'resume_downloads', 'users'
   add_foreign_key 'resumes', 'users'
   add_foreign_key 'role_applications', 'organizational_roles', column: 'org_role_id'
   add_foreign_key 'role_applications', 'users'

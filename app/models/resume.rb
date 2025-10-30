@@ -1,6 +1,7 @@
 class Resume < ApplicationRecord
   belongs_to :user
   has_one_attached :file
+  has_many :resume_downloads, dependent: :destroy
 
   validates :file, presence: true
   validates :gpa,

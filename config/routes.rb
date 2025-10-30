@@ -9,7 +9,11 @@ Rails.application.routes.draw do
   post 'checkin', to: 'checkins#create', as: :perform_checkin
 
   # Allow viewing all resumes
-  resources :resumes, only: %i[index show edit update destroy]
+  resources :resumes, only: %i[index show edit update destroy] do
+    member do
+      get :download
+    end
+  end
 
   resources :events, only: %i[index show] do
     # RSVP create/update
