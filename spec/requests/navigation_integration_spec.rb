@@ -74,12 +74,12 @@ RSpec.describe 'Navigation Integration', type: :request do
   describe 'Active page highlighting' do
     it 'marks current page as active on root path' do
       get root_path
-      expect(response.body).to match(/<a[^>]*class="[^"]*nav-link[^"]*active[^"]*"[^>]*>Home<\/a>/)
+      expect(response.body).to match(%r{<a[^>]*class="[^"]*nav-link[^"]*active[^"]*"[^>]*>Home</a>})
     end
 
     it 'marks events page as active when on events index' do
       get events_path
-      expect(response.body).to match(/<a[^>]*class="[^"]*nav-link[^"]*active[^"]*"[^>]*>Events<\/a>/)
+      expect(response.body).to match(%r{<a[^>]*class="[^"]*nav-link[^"]*active[^"]*"[^>]*>Events</a>})
     end
   end
 
