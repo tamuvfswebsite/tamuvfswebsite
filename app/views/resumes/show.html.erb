@@ -29,7 +29,7 @@
     <p>
       <% if @resume.file.attached? %>
       <div class="resume-actions">
-        <%= link_to "Download", download_resume_path(@resume), class: "btn btn-resume-download" %>
+        <%= link_to "Download", download_resume_path(@resume), class: "btn btn-resume-download", data: { turbo: false } %>
         <%= link_to "Edit this resume", edit_resume_path(@resume), class: "btn btn-resume-edit" %>
 
         <%= button_to "Delete Resume", @resume, method: :delete, class: "btn btn-danger" %>

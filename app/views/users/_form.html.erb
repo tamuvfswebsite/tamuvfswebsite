@@ -31,8 +31,8 @@
           ['Sponsor', 'sponsor']
         ], user.role),
         { prompt: 'Select a role' },
-        { class: "form-select", disabled: is_own_account(user) } %>
-    <% if is_own_account(user) %>
+        { class: "form-select", disabled: own_account?(user) } %>
+    <% if own_account?(user) %>
       <small class="form-text text-warning">You cannot change your own role.</small>
     <% else %>
       <small class="form-text">Choose the user's access level for the application.</small>

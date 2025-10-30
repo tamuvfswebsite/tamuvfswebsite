@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   include UsersHelper
-  
+
   before_action :set_user, only: %i[ show edit update destroy ]
   before_action :ensure_admin_user, except: [:show]
   before_action :ensure_own_profile_or_admin, only: [:show]
@@ -58,7 +58,7 @@ class UsersController < ApplicationController
     return if admin_user? # Admins can view anyone's profile
 
     # Non-admins can only view their own profile
-    return if is_own_account(@user)
+    return if own_account?(@user)
 
     flash[:alert] = 'Access denied. You can only view your own profile.'
     redirect_to homepage_path

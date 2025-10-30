@@ -13,10 +13,10 @@
   <h2>Resume Overview</h2>
   <ul>
     <li>Resume Count: <%= @resume_count %></li>
-    <li>% Users with Resumes: <%= @resume_count.to_f / @total_users * 100 %>%</li>
+    <li>% Users with Resumes: <%= (@resume_count.to_f / @total_users * 100).round(2) %>%</li>
   </ul>
   <h3>Sponsor Download Statistics</h3>
-  <% if @sponsor_download_stats.any? %>
+  <% if @sponsor_download_stats&.any? %>
     <table class="sponsor-stats-table">
       <thead>
         <tr>

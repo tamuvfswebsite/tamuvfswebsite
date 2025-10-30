@@ -78,7 +78,7 @@ class ResumesController < ApplicationController
       )
     end
 
-    # Send the file
+    # Send the file directly instead of redirecting
     redirect_to rails_blob_path(@resume.file, disposition: 'attachment'), allow_other_host: true
   end
 

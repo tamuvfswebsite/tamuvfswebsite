@@ -1,7 +1,7 @@
 module UsersHelper
   # Check if the current admin user is viewing/editing their own account
-  def is_own_account(user)
+  def own_account?(user)
     admin_signed_in? && user.google_uid == current_admin.uid
   end
-  alias_method :editing_own_profile?, :is_own_account
+  alias editing_own_profile? own_account?
 end
