@@ -28,7 +28,7 @@
       <% current_user = User.find_by(google_uid: current_admin.uid) %>
       <% if current_user %>
         <%# Admins and sponsors can view all resumes %>
-        <% if current_user.role&.in?(['admin', 'sponsor']) %>
+        <% if current_user.role == 'admin' || (current_user.role == 'sponsor' && current_sponsor.resume_access == true) %>
           <%= link_to "Browse Resumes", resumes_path, class: "btn btn-resume-index" %>
         <% end %>
         

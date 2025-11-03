@@ -37,7 +37,6 @@ module AdminPanel
     end
 
     def assign_users
-      # Show form to assign users to this sponsor
       @available_users = User.where(role: 'sponsor')
       @assigned_users = @sponsor.users
     end
@@ -46,7 +45,6 @@ module AdminPanel
       begin
         user_ids = params.dig(:sponsor, :user_ids)&.reject(&:blank?) || []
         
-        # Clear existing associations and add new ones
         @sponsor.users.clear
         
         if user_ids.any?

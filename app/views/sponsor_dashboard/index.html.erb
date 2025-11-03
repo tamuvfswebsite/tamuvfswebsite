@@ -6,23 +6,16 @@
     <h2>Company Details</h2>
     <p><strong>Company:</strong> <%= @sponsor.company_name %></p>
     <p><strong>Website:</strong> <%= link_to @sponsor.website, @sponsor.website, target: '_blank' if @sponsor.website.present? %></p>
-    <p><strong>Resume Access:</strong> <%= @sponsor.resume_access ? 'Granted' : 'Pending' %></p>
-  </div>
-
-  <ul>
     <% if @sponsor.resume_access %>
-      <li><%= link_to 'View student resumes', '/resumes' %></li>
-    <% else %>
-      <li>View student resumes (Access pending admin approval)</li>
+      <p>View Resumes: <%= link_to "Access Resumes", resumes_path %></p>
     <% end %>
-    <li><%= link_to 'Manage Logo Placements', '#' %></li>
-  </ul>
+  </div>
 
   <% if @sponsor.logo_placements.any? %>
     <h3>Your Current Logo Placements</h3>
     <ul>
       <% @sponsor.logo_placements.each do |placement| %>
-        <li><%= placement.inspect %></li>
+        <li><%= placement.page_name %> Page, <%= placement.section %> Section</li>
       <% end %>
     </ul>
   <% else %>
