@@ -1,4 +1,4 @@
-<%= form_with(model: [:admin_panel, sponsor], local: true) do |form| %>
+<%= form_with(model: sponsor, local: true) do |form| %>
   <% if sponsor.errors.any? %>
     <div class="error-messages">
       <h4><%= pluralize(sponsor.errors.count, "error") %> prohibited this sponsor from being saved:</h4>
@@ -13,11 +13,6 @@
   <div class="field">
     <%= form.label :company_name, "Sponsor Company Name" %>
     <%= form.text_field :company_name %>
-  </div>
-
-  <div class="field">
-    <%= form.label :tier, "Sponsorship Tier" %>
-    <%= form.select :tier, options_for_select(["Gold", "Silver", "Bronze", "Maroon"], sponsor.tier) %>
   </div>
 
   <div class="field">
@@ -38,12 +33,6 @@
   <div class="field">
     <%= form.label :website, "Sponsor Website" %>
     <%= form.url_field :website %>
-  </div>
-
-  <div class="field">
-    <%= form.label :resume_access, "Resume Access" %>
-    <%= form.check_box :resume_access %>
-    <span>Allow this sponsor to access student resumes</span>
   </div>
 
   <div class="actions">

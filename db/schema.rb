@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_26_211047) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_03_224144) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -177,11 +177,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_26_211047) do
 
   create_table "sponsors", force: :cascade do |t|
     t.string "company_name"
-    t.string "logo_url"
     t.string "website"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "resume_access"
+    t.string "tier"
+    t.string "contact_email"
+    t.string "phone_number"
+    t.text "company_description"
   end
 
   create_table "translations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -1,54 +1,66 @@
 Rails.application.routes.draw do
-  get 'sponsor_dashboard/index'
+  # Root and basic pages
   root 'home#index'
   get 'homepage', to: 'home#homepage', as: :homepage
-  get 'apply', to: 'home#apply', as: :apply
+  get 'apply',    to: 'home#apply',    as: :apply
 
-  # Public check-in endpoint (token-based)
+  # Sponsor dashboard
+  get 'sponsor_dashboard/index'
+  resource :sponsor, only: [:show, :edit, :update]
+
+
+  # Public check-in (token-based)
   get  'checkin', to: 'checkins#new',    as: :checkin
   post 'checkin', to: 'checkins#create', as: :perform_checkin
 
-  # Allow viewing all resumes
+  # Resumes
   resources :resumes, only: %i[index show edit update destroy] do
-    member do
-      get :download
-    end
+    member { get :download }
   end
 
+  # Events & RSVPs
   resources :events, only: %i[index show] do
-    # RSVP create/update
     resource :rsvp, only: %i[create update], controller: 'event_rsvps'
   end
 
-  # Nested resume routes for user-specific actions
+  # Users & their resumes
   resources :users do
     resource :resume, only: %i[new create show edit update destroy]
   end
 
-  # Role applications - users can create/view their own, admins can view all
+  # Role applications
   resources :role_applications, only: %i[new create show edit update]
 
+  # Admin authentication (Devise + OmniAuth)
   devise_for :admins, controllers: { omniauth_callbacks: 'admins/omniauth_callbacks' }
+
   devise_scope :admin do
-    # Render sign-in page which posts to Google OAuth (OmniAuth 2.x requires POST)
-    get 'admins/sign_in', to: 'admins/sessions#new', as: :new_admin_session
+    get 'admins/sign_in',  to: 'admins/sessions#new',     as: :new_admin_session
     get 'admins/sign_out', to: 'admins/sessions#destroy', as: :destroy_admin_session
   end
 
+  # Admin Panel
   namespace :admin_panel do
     root to: 'dashboard#index'
-    get 'dashboard', to: 'dashboard#index'
+
+    get 'dashboard',   to: 'dashboard#index'
     get 'leaderboard', to: 'dashboard#leaderboard'
+
     resources :events
     resources :attendance_links, only: %i[new create]
     resources :organizational_roles
+
     resources :role_applications, only: %i[index show destroy] do
       patch :update_status, on: :member
     end
+
     resources :sponsors do
       resources :logo_placements, except: %i[index]
-      get 'assign_users', on: :member
-      patch 'update_users', on: :member
+      member do
+        get   :assign_users
+        patch :update_users
+      end
+      # Future sponsor routes (e.g., resumes, applications)
       # resources :resumes, only: [:index]
       # resources :applications, only: [:index]
     end

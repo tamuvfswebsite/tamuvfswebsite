@@ -2,7 +2,10 @@
 
 <div class="sponsor-details">
   <p><strong>Website:</strong> <%= @sponsor.website %></p>
-  <p><strong>Logo URL:</strong> <%= @sponsor.logo_url %></p>
+  <p><strong>Tier:</strong> <%= @sponsor.tier %></p>
+  <p><strong>Contact Email:</strong> <%= @sponsor.contact_email %></p>
+  <p><strong>Phone Number:</strong> <%= @sponsor.phone_number %></p>
+  <p><strong>Description:</strong> <%= @sponsor.company_description %></p>
   <p><strong>Resume Access:</strong> <%= @sponsor.resume_access? ? "Yes" : "No" %></p>
 
   <p>Logo Placements</p>
@@ -13,9 +16,8 @@
       <li>
         <%= placement.page_name.titleize %> - <%= placement.section %>
         <%= link_to "Edit", edit_admin_panel_sponsor_logo_placement_path(@sponsor, placement) %>
-        <%= link_to "Delete", 
-    admin_panel_sponsor_logo_placement_path(@sponsor, placement), 
-    data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+        <%= link_to "Delete", admin_panel_sponsor_logo_placement_path(@sponsor, placement),
+            data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
       </li>
     <% end %>
   </ul>

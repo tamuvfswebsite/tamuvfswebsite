@@ -1,13 +1,20 @@
 <% if @sponsor %>
   <h1>Welcome, <%= @sponsor.company_name %></h1>
-  <p>Welcome to your Sponsor Dashboard. Quick links and current logos are shown below.</p>
-  
+  <p>Welcome to your Sponsor Dashboard. Quick links and company details are shown below.</p>
+
   <div class="sponsor-info">
     <h2>Company Details</h2>
     <p><strong>Company:</strong> <%= @sponsor.company_name %></p>
-    <p><strong>Website:</strong> <%= link_to @sponsor.website, @sponsor.website, target: '_blank' if @sponsor.website.present? %></p>
+    <p><strong>Tier:</strong> <%= @sponsor.tier %></p>
+    <p><strong>Website:</strong>
+      <%= link_to @sponsor.website, @sponsor.website, target: '_blank' if @sponsor.website.present? %>
+    </p>
+    <p><strong>Contact Email:</strong> <%= @sponsor.contact_email.presence || "Not provided" %></p>
+    <p><strong>Phone Number:</strong> <%= @sponsor.phone_number.presence || "Not provided" %></p>
+    <p><strong>Description:</strong> <%= @sponsor.company_description.presence || "No description provided." %></p>
+
     <% if @sponsor.resume_access %>
-      <p>View Resumes: <%= link_to "Access Resumes", resumes_path %></p>
+      <p><strong>View Resumes:</strong> <%= link_to "Access Resumes", resumes_path %></p>
     <% end %>
   </div>
 
@@ -15,14 +22,16 @@
     <h3>Your Current Logo Placements</h3>
     <ul>
       <% @sponsor.logo_placements.each do |placement| %>
-        <li><%= placement.page_name %> Page, <%= placement.section %> Section</li>
+        <li><%= placement.page_name.titleize %> Page, <%= placement.section %> Section</li>
       <% end %>
     </ul>
   <% else %>
     <p>No logo placements yet.</p>
   <% end %>
 
-  <div>
+  <%= link_to "Edit Company Info", edit_sponsor_path, class: "button" %>
+
+  <div class="actions">
     <%= link_to "Home", root_path %>
   </div>
 <% end %>

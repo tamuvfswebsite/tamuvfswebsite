@@ -65,7 +65,15 @@ module AdminPanel
     end
 
     def sponsor_params
-      params.require(:sponsor).permit(:company_name, :website, :logo_url, :resume_access)
+      params.require(:sponsor).permit(
+        :company_name,
+        :website,
+        :tier,
+        :contact_email,
+        :phone_number,
+        :company_description,
+        :resume_access
+      )
     end
   end
 end
