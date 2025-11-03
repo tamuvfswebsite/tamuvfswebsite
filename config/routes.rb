@@ -47,6 +47,8 @@ Rails.application.routes.draw do
     end
     resources :sponsors do
       resources :logo_placements, except: %i[index]
+      get 'assign_users', on: :member
+      patch 'update_users', on: :member
       # resources :resumes, only: [:index]
       # resources :applications, only: [:index]
     end

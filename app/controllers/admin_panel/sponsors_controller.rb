@@ -1,6 +1,6 @@
 module AdminPanel
   class SponsorsController < ApplicationController
-    before_action :set_sponsor, only: %i[show edit update destroy]
+    before_action :set_sponsor, only: %i[show edit update destroy assign_users update_users]
 
     def index
       @sponsors = Sponsor.all
@@ -34,6 +34,30 @@ module AdminPanel
     def destroy
       @sponsor.destroy
       redirect_to admin_panel_sponsors_path, notice: 'Sponsor was successfully deleted.'
+    end
+
+    def assign_users
+      # Show form to assign users to this sponsor
+      @available_users = User.where(role: 'sponsor')
+      @assigned_users = @sponsor.users
+    end
+
+    def update_users
+      begin
+        user_ids = params.dig(:sponsor, :user_ids)&.reject(&:blank?) || []
+        
+        # Clear existing associations and add new ones
+        @sponsor.users.clear
+        
+        if user_ids.any?
+          users = User.where(id: user_ids, role: 'sponsor')
+          @sponsor.users << users
+        end
+        
+        redirect_to admin_panel_sponsor_path(@sponsor), notice: "Users updated successfully. #{@sponsor.users.count} user(s) assigned."
+      rescue => e
+        redirect_to assign_users_admin_panel_sponsor_path(@sponsor), alert: "Error updating users: #{e.message}"
+      end
     end
 
     private

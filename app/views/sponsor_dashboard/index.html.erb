@@ -1,14 +1,35 @@
-<h1>Welcome, Sponsor</h1>
+<% if @sponsor %>
+  <h1>Welcome, <%= @sponsor.company_name %></h1>
+  <p>Welcome to your Sponsor Dashboard. Quick links and current logos are shown below.</p>
+  
+  <div class="sponsor-info">
+    <h2>Company Details</h2>
+    <p><strong>Company:</strong> <%= @sponsor.company_name %></p>
+    <p><strong>Website:</strong> <%= link_to @sponsor.website, @sponsor.website, target: '_blank' if @sponsor.website.present? %></p>
+    <p><strong>Resume Access:</strong> <%= @sponsor.resume_access ? 'Granted' : 'Pending' %></p>
+  </div>
 
-<p>Welcome to your Sponsor Dashboard. Quick links and current logos are shown below.</p>
+  <ul>
+    <% if @sponsor.resume_access %>
+      <li><%= link_to 'View student resumes', '/resumes' %></li>
+    <% else %>
+      <li>View student resumes (Access pending admin approval)</li>
+    <% end %>
+    <li><%= link_to 'Manage Logo Placements', '#' %></li>
+  </ul>
 
-<ul>
-    <li><%= link_to 'View student resumes', '/resumes' %></li>
-    <li>Logo Placements</li>
-    <li>Major Design Updates</li>
-    <!-- <li><%= link_to 'Logo Placements - Store Images Using Active Storage?', '/sponsor_dashboard/index' %></li> -->
-</ul>
+  <% if @sponsor.logo_placements.any? %>
+    <h3>Your Current Logo Placements</h3>
+    <ul>
+      <% @sponsor.logo_placements.each do |placement| %>
+        <li><%= placement.inspect %></li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>No logo placements yet.</p>
+  <% end %>
 
-<div>
-  <%= link_to "Home", root_path %>
-</div>
+  <div>
+    <%= link_to "Home", root_path %>
+  </div>
+<% end %>

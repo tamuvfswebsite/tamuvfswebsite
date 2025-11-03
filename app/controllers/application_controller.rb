@@ -1,8 +1,13 @@
 class ApplicationController < ActionController::Base
-  helper_method :admin_user?, :sponsor_user?, :current_user
+  helper_method :admin_user?, :sponsor_user?, :current_user, :current_sponsor
 
   def current_user
     @current_user ||= User.find_by(google_uid: current_admin&.uid)
+  end
+ 
+  def current_sponsor
+    return nil unless sponsor_user?
+    @current_sponsor ||= current_user.sponsors.first
   end
 
   private

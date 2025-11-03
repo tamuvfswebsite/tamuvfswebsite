@@ -23,6 +23,7 @@
 
 <div class="actions">
   <%= link_to 'Edit Sponsor', edit_admin_panel_sponsor_path(@sponsor) %>
+  <%= link_to "Assign Users", assign_users_admin_panel_sponsor_path(@sponsor) %>
   <%= button_to 'Delete Sponsor', admin_panel_sponsor_path(@sponsor),
               method: :delete,
               data: { confirm: "Are you sure you want to delete this sponsor?" } %>
