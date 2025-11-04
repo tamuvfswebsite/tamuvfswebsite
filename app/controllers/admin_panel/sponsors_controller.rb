@@ -42,20 +42,11 @@ module AdminPanel
     end
 
     def update_users
-      begin
-        user_ids = params.dig(:sponsor, :user_ids)&.reject(&:blank?) || []
-        
-        @sponsor.users.clear
-        
-        if user_ids.any?
-          users = User.where(id: user_ids, role: 'sponsor')
-          @sponsor.users << users
-        end
-        
-        redirect_to admin_panel_sponsor_path(@sponsor), notice: "Users updated successfully. #{@sponsor.users.count} user(s) assigned."
-      rescue => e
-        redirect_to assign_users_admin_panel_sponsor_path(@sponsor), alert: "Error updating users: #{e.message}"
-      end
+      user_ids = extract_user_ids
+      assign_users_to_sponsor(user_ids)
+      redirect_success
+    rescue StandardError => e
+      redirect_failure(e)
     end
 
     private
@@ -74,6 +65,28 @@ module AdminPanel
         :company_description,
         :resume_access
       )
+    end
+
+    def extract_user_ids
+      params.dig(:sponsor, :user_ids)&.reject(&:blank?) || []
+    end
+
+    def assign_users_to_sponsor(user_ids)
+      @sponsor.users.clear
+      return unless user_ids.any?
+
+      users = User.where(id: user_ids, role: 'sponsor')
+      @sponsor.users << users
+    end
+
+    def redirect_success
+      redirect_to admin_panel_sponsor_path(@sponsor),
+                  notice: "Users updated successfully. #{@sponsor.users.count} user(s) assigned."
+    end
+
+    def redirect_failure(exception)
+      redirect_to assign_users_admin_panel_sponsor_path(@sponsor),
+                  alert: "Error updating users: #{exception.message}"
     end
   end
 end

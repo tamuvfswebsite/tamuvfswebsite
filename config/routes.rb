@@ -6,8 +6,7 @@ Rails.application.routes.draw do
 
   # Sponsor dashboard
   get 'sponsor_dashboard/index'
-  resource :sponsor, only: [:show, :edit, :update]
-
+  resource :sponsor, only: %i[show edit update]
 
   # Public check-in (token-based)
   get  'checkin', to: 'checkins#new',    as: :checkin

@@ -3,10 +3,10 @@ class SponsorDashboardController < ApplicationController
 
   def index
     @sponsor = current_sponsor
-    
-    if @sponsor.nil?
-      flash[:alert] = 'No sponsor company associated with your account.'
-      redirect_to homepage_path
-    end
+
+    return unless @sponsor.nil?
+
+    flash[:alert] = 'No sponsor company associated with your account.'
+    redirect_to homepage_path
   end
 end

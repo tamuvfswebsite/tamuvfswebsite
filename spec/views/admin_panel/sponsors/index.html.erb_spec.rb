@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe 'admin_panel/sponsors/index.html.erb', type: :view do
-  let(:sponsor1) { Sponsor.new(id: 1, company_name: 'TechCorp', website: 'https://techcorp.com', logo_url: 'logo1.png', resume_access: true) }
-  let(:sponsor2) { Sponsor.new(id: 2, company_name: 'DataWorks', website: 'https://dataworks.ai', logo_url: 'logo2.png', resume_access: false) }
+  let(:sponsor1) { Sponsor.new(id: 1, company_name: 'TechCorp', website: 'https://techcorp.com', tier: 'Gold') }
+  let(:sponsor2) { Sponsor.new(id: 2, company_name: 'DataWorks', website: 'https://dataworks.ai', tier: 'Silver') }
 
   before do
     assign(:sponsors, [sponsor1, sponsor2])

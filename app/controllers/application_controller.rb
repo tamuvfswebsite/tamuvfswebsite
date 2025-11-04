@@ -4,9 +4,10 @@ class ApplicationController < ActionController::Base
   def current_user
     @current_user ||= User.find_by(google_uid: current_admin&.uid)
   end
- 
+
   def current_sponsor
     return nil unless sponsor_user?
+
     @current_sponsor ||= current_user.sponsors.first
   end
 

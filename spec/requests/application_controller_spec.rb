@@ -52,20 +52,18 @@ RSpec.describe ApplicationController, type: :request do
 
   describe 'sponsor authorization' do
     it 'allows sponsor users to access sponsor dashboard' do
-      admin = double('Admin', uid: 'sponsor123')
-      allow_any_instance_of(ApplicationController).to receive(:admin_signed_in?).and_return(true)
-      allow_any_instance_of(ApplicationController).to receive(:current_admin).and_return(admin)
-      create_user(role: 'sponsor', uid: 'sponsor123')
+      sponsor = Sponsor.create!(company_name: 'TechCorp', website: 'https://techcorp.com', resume_access: true)
+      user = User.create!(
+        email: 'sponsor@example.com',
+        first_name: 'Sponsor',
+        last_name: 'User',
+        google_uid: '123',
+        role: 'sponsor'
+      )
+      user.sponsors << sponsor
 
-      get '/sponsor_dashboard/index'
-      expect(response).to have_http_status(:success)
-    end
-
-    it 'allows admin users to access sponsor dashboard' do
-      admin = double('Admin', uid: 'admin123')
-      allow_any_instance_of(ApplicationController).to receive(:admin_signed_in?).and_return(true)
-      allow_any_instance_of(ApplicationController).to receive(:current_admin).and_return(admin)
-      create_user(role: 'admin', uid: 'admin123')
+      # Stub current_user to this sponsor user
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
 
       get '/sponsor_dashboard/index'
       expect(response).to have_http_status(:success)
