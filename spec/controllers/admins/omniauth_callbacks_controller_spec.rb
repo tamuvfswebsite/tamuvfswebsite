@@ -107,7 +107,7 @@ RSpec.describe 'Admins::OmniauthCallbacksController', type: :request do
         resume.save!
 
         org_role = OrganizationalRole.create!(name: 'Test Role')
-        user.create_role_application!(org_role_id: org_role.id, essay: 'Test essay' * 20)
+        user.create_role_application!(org_role_id: org_role.id)
 
         get apply_path # Set applying_for_role flag
         get '/admins/auth/google_oauth2/callback'

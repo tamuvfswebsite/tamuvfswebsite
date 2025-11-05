@@ -26,6 +26,49 @@ RSpec.describe OrganizationalRole, type: :model do
     end
   end
 
+  describe 'application questions' do
+    it 'allows optional question_1' do
+      role = OrganizationalRole.new(name: 'AI Team')
+      expect(role).to be_valid
+      expect(role.question_1).to be_nil
+    end
+
+    it 'allows optional question_2' do
+      role = OrganizationalRole.new(name: 'AI Team')
+      expect(role).to be_valid
+      expect(role.question_2).to be_nil
+    end
+
+    it 'allows optional question_3' do
+      role = OrganizationalRole.new(name: 'AI Team')
+      expect(role).to be_valid
+      expect(role.question_3).to be_nil
+    end
+
+    it 'allows setting custom questions' do
+      role = OrganizationalRole.create!(
+        name: 'Engineering Team',
+        question_1: 'What programming languages are you proficient in?',
+        question_2: 'Describe a challenging technical problem you solved.',
+        question_3: 'Why do you want to join our engineering team?'
+      )
+      expect(role.question_1).to eq('What programming languages are you proficient in?')
+      expect(role.question_2).to eq('Describe a challenging technical problem you solved.')
+      expect(role.question_3).to eq('Why do you want to join our engineering team?')
+    end
+
+    it 'allows partial question sets' do
+      role = OrganizationalRole.create!(
+        name: 'Marketing Team',
+        question_1: 'What marketing experience do you have?',
+        question_2: 'Describe a successful campaign you worked on.'
+      )
+      expect(role.question_1).to be_present
+      expect(role.question_2).to be_present
+      expect(role.question_3).to be_nil
+    end
+  end
+
   describe 'associations' do
     it 'has many users' do
       role = OrganizationalRole.create!(name: 'AI Team')

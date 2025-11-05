@@ -27,13 +27,11 @@ RSpec.describe 'role_applications/index', type: :view do
     assign(:role_applications, [
              RoleApplication.create!(
                user: user1,
-               organizational_role: organizational_role,
-               essay: 'This is a test essay that is at least fifty characters long.'
+               organizational_role: organizational_role
              ),
              RoleApplication.create!(
                user: user2,
-               organizational_role: organizational_role,
-               essay: 'This is another test essay that is at least fifty characters.'
+               organizational_role: organizational_role
              )
            ])
   end

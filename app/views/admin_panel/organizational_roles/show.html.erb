@@ -1,0 +1,50 @@
+<div class="container-fluid">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800"><%= @organizational_role.name %></h1>
+    <div>
+      <%= link_to "Edit", edit_admin_panel_organizational_role_path(@organizational_role), class: "btn btn-sm btn-warning" %>
+      <%= link_to "Back to List", admin_panel_organizational_roles_path, class: "btn btn-sm btn-secondary" %>
+    </div>
+  </div>
+
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Role Details</h6>
+    </div>
+    <div class="card-body">
+      <div class="mb-3">
+        <strong>Description:</strong>
+        <p><%= @organizational_role.description %></p>
+      </div>
+
+      <hr>
+
+      <h5 class="mt-4 mb-3">Application Questions</h5>
+      
+      <% if @organizational_role.question_1.present? %>
+        <div class="mb-4">
+          <strong>Question 1:</strong>
+          <p class="ml-3"><%= @organizational_role.question_1 %></p>
+        </div>
+      <% end %>
+
+      <% if @organizational_role.question_2.present? %>
+        <div class="mb-4">
+          <strong>Question 2:</strong>
+          <p class="ml-3"><%= @organizational_role.question_2 %></p>
+        </div>
+      <% end %>
+
+      <% if @organizational_role.question_3.present? %>
+        <div class="mb-4">
+          <strong>Question 3:</strong>
+          <p class="ml-3"><%= @organizational_role.question_3 %></p>
+        </div>
+      <% end %>
+
+      <% if [@organizational_role.question_1, @organizational_role.question_2, @organizational_role.question_3].all?(&:blank?) %>
+        <p class="text-muted">No application questions configured for this role.</p>
+      <% end %>
+    </div>
+  </div>
+</div>

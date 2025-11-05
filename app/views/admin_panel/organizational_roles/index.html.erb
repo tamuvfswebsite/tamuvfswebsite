@@ -1,0 +1,43 @@
+<div class="container-fluid">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Organizational Roles</h1>
+    <%= link_to "New Organizational Role", new_admin_panel_organizational_role_path, class: "d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" %>
+  </div>
+
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">All Organizational Roles</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Questions</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @organizational_roles.each do |org_role| %>
+              <tr>
+                <td><%= org_role.name %></td>
+                <td><%= truncate(org_role.description, length: 100) %></td>
+                <td>
+                  <% questions_count = [org_role.question_1, org_role.question_2, org_role.question_3].compact.count %>
+                  <%= pluralize(questions_count, 'question') %>
+                </td>
+                <td>
+                  <%= link_to "View", admin_panel_organizational_role_path(org_role), class: "btn btn-sm btn-info" %>
+                  <%= link_to "Edit", edit_admin_panel_organizational_role_path(org_role), class: "btn btn-sm btn-warning" %>
+                  <%= button_to "Delete", admin_panel_organizational_role_path(org_role), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

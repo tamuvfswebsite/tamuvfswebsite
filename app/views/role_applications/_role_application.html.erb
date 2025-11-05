@@ -29,9 +29,39 @@
   </p>
 
   <div style="margin-top: 20px;">
-    <strong>Essay Response:</strong>
-    <div style="background-color: white; border: 1px solid #dee2e6; border-radius: 4px; padding: 15px; margin-top: 10px; white-space: pre-wrap;">
-<%= role_application.essay %>
-    </div>
+    <strong>Application Responses:</strong>
+    
+    <% if role_application.organizational_role.question_1.present? && role_application.answer_1.present? %>
+      <div style="margin-top: 15px;">
+        <strong style="color: #495057;"><%= role_application.organizational_role.question_1 %></strong>
+        <div style="background-color: white; border: 1px solid #dee2e6; border-radius: 4px; padding: 15px; margin-top: 5px; white-space: pre-wrap;">
+<%= role_application.answer_1 %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if role_application.organizational_role.question_2.present? && role_application.answer_2.present? %>
+      <div style="margin-top: 15px;">
+        <strong style="color: #495057;"><%= role_application.organizational_role.question_2 %></strong>
+        <div style="background-color: white; border: 1px solid #dee2e6; border-radius: 4px; padding: 15px; margin-top: 5px; white-space: pre-wrap;">
+<%= role_application.answer_2 %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if role_application.organizational_role.question_3.present? && role_application.answer_3.present? %>
+      <div style="margin-top: 15px;">
+        <strong style="color: #495057;"><%= role_application.organizational_role.question_3 %></strong>
+        <div style="background-color: white; border: 1px solid #dee2e6; border-radius: 4px; padding: 15px; margin-top: 5px; white-space: pre-wrap;">
+<%= role_application.answer_3 %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if role_application.organizational_role.question_1.blank? && 
+          role_application.organizational_role.question_2.blank? && 
+          role_application.organizational_role.question_3.blank? %>
+      <p style="color: #6c757d; font-style: italic; margin-top: 10px;">This role had no application questions.</p>
+    <% end %>
   </div>
 </div>

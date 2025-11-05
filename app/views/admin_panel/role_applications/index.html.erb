@@ -93,9 +93,31 @@
           </div>
 
           <div class="card-field">
-            <strong>Essay:</strong>
+            <strong>Application Responses:</strong>
             <div class="essay-preview">
-              <%= simple_format(application.essay) %>
+              <% if application.organizational_role.question_1.present? && application.answer_1.present? %>
+                <div style="margin-bottom: 10px;">
+                  <em><%= application.organizational_role.question_1 %></em>
+                  <p><%= simple_format(application.answer_1) %></p>
+                </div>
+              <% end %>
+              <% if application.organizational_role.question_2.present? && application.answer_2.present? %>
+                <div style="margin-bottom: 10px;">
+                  <em><%= application.organizational_role.question_2 %></em>
+                  <p><%= simple_format(application.answer_2) %></p>
+                </div>
+              <% end %>
+              <% if application.organizational_role.question_3.present? && application.answer_3.present? %>
+                <div style="margin-bottom: 10px;">
+                  <em><%= application.organizational_role.question_3 %></em>
+                  <p><%= simple_format(application.answer_3) %></p>
+                </div>
+              <% end %>
+              <% if application.organizational_role.question_1.blank? && 
+                    application.organizational_role.question_2.blank? && 
+                    application.organizational_role.question_3.blank? %>
+                <em>No application questions for this role.</em>
+              <% end %>
             </div>
           </div>
 
