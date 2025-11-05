@@ -1,41 +1,44 @@
-<%= form_with(model: sponsor, local: true) do |form| %>
-  <% if sponsor.errors.any? %>
-    <div class="error-messages">
-      <h4><%= pluralize(sponsor.errors.count, "error") %> prohibited this sponsor from being saved:</h4>
-      <ul>
-        <% sponsor.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+<div class="form-container">
+  <%= form_with(model: sponsor, local: true) do |form| %>
+    <% if sponsor.errors.any? %>
+      <div class="error-messages">
+        <h4><%= pluralize(sponsor.errors.count, "error") %> prohibited this sponsor from being saved:</h4>
+        <ul>
+          <% sponsor.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="field">
+      <%= form.label :company_name, "Sponsor Company Name" %>
+      <%= form.text_field :company_name, placeholder: "Enter company name" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :contact_email, "Contact Email" %>
+      <%= form.email_field :contact_email, placeholder: "contact@company.com" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :phone_number, "Phone Number" %>
+      <%= form.telephone_field :phone_number, placeholder: "(555) 123-4567" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :company_description, "Company Description" %>
+      <%= form.text_area :company_description, rows: 4, placeholder: "Tell us about your company..." %>
+    </div>
+
+    <div class="field">
+      <%= form.label :website, "Sponsor Website" %>
+      <%= form.url_field :website, placeholder: "https://www.company.com" %>
+    </div>
+
+    <div class="form-actions">
+      <%= form.submit "Save Changes", class: "btn-primary" %>
+      <%= link_to "Cancel", sponsor_dashboard_index_path, class: "btn-secondary" %>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= form.label :company_name, "Sponsor Company Name" %>
-    <%= form.text_field :company_name %>
-  </div>
-
-  <div class="field">
-    <%= form.label :contact_email, "Contact Email" %>
-    <%= form.email_field :contact_email %>
-  </div>
-
-  <div class="field">
-    <%= form.label :phone_number, "Phone Number" %>
-    <%= form.telephone_field :phone_number %>
-  </div>
-
-  <div class="field">
-    <%= form.label :company_description, "Company Description" %>
-    <%= form.text_area :company_description, rows: 4 %>
-  </div>
-
-  <div class="field">
-    <%= form.label :website, "Sponsor Website" %>
-    <%= form.url_field :website %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>

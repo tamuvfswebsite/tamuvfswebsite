@@ -1,0 +1,23 @@
+// Variables first (from style guide)
+@import 'variables';
+
+// Base styles
+@import 'base';
+
+// Shared components
+@import 'buttons';
+@import 'forms';
+@import 'navbar';
+
+// Component modules
+// @import 'components/cards';
+// @import 'components/tables';
+// @import 'components/badges';
+
+// Page-specific styles
+@import 'pages/home';
+@import 'pages/sponsor_dashboard';
+@import 'pages/admin_dashboard';
+@import 'pages/resumes';
+@import 'pages/role_applications';
+@import 'pages/users';

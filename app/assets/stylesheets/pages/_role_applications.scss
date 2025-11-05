@@ -1,0 +1,205 @@
+// Role Applications Styles
+
+.back-to-home,
+.back-to-dashboard {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  color: var(--color-text-medium);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 4px;
+  transition: var(--transition-standard);
+
+  &:hover {
+    background: var(--color-off-white);
+    color: var(--color-text-dark);
+  }
+}
+
+.role-applications-admin-index {
+  padding: var(--space-md);
+  max-width: var(--container-max);
+  margin: 0 auto;
+
+  .navigation-buttons { margin-bottom: var(--space-md); }
+
+  h1 {
+    margin-bottom: var(--space-xs);
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.2;
+
+    @media (max-width: 767px) { font-size: 32px; }
+  }
+
+  .subtitle {
+    color: var(--color-text-medium);
+    margin-bottom: var(--space-lg);
+    font-size: 14px;
+  }
+
+  .filter-section {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-md);
+    margin-bottom: var(--space-lg);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  h3 {
+    margin-bottom: var(--space-sm);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .filter-checkboxes {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-sm);
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-size: 14px;
+      cursor: pointer;
+    }
+  }
+
+  .filter-actions {
+    display: flex;
+    gap: var(--space-sm);
+  }
+
+  .applications-grid {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .application-card {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-md);
+    transition: var(--transition-standard);
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-sm);
+    }
+
+    h3 {
+      margin-bottom: var(--space-xs);
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .email {
+      color: var(--color-text-medium);
+      font-size: 14px;
+    }
+
+    .role-badge {
+      background: var(--color-primary);
+      color: var(--color-white);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .card-field {
+      margin-bottom: var(--space-sm);
+      font-size: 14px;
+
+      strong { font-weight: 700; }
+
+      .status-controls {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-sm);
+        margin-left: var(--space-sm);
+
+        .status-dropdown {
+          padding: var(--space-xs) var(--space-sm);
+          border: 2px solid var(--color-border);
+          border-radius: 4px;
+          background: var(--color-white);
+          font-size: 14px;
+          transition: var(--transition-standard);
+
+          &:hover,
+          &:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(80, 0, 0, 0.1);
+          }
+        }
+      }
+    }
+
+    .resume-link {
+      color: var(--color-primary);
+      text-decoration: none;
+
+      &:hover { opacity: 0.7; }
+    }
+
+    .no-resume { color: var(--color-text-medium); }
+
+    .essay-preview {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: var(--space-sm);
+      margin-top: var(--space-xs);
+      max-height: 150px;
+      overflow-y: auto;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: var(--space-sm);
+      margin-top: var(--space-sm);
+    }
+  }
+
+  .no-applications {
+    background: var(--color-off-white);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-medium);
+    padding: var(--space-sm);
+    border-radius: 4px;
+    text-align: center;
+    font-size: 16px;
+  }
+}
+
+// Status Badges
+.status-badge {
+  display: inline-block;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-white);
+
+  &.not-reviewed { background: var(--color-text-medium); }
+  &.in-review { background: var(--color-primary-light); }
+  &.accepted { background: var(--color-primary); }
+  &.rejected { background: var(--color-primary-hover); }
+}
