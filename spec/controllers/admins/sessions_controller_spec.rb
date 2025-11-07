@@ -12,11 +12,11 @@ RSpec.describe Admins::SessionsController, type: :controller do
   end
 
   describe '#after_sign_in_path_for' do
-    it 'returns homepage_path when no stored location' do
+    it 'returns root_path when no stored location' do
       admin = double('Admin')
       allow(controller).to receive(:stored_location_for).with(admin).and_return(nil)
 
-      expect(controller.after_sign_in_path_for(admin)).to eq(homepage_path)
+      expect(controller.after_sign_in_path_for(admin)).to eq(root_path)
     end
 
     it 'returns stored location when available' do

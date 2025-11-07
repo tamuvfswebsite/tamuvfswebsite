@@ -7,6 +7,6 @@ class SponsorDashboardController < ApplicationController
     return unless @sponsor.nil?
 
     flash[:alert] = 'No sponsor company associated with your account.'
-    redirect_to homepage_path
+    redirect_to root_path
   end
 end

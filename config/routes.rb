@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
   # Root and basic pages
   root 'home#index'
-  get 'homepage', to: 'home#homepage', as: :homepage
-  get 'apply',    to: 'home#apply',    as: :apply
+  get 'apply', to: 'home#apply', as: :apply
 
   # Sponsor dashboard
   get 'sponsor_dashboard/index'

@@ -37,7 +37,7 @@ RSpec.describe 'Users', type: :request do
       allow(controller).to receive(:current_admin).and_return(double('Admin', uid: 'user123'))
 
       get "/users/#{user2.id}"
-      expect(response).to redirect_to(homepage_path)
+      expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to include('You can only view your own profile')
     end
 

@@ -6,21 +6,6 @@
       <div class="brand">Texas A&M • Vertical Flight Society</div>
       <h1 class="headline">Welcome to the Vertical Flight Society</h1>
       <p class="subhead">Advancing rotorcraft and VTOL innovation at Texas A&M University.</p>
-
-      <div class="cta-row">
-        <%= button_to "Apply Now",
-              apply_path,
-              method: :get,
-              form: { style: "display:inline-block;" },
-              data: { turbo: false },
-              class: "btn btn-primary" %>
-        <%= button_to "Member Sign In", 
-              admin_google_oauth2_omniauth_authorize_path,
-              method: :post,
-              form: { style: "display:inline-block;" },
-              data: { turbo: false },
-              class: "btn btn-outline" %>
-      </div>
     </div>
 
     <div class="right">
@@ -28,5 +13,33 @@
         <span>Image placeholder</span>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="events-section">
+  <div class="events-container">
+    <h2 class="events-title">Upcoming Events</h2>
+    <% if @upcoming_events.present? %>
+      <ul class="events-list">
+        <% @upcoming_events.each do |event| %>
+          <li class="event-item">
+            <div class="event-main">
+              <span class="event-title"><%= event.title %></span>
+              <span class="event-date"><%= event.formatted_date %></span>
+            </div>
+            <div class="event-meta">
+              <span class="event-location"><%= event.location %></span>
+            </div>
+            <% if admin_signed_in? %>
+              <div class="event-actions">
+                <%= link_to "View & RSVP", event_path(event), class: "btn" %>
+              </div>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="events-empty">No upcoming events scheduled.</p>
+    <% end %>
   </div>
 </div>
