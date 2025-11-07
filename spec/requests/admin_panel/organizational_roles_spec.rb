@@ -13,7 +13,7 @@ RSpec.describe 'AdminPanel::OrganizationalRoles', type: :request do
       allow_any_instance_of(ApplicationController).to receive(:admin_signed_in?).and_return(false)
 
       get '/admin_panel/organizational_roles'
-      expect(response).to redirect_to(homepage_path)
+      expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to include('Admin privileges required')
     end
 
@@ -28,7 +28,7 @@ RSpec.describe 'AdminPanel::OrganizationalRoles', type: :request do
       create_user(role: 'user', uid: 'user123')
 
       get '/admin_panel/organizational_roles'
-      expect(response).to redirect_to(homepage_path)
+      expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to include('Admin privileges required')
     end
   end

@@ -12,27 +12,16 @@ RSpec.describe HomeController, type: :request do
         get root_path
         expect(response).not_to be_redirect
       end
-    end
 
-    context 'when signed in' do
-      let(:user) { create_user(role: 'user') }
+      it 'displays upcoming events' do
+        Event.create!(title: 'Upcoming Event 1', event_date: 1.day.from_now, location: 'Test Location',
+                      capacity: 100, attendance_points: 10, published: true)
+        Event.create!(title: 'Upcoming Event 2', event_date: 2.days.from_now, location: 'Test Location',
+                      capacity: 100, attendance_points: 15, published: true)
 
-      before do
-        sign_in_as_admin(user)
-      end
-
-      it 'redirects to homepage' do
         get root_path
-        expect(response).to redirect_to(homepage_path)
-      end
-    end
-  end
-
-  describe 'GET /homepage' do
-    context 'when not signed in' do
-      it 'redirects to root path' do
-        get homepage_path
-        expect(response).to redirect_to(root_path)
+        expect(response.body).to include('Upcoming Event 1')
+        expect(response.body).to include('Upcoming Event 2')
       end
     end
 
@@ -44,40 +33,41 @@ RSpec.describe HomeController, type: :request do
       end
 
       it 'renders the homepage successfully' do
-        get homepage_path
+        get root_path
         expect(response).to be_successful
+        expect(response).not_to be_redirect
       end
 
       it 'displays upcoming events' do
         Event.create!(title: 'Upcoming Event 1', event_date: 1.day.from_now, location: 'Test Location',
-                      capacity: 100, attendance_points: 10)
+                      capacity: 100, attendance_points: 10, published: true)
         Event.create!(title: 'Upcoming Event 2', event_date: 2.days.from_now, location: 'Test Location',
-                      capacity: 100, attendance_points: 15)
+                      capacity: 100, attendance_points: 15, published: true)
 
-        get homepage_path
+        get root_path
         expect(response.body).to include('Upcoming Event 1')
         expect(response.body).to include('Upcoming Event 2')
       end
 
       it 'only shows future events' do
         Event.create!(title: 'Future Event', event_date: 1.day.from_now, location: 'Test Location',
-                      capacity: 100, attendance_points: 10)
+                      capacity: 100, attendance_points: 10, published: true)
         past_event = Event.create!(title: 'Past Event', event_date: 1.day.from_now, location: 'Test Location',
-                                   capacity: 100, attendance_points: 5)
+                                   capacity: 100, attendance_points: 5, published: true)
         past_event.update_column(:event_date, 1.day.ago)
 
-        get homepage_path
+        get root_path
         expect(response.body).to include('Future Event')
         expect(response.body).not_to include('Past Event')
       end
 
       it 'orders events by event date' do
         Event.create!(title: 'Event Later', event_date: 5.days.from_now, location: 'Test Location',
-                      capacity: 100, attendance_points: 10)
+                      capacity: 100, attendance_points: 10, published: true)
         Event.create!(title: 'Event Sooner', event_date: 1.day.from_now, location: 'Test Location',
-                      capacity: 100, attendance_points: 10)
+                      capacity: 100, attendance_points: 10, published: true)
 
-        get homepage_path
+        get root_path
 
         # Check that sooner event appears before later event
         sooner_position = response.body.index('Event Sooner')
@@ -89,10 +79,10 @@ RSpec.describe HomeController, type: :request do
         # Create 7 future events
         7.times do |i|
           Event.create!(title: "Event #{i}", event_date: (i + 1).days.from_now, location: 'Test Location',
-                        capacity: 100, attendance_points: 10)
+                        capacity: 100, attendance_points: 10, published: true)
         end
 
-        get homepage_path
+        get root_path
 
         # Check that only events 0-4 appear (first 5)
         expect(response.body).to include('Event 0')
@@ -102,7 +92,7 @@ RSpec.describe HomeController, type: :request do
       end
 
       it 'uses application layout' do
-        get homepage_path
+        get root_path
         # Check for layout elements
         expect(response.body).to include('<!DOCTYPE html>')
       end
@@ -138,7 +128,7 @@ RSpec.describe HomeController, type: :request do
       user = create_user(uid: 'unique123', email: 'unique@test.com')
       sign_in_as_admin(user)
 
-      get homepage_path
+      get root_path
       expect(response).to be_successful
       # The current_user helper is used internally and works correctly
     end
@@ -147,7 +137,7 @@ RSpec.describe HomeController, type: :request do
       user = create_user(uid: 'test123')
       sign_in_as_admin(user)
 
-      get homepage_path
+      get root_path
       # Verifies current_user helper allows homepage access
       expect(response).to be_successful
     end
