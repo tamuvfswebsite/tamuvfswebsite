@@ -16,7 +16,14 @@ RSpec.describe 'AdminPanel::Sponsors', type: :request do
 
   describe 'GET /show' do
     it 'returns http success' do
-      sponsor = Sponsor.create!(company_name: 'Test Co', website: 'https://example.com', logo_url: 'https://logo.png')
+      sponsor = Sponsor.create!(
+        company_name: 'Test Co',
+        website: 'https://example.com',
+        tier: 'Gold',
+        contact_email: 'contact@example.com',
+        phone_number: '123-456-7890',
+        company_description: 'A great test sponsor.'
+      )
       get "/admin_panel/sponsors/#{sponsor.id}"
       expect(response).to have_http_status(:success)
     end
@@ -31,7 +38,14 @@ RSpec.describe 'AdminPanel::Sponsors', type: :request do
 
   describe 'GET /edit' do
     it 'returns http success' do
-      sponsor = Sponsor.create!(company_name: 'Test Co', website: 'https://example.com', logo_url: 'https://logo.png')
+      sponsor = Sponsor.create!(
+        company_name: 'Test Co',
+        website: 'https://example.com',
+        tier: 'Gold',
+        contact_email: 'contact@example.com',
+        phone_number: '123-456-7890',
+        company_description: 'A great test sponsor.'
+      )
       get "/admin_panel/sponsors/#{sponsor.id}/edit"
       expect(response).to have_http_status(:success)
     end

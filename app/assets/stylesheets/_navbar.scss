@@ -1,0 +1,91 @@
+/* Navigation Bar – follows guide */
+.navbar {
+  background: var(--color-primary);
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.navbar-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 40px;
+}
+
+/* Brand */
+.navbar-brand .navbar-logo {
+  color: var(--color-white);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--transition-standard);
+}
+.navbar-logo:hover { opacity: .7; }
+
+/* Mobile toggle */
+.navbar-toggle {
+  display: none;
+  background: transparent;
+  border: 2px solid var(--color-white);
+  border-radius: 4px;
+  padding: .5rem;
+  cursor: pointer;
+}
+.navbar-toggle-icon {
+  width: 24px; height: 3px;
+  background: var(--color-white);
+  margin: 3px 0;
+  border-radius: 2px;
+  transition: var(--transition-standard);
+}
+
+/* Menu */
+.navbar-menu {
+  display: flex;
+  align-items: center;
+}
+.navbar-nav {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: flex;
+  gap: var(--space-sm);
+}
+.nav-link {
+  color: var(--color-white);
+  font-weight: 500;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 4px;
+  transition: var(--transition-standard);
+}
+.nav-link:hover,
+.nav-link:focus { opacity: .7; }
+.nav-link.active {
+  background: var(--color-primary-hover);
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .navbar-toggle { display: flex; }
+  .navbar-menu {
+    position: fixed;
+    top: 60px; left: 0; right: 0;
+    background: var(--color-primary);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .3s ease;
+  }
+  .navbar-menu.open { max-height: 600px; }
+  .navbar-nav { flex-direction: column; gap: 0; }
+  .nav-link { padding: var(--space-md) var(--space-lg); }
+}
+
+/* Hamburger animation */
+.navbar-toggle[aria-expanded='true'] .navbar-toggle-icon:nth-child(1) { transform: rotate(45deg) translate(6px,6px); }
+.navbar-toggle[aria-expanded='true'] .navbar-toggle-icon:nth-child(2) { opacity: 0; }
+.navbar-toggle[aria-expanded='true'] .navbar-toggle-icon:nth-child(3) { transform: rotate(-45deg) translate(6px,-6px); }

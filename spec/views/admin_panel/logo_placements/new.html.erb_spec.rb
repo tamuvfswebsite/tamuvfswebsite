@@ -5,7 +5,10 @@ RSpec.describe 'admin_panel/logo_placements/new', type: :view do
     Sponsor.create!(
       company_name: 'Test Company',
       website: 'https://example.com',
-      logo_url: 'https://example.com/logo.png',
+      tier: 'Gold',
+      contact_email: 'contact@example.com',
+      phone_number: '123-456-7890',
+      company_description: 'A test company for specs.',
       resume_access: false
     )
   end

@@ -1,8 +1,14 @@
 class ApplicationController < ActionController::Base
-  helper_method :admin_user?, :sponsor_user?, :current_user
+  helper_method :admin_user?, :sponsor_user?, :current_user, :current_sponsor
 
   def current_user
     @current_user ||= User.find_by(google_uid: current_admin&.uid)
+  end
+
+  def current_sponsor
+    return nil unless sponsor_user?
+
+    @current_sponsor ||= current_user.sponsors.first
   end
 
   private
@@ -17,14 +23,7 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_sponsor_user
-    return if admin_user?
-    return if sponsor_user? # && current_user&.resume_access == true
-
-    # if sponsor_user? && current_user&.resume_access != true
-    #   flash[:alert] = 'Access denied. Resume access not granted by admin.'
-    #   redirect_to homepage_path
-    #   return
-    # end
+    return if admin_user? || sponsor_user?
 
     flash[:alert] =
       current_user.present? ? 'Access denied. Sponsor privileges required.' : 'You need to sign in first.'

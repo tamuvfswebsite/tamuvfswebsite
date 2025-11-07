@@ -1,0 +1,33 @@
+// CSS Variables from style guide
+:root {
+  // Colors
+  --color-primary: #500000;
+  --color-primary-hover: #660000;
+  --color-primary-light: #8B0000;
+  --color-white: #FFFFFF;
+  --color-off-white: #F5F5F5;
+  --color-text-dark: #333333;
+  --color-text-medium: #666666;
+  --color-border: #CCCCCC;
+  
+  // Spacing
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 32px;
+  --space-xl: 48px;
+  --space-2xl: 64px;
+  --space-3xl: 96px;
+  
+  // Typography
+  --font-primary: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-size-base: 16px;
+  --line-height-base: 1.6;
+  
+  // Layout
+  --container-max: 1200px;
+  --border-radius: 8px;
+  
+  // Transitions
+  --transition-standard: all 0.3s ease;
+}
