@@ -15,9 +15,9 @@ RSpec.describe HomeController, type: :request do
 
       it 'displays upcoming events' do
         Event.create!(title: 'Upcoming Event 1', event_date: 1.day.from_now, location: 'Test Location',
-                      capacity: 100, attendance_points: 10, published: true)
+                      capacity: 100, attendance_points: 10, is_published: true)
         Event.create!(title: 'Upcoming Event 2', event_date: 2.days.from_now, location: 'Test Location',
-                      capacity: 100, attendance_points: 15, published: true)
+                      capacity: 100, attendance_points: 15, is_published: true)
 
         get root_path
         expect(response.body).to include('Upcoming Event 1')
@@ -40,9 +40,9 @@ RSpec.describe HomeController, type: :request do
 
       it 'displays upcoming events' do
         Event.create!(title: 'Upcoming Event 1', event_date: 1.day.from_now, location: 'Test Location',
-                      capacity: 100, attendance_points: 10, published: true)
+                      capacity: 100, attendance_points: 10, is_published: true)
         Event.create!(title: 'Upcoming Event 2', event_date: 2.days.from_now, location: 'Test Location',
-                      capacity: 100, attendance_points: 15, published: true)
+                      capacity: 100, attendance_points: 15, is_published: true)
 
         get root_path
         expect(response.body).to include('Upcoming Event 1')
@@ -51,9 +51,9 @@ RSpec.describe HomeController, type: :request do
 
       it 'only shows future events' do
         Event.create!(title: 'Future Event', event_date: 1.day.from_now, location: 'Test Location',
-                      capacity: 100, attendance_points: 10, published: true)
+                      capacity: 100, attendance_points: 10, is_published: true)
         past_event = Event.create!(title: 'Past Event', event_date: 1.day.from_now, location: 'Test Location',
-                                   capacity: 100, attendance_points: 5, published: true)
+                                   capacity: 100, attendance_points: 5, is_published: true)
         past_event.update_column(:event_date, 1.day.ago)
 
         get root_path
@@ -63,9 +63,9 @@ RSpec.describe HomeController, type: :request do
 
       it 'orders events by event date' do
         Event.create!(title: 'Event Later', event_date: 5.days.from_now, location: 'Test Location',
-                      capacity: 100, attendance_points: 10, published: true)
+                      capacity: 100, attendance_points: 10, is_published: true)
         Event.create!(title: 'Event Sooner', event_date: 1.day.from_now, location: 'Test Location',
-                      capacity: 100, attendance_points: 10, published: true)
+                      capacity: 100, attendance_points: 10, is_published: true)
 
         get root_path
 
@@ -79,7 +79,7 @@ RSpec.describe HomeController, type: :request do
         # Create 7 future events
         7.times do |i|
           Event.create!(title: "Event #{i}", event_date: (i + 1).days.from_now, location: 'Test Location',
-                        capacity: 100, attendance_points: 10, published: true)
+                        capacity: 100, attendance_points: 10, is_published: true)
         end
 
         get root_path

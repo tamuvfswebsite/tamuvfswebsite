@@ -21,6 +21,9 @@
         <li class="nav-item">
           <%= link_to 'Home', root_path, class: "nav-link #{current_page?(root_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
         </li>
+        <li class="nav-item">
+          <%= link_to 'Events', events_path, class: "nav-link #{current_page?(events_path) || request.path.start_with?('/events') ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+        </li>
         <% if admin_signed_in? %>
           <li class="nav-item">
             <% if admin_user? %>
