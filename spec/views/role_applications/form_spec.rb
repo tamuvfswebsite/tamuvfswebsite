@@ -36,9 +36,7 @@ RSpec.describe 'role_applications/_form', type: :view do
 
   # Define helper method at the describe block level
   helper do
-    def current_user
-      @current_user
-    end
+    attr_reader :current_user
   end
 
   before do
@@ -85,13 +83,13 @@ RSpec.describe 'role_applications/_form', type: :view do
 
       render partial: 'role_applications/form', locals: { role_application: existing_application }
 
+      expected_return_to = "application_edit_#{existing_application.id}"
       expect(rendered).to have_link('Edit Resume',
-                                    href: edit_user_resume_path(user,
-                                                                 return_to: "application_edit_#{existing_application.id}"))
+                                    href: edit_user_resume_path(user, return_to: expected_return_to))
     end
   end
 
-  # Note: Testing dynamic JavaScript behavior (showing/hiding questions based on selection)
+  # NOTE: Testing dynamic JavaScript behavior (showing/hiding questions based on selection)
   # would typically be done with system tests (feature specs) using Capybara with JavaScript enabled
   describe 'dynamic question display (requires JavaScript)' do
     it 'includes data attributes for JavaScript to use' do
