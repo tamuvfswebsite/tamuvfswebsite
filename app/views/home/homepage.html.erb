@@ -77,7 +77,7 @@
       <p class="events-empty">No upcoming events scheduled.</p>
     <% end %>
   </div>
-  <% if admin_signed_in? %>
+  <% if admin_user? %>
     <div class="events-actions">
       <%= link_to "Manage Events", admin_panel_events_path, class: "btn" %>
     </div>
