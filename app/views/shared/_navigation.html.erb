@@ -21,9 +21,6 @@
         <li class="nav-item">
           <%= link_to 'Home', root_path, class: "nav-link #{current_page?(root_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
         </li>
-        <li class="nav-item">
-          <%= link_to 'Events', events_path, class: "nav-link #{current_page?(events_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
-        </li>
         <% if admin_signed_in? %>
           <li class="nav-item">
             <% if admin_user? %>
@@ -37,6 +34,9 @@
           </li>
           <% if admin_user? %>
             <li class="nav-item">
+              <%= link_to 'Manage Events', admin_panel_events_path, class: "nav-link #{request.path.start_with?('/admin_panel/events') ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+            </li>
+            <li class="nav-item">
               <%= link_to 'Admin Panel', admin_panel_root_path, class: "nav-link #{request.path.start_with?('/admin_panel') ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
             </li>
           <% end %>
@@ -44,6 +44,9 @@
             <%= link_to 'Sign Out', destroy_admin_session_path, class: 'nav-link', data: { action: 'click->navigation#closeMenu' } %>
           </li>
         <% else %>
+          <li class="nav-item">
+            <%= link_to 'Apply Now', apply_path, class: "nav-link #{current_page?(apply_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+          </li>
           <li class="nav-item">
             <%= button_to 'Sign In', '/admins/auth/google_oauth2', method: :post, class: 'nav-link nav-button', data: { action: 'click->navigation#closeMenu', turbo: false } %>
           </li>

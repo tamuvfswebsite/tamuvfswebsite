@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
     return if admin_user?
 
     flash[:alert] = 'Access denied. Admin privileges required.'
-    redirect_to homepage_path
+    redirect_to root_path
   end
 
   def ensure_sponsor_user
@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
 
     flash[:alert] =
       current_user.present? ? 'Access denied. Sponsor privileges required.' : 'You need to sign in first.'
-    redirect_to homepage_path
+    redirect_to root_path
   end
 
   # --- Role Check Helpers ---

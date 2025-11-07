@@ -74,6 +74,16 @@ ActiveRecord::Schema[8.0].define(version: 20_251_103_224_144) do
     t.index ['user_id'], name: 'index_attendances_on_user_id'
   end
 
+  create_table 'event_organizational_roles', force: :cascade do |t|
+    t.bigint 'event_id', null: false
+    t.bigint 'organizational_role_id', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index %w[event_id organizational_role_id], name: 'index_event_org_roles_on_event_and_role', unique: true
+    t.index ['event_id'], name: 'index_event_organizational_roles_on_event_id'
+    t.index ['organizational_role_id'], name: 'index_event_organizational_roles_on_organizational_role_id'
+  end
+
   create_table 'event_rsvps', id: :uuid, default: -> { 'gen_random_uuid()' }, force: :cascade do |t|
     t.bigint 'event_id', null: false
     t.bigint 'user_id', null: false
@@ -212,6 +222,8 @@ ActiveRecord::Schema[8.0].define(version: 20_251_103_224_144) do
   add_foreign_key 'admin_panel_logo_placements', 'sponsors'
   add_foreign_key 'attendances', 'events'
   add_foreign_key 'attendances', 'users'
+  add_foreign_key 'event_organizational_roles', 'events'
+  add_foreign_key 'event_organizational_roles', 'organizational_roles'
   add_foreign_key 'event_rsvps', 'events'
   add_foreign_key 'event_rsvps', 'users'
   add_foreign_key 'organizational_role_users', 'organizational_roles'
