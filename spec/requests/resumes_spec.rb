@@ -174,8 +174,8 @@ RSpec.describe '/resumes', type: :request do
 
     it 'allows admins to delete any users resume' do
       other_user = create_user(role: 'member', uid: 'other_uid')
-      other_resume = Resume.create!(user: other_user,
-                                    file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf'))
+      Resume.create!(user: other_user,
+                     file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf'))
       sign_in admin
 
       # Admin should be able to delete any resume
