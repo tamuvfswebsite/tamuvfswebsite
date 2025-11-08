@@ -93,15 +93,21 @@
 .badge {
   display: inline-block;
   padding: var(--space-xs) var(--space-sm);
-  border-radius: 4px;
+  border-radius: 999px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .user-role.badge {
-  background: var(--color-primary-light);
-  color: var(--color-white);
-  border: 1px solid var(--color-primary);
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+
+.org-role.badge {
+  background: #e0e7ff;
+  color: #4338ca;
+  border: 1px solid #a5b4fc;
 }
 
 // Users Page
