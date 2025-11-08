@@ -1,0 +1,115 @@
+// Events Page
+.events-page {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-md);
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 2px solid var(--color-border);
+
+  h1 {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--color-primary);
+    line-height: 1.2;
+
+    @media (max-width: 767px) { font-size: 32px; }
+  }
+}
+
+// Events Grid
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Event Card
+.event-card {
+  display: block;
+  background: var(--color-white);
+  border-radius: var(--border-radius);
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: var(--transition-standard);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+}
+
+.event-card-header {
+  margin-bottom: var(--space-sm);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.event-card-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text-dark);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.event-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.event-card-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-text-medium);
+  font-size: 14px;
+
+  svg {
+    flex-shrink: 0;
+    color: var(--color-primary);
+  }
+}
+
+.event-card-date,
+.event-card-location {
+  font-weight: 500;
+}
+
+.event-card-description {
+  margin-top: var(--space-xs);
+  color: var(--color-text-medium);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+// Empty State
+.events-empty-state {
+  text-align: center;
+  padding: var(--space-2xl);
+  background: var(--color-white);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+
+  p {
+    color: var(--color-text-medium);
+    font-size: 16px;
+  }
+}
