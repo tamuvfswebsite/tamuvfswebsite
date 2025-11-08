@@ -1,16 +1,19 @@
-<h1>Events</h1>
+<div class="events-page">
+  <div class="page-header">
+    <h1>Events</h1>
+  </div>
 
-<% if @events.any? %>
-  <ul>
-    <% @events.each do |event| %>
-      <li>
-        <%= link_to event.title, event_path(event) %>
-        — <%= event.formatted_date %> • <%= event.location %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>No upcoming events.</p>
-<% end %>
+  <% if @events.any? %>
+    <div class="events-grid">
+      <% @events.each do |event| %>
+        <%= render event %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="events-empty-state">
+      <p>No upcoming events.</p>
+    </div>
+  <% end %>
+</div>
 
 

@@ -1,40 +1,111 @@
-<h1><%= @event.title %></h1>
-<p><%= @event.formatted_date %> • <%= @event.location %></p>
-<p><%= @event.description %></p>
+<div class="event-show-page">
+  <%= link_to events_path, class: "back-to-events" do %>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="19" y1="12" x2="5" y2="12"></line>
+      <polyline points="12 19 5 12 12 5"></polyline>
+    </svg>
+    <span>Back to Events</span>
+  <% end %>
 
-<h3>RSVP</h3>
-<p>Your status: <strong><%= @rsvp&.status || 'none' %></strong></p>
+  <div class="event-details-card">
+    <div class="event-header">
+      <h1><%= @event.title %></h1>
+      <div class="event-meta-row">
+        <div class="event-meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <span><%= @event.formatted_date %></span>
+        </div>
+        <div class="event-meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <span><%= @event.location %></span>
+        </div>
+      </div>
+    </div>
 
-<% if @event.event_date > Time.current %>
-  <div class="rsvp-actions">
-    <% if admin_signed_in? %>
-      <%= form_with url: event_rsvp_path(@event), method: @rsvp.present? ? :patch : :post, local: true do |f| %>
-        <%= hidden_field_tag :status, 'yes' %>
-        <%= submit_tag 'Yes' %>
-      <% end %>
-
-      <%= form_with url: event_rsvp_path(@event), method: @rsvp.present? ? :patch : :post, local: true do |f| %>
-        <%= hidden_field_tag :status, 'maybe' %>
-        <%= submit_tag 'Maybe' %>
-      <% end %>
-
-      <%= form_with url: event_rsvp_path(@event), method: @rsvp.present? ? :patch : :post, local: true do |f| %>
-        <%= hidden_field_tag :status, 'no' %>
-        <%= submit_tag 'No' %>
-      <% end %>
-    <% else %>
-      <p>Please <%= link_to 'sign in', new_admin_session_path %> to RSVP.</p>
+    <% if @event.description.present? %>
+      <div class="event-description">
+        <p><%= @event.description %></p>
+      </div>
     <% end %>
   </div>
-<% else %>
-  <p>RSVP is closed for this event.</p>
-<% end %>
 
-<h3>RSVP counts</h3>
-<ul>
-  <li>Yes: <%= @yes_count %></li>
-  <li>Maybe: <%= @maybe_count %></li>
-  <li>No: <%= @no_count %></li>
- </ul>
+  <div class="rsvp-section">
+    <h2>RSVP</h2>
+
+    <% if @rsvp&.status.present? %>
+      <div class="rsvp-status rsvp-status-<%= @rsvp.status %>">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <span>Your status: <strong><%= @rsvp.status.titleize %></strong></span>
+      </div>
+    <% else %>
+      <div class="rsvp-status rsvp-status-none">
+        <span>Your status: <strong>None</strong></span>
+      </div>
+    <% end %>
+
+    <% if @event.event_date > Time.current %>
+      <div class="rsvp-actions">
+        <% if admin_signed_in? %>
+          <%= form_with url: event_rsvp_path(@event), method: @rsvp.present? ? :patch : :post, local: true, class: 'rsvp-form' do |f| %>
+            <%= hidden_field_tag :status, 'yes' %>
+            <%= submit_tag 'Yes', class: 'btn btn-rsvp btn-rsvp-yes' %>
+          <% end %>
+
+          <%= form_with url: event_rsvp_path(@event), method: @rsvp.present? ? :patch : :post, local: true, class: 'rsvp-form' do |f| %>
+            <%= hidden_field_tag :status, 'maybe' %>
+            <%= submit_tag 'Maybe', class: 'btn btn-rsvp btn-rsvp-maybe' %>
+          <% end %>
+
+          <%= form_with url: event_rsvp_path(@event), method: @rsvp.present? ? :patch : :post, local: true, class: 'rsvp-form' do |f| %>
+            <%= hidden_field_tag :status, 'no' %>
+            <%= submit_tag 'No', class: 'btn btn-rsvp btn-rsvp-no' %>
+          <% end %>
+        <% else %>
+          <p class="rsvp-signin-prompt">
+            Please
+            <form action="/admins/auth/google_oauth2" method="post" style="display: inline; margin: 0;">
+              <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+              <a href="#" onclick="this.closest('form').submit(); return false;" class="inline-link">sign in</a>
+            </form>
+            to RSVP.
+          </p>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="rsvp-closed">
+        <p>RSVP is closed for this event.</p>
+      </div>
+    <% end %>
+
+    <div class="rsvp-counts">
+      <h3>Attendance</h3>
+      <div class="counts-grid">
+        <div class="count-item count-yes">
+          <div class="count-number"><%= @yes_count %></div>
+          <div class="count-label">Yes</div>
+        </div>
+        <div class="count-item count-maybe">
+          <div class="count-number"><%= @maybe_count %></div>
+          <div class="count-label">Maybe</div>
+        </div>
+        <div class="count-item count-no">
+          <div class="count-number"><%= @no_count %></div>
+          <div class="count-label">No</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
