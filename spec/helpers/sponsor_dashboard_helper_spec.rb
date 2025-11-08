@@ -1,15 +1,9 @@
 require 'rails_helper'
 
-# Specs in this file have access to a helper object that includes
-# the SponsorDashboardHelper. For example:
-#
-# describe SponsorDashboardHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
 RSpec.describe SponsorDashboardHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'module inclusion' do
+    it 'is included in the helper object' do
+      expect(helper.class.ancestors).to include(SponsorDashboardHelper)
+    end
+  end
 end

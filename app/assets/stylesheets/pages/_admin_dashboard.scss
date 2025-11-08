@@ -1,0 +1,42 @@
+// Admin Dashboard Styles
+
+.sponsor-stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--space-sm);
+  background: var(--color-white);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius);
+}
+
+.sponsor-stats-table thead {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.sponsor-stats-table th,
+.sponsor-stats-table td {
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sponsor-stats-table th {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.sponsor-stats-table tbody tr:hover {
+  background: var(--color-off-white);
+}
+
+.sponsor-stats-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.sponsor-stats-table td:last-child {
+  font-weight: 700;
+  color: var(--color-primary);
+  text-align: center;
+}

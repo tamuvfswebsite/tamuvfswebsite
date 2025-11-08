@@ -1,7 +1,10 @@
 class UsersController < ApplicationController
+  include UsersHelper
+
   before_action :set_user, only: %i[ show edit update destroy ]
   before_action :ensure_admin_user, except: [:show]
   before_action :ensure_own_profile_or_admin, only: [:show]
+  helper_method :editing_own_profile?
 
   # GET /users or /users.json
   def index
@@ -25,23 +28,9 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1 or /users/1.json
   def update
-    if @user.google_uid == current_admin.uid && user_params[:role].present?
-      respond_to do |format|
-        format.html { redirect_to @user, alert: 'You cannot change your own role.', status: :see_other }
-        format.json { render json: { error: 'You cannot change your own role.' }, status: :forbidden }
-      end
-      return
-    end
+    return if prevent_self_role_change
 
-    respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'User was successfully updated.', status: :see_other }
-        format.json { render :show, status: :ok, location: @user }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
-    end
+    perform_update
   end
 
   # DELETE /users/1 or /users/1.json
@@ -70,9 +59,40 @@ class UsersController < ApplicationController
     return if admin_user? # Admins can view anyone's profile
 
     # Non-admins can only view their own profile
-    return if admin_signed_in? && @user.google_uid == current_admin.uid
+    return if own_account?(@user)
 
     flash[:alert] = 'Access denied. You can only view your own profile.'
-    redirect_to homepage_path
+    redirect_to root_path
+  end
+
+  def prevent_self_role_change
+    return false unless attempting_self_role_change?
+
+    respond_to do |format|
+      format.html do
+        flash[:alert] = 'You cannot change your own role.'
+        redirect_to @user
+      end
+      format.json do
+        render json: { error: 'You cannot change your own role.' }, status: :forbidden
+      end
+    end
+    true
+  end
+
+  def attempting_self_role_change?
+    editing_own_profile?(@user) && user_params[:role].present? && user_params[:role] != @user.role
+  end
+
+  def perform_update
+    respond_to do |format|
+      if @user.update(user_params)
+        format.html { redirect_to @user, notice: 'User was successfully updated.', status: :see_other }
+        format.json { render :show, status: :ok, location: @user }
+      else
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @user.errors, status: :unprocessable_content }
+      end
+    end
   end
 end

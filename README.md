@@ -1,54 +1,25 @@
-## README
+# README
 
-### Introduction
-Land-502 is a Ruby on Rails web application that provides an events dashboard and resume submissions. Admins authenticate with Google OAuth to manage events; users can view events and attach a PDF resume to their profile.
+This README would normally document whatever steps are necessary to get the
+application up and running.
 
-### Application Description
-- Rails 8 app with PostgreSQL, Hotwire (Turbo/Stimulus), and Active Storage
-- Admin Google OAuth via Devise + OmniAuth
-- Admin panel (`/admin_panel`) for Events CRUD
-- Users have a single PDF resume (validated type and size)
-- GitHub Actions for linting, security scans, and tests
+Things you may want to cover:
 
-### Requirements
-This code has been run and tested on:
-- **Ruby**: 3.4.5
-- **Rails**: 8.0.2.1
-- **RubyGems**: see `Gemfile`
-- **PostgreSQL**: 13.x or newer
-- **Node.js**: 16.20.2 (optional for legacy webpack scripts)
-- **Yarn**: 1.x (optional)
-- **Docker**: latest (for containerized runs)
+* Ruby version
 
-### External Deps
-- **Docker Desktop**: [Download](https://www.docker.com/products/docker-desktop)
-- **Git**: [Install](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-- **Heroku CLI (optional)**: [Install](https://devcenter.heroku.com/articles/heroku-cli)
-- **GitHub Desktop (optional)**: [Install](https://desktop.github.com/)
+* System dependencies
 
-### Installation
-Download this code repository using git:
+* Configuration
 
-```bash
-git clone <YOUR_REPO_URL>
-cd <YOUR_REPO_DIR>
+* Database creation
 
-gem install bundler --conservative
-bundle install
-./bin/setup        # prepares database, clears logs, restarts
-```
+* Database initialization
 
-### Tests
-An RSpec test suite is available and can be run using:
+* How to run the test suite
 
-```bash
-bundle exec rspec
-# or
-rspec spec/
-```
+* Services (job queues, cache servers, search engines, etc.)
 
-### Execute Code
-Run the following in PowerShell (Windows) or a terminal (Linux/Mac):
+* Deployment instructions
 
 Development server:
 ```bash

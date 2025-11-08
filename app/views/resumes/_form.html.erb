@@ -1,6 +1,6 @@
 <%= form_with(model: resume, url: user_resume_path(@user, return_to: @return_to), method: resume.new_record? ? :post : :patch) do |form| %>
   <% if resume.errors.any? %>
-    <div style="color: red; background-color: #ffebee; border: 1px solid red; padding: 10px; margin-bottom: 15px;">
+    <div style="color: red">
       <h2>Cannot save resume, <%= pluralize(resume.errors.count, "error") %> found:</h2>
 
       <ul>

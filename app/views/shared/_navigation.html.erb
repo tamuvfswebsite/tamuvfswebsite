@@ -1,0 +1,63 @@
+<nav class="navbar" role="navigation" aria-label="Main navigation" data-controller="navigation">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <%= link_to 'Home', root_path, class: 'navbar-logo' %>
+    </div>
+
+    <button class="navbar-toggle"
+            aria-label="Toggle navigation menu"
+            aria-expanded="false"
+            aria-controls="navbar-menu"
+            type="button"
+            data-navigation-target="toggle"
+            data-action="click->navigation#toggle">
+      <span class="navbar-toggle-icon"></span>
+      <span class="navbar-toggle-icon"></span>
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="navbar-menu" data-navigation-target="menu">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <%= link_to 'Home', root_path, class: "nav-link #{current_page?(root_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Events', events_path, class: "nav-link #{current_page?(events_path) || request.path.start_with?('/events') ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+        </li>
+        <% if admin_signed_in? %>
+          <li class="nav-item">
+            <% if admin_user? %>
+              <%= link_to 'Resumes', resumes_path, class: "nav-link #{current_page?(resumes_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+            <% else %>
+              <%= link_to 'My Resume', user_resume_path(current_user), class: "nav-link #{request.path.start_with?("/users/#{current_user.id}/resume") ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+            <% end %>
+          </li>
+          <li class="nav-item">
+            <%= link_to 'Apply for Role', new_role_application_path, class: "nav-link #{current_page?(new_role_application_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+          </li>
+          <% if admin_user? %>
+            <li class="nav-item">
+              <%= link_to 'Manage Events', admin_panel_events_path, class: "nav-link #{request.path.start_with?('/admin_panel/events') ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'Admin Panel', admin_panel_root_path, class: "nav-link #{request.path.start_with?('/admin_panel') ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+            </li>
+          <% end %>
+          <li class="nav-item">
+            <%= link_to 'Sign Out', destroy_admin_session_path, class: 'nav-link', data: { action: 'click->navigation#closeMenu' } %>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to 'Apply Now', apply_path, class: "nav-link #{current_page?(apply_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+          </li>
+          <li class="nav-item">
+            <form action="/admins/auth/google_oauth2" method="post" style="display: inline; margin: 0;">
+              <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+              <a href="#" onclick="this.closest('form').submit(); return false;" class="nav-link" data-action="click->navigation#closeMenu">Sign In</a>
+            </form>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>

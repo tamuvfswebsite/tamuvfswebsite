@@ -36,7 +36,7 @@ RSpec.describe 'Admins::OmniauthCallbacksController', type: :request do
       it 'signs in the admin successfully' do
         get '/admins/auth/google_oauth2/callback'
 
-        expect(response).to redirect_to(homepage_path)
+        expect(response).to redirect_to(root_path)
         expect(flash[:success]).to include('Successfully authenticated')
       end
 
@@ -140,7 +140,7 @@ RSpec.describe 'Admins::OmniauthCallbacksController', type: :request do
         get '/admins/auth/google_oauth2/callback'
 
         # Admin.from_google creates the admin automatically
-        expect(response).to redirect_to(homepage_path)
+        expect(response).to redirect_to(root_path)
         expect(flash[:success]).to include('Successfully authenticated')
 
         # Verify admin was created

@@ -1,7 +1,7 @@
 <% current_user = admin_signed_in? ? User.find_by(google_uid: current_admin.uid) : nil %>
 
 <div class="resume-show">
-  <%= link_to homepage_path, class: "back-to-home" do %>
+  <%= link_to root_path, class: "back-to-home" do %>
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
       <polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -29,7 +29,7 @@
     <p>
       <% if @resume.file.attached? %>
       <div class="resume-actions">
-        <%= link_to "Download", rails_blob_path(@resume.file, disposition: "attachment"), class: "btn btn-resume-download" %>
+        <%= link_to "Download", download_resume_path(@resume), class: "btn btn-resume-download", data: { turbo: false } %>
         <%= link_to "Edit this resume", edit_resume_path(@resume), class: "btn btn-resume-edit" %>
 
         <%= button_to "Delete Resume", @resume, method: :delete, class: "btn btn-danger" %>

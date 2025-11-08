@@ -26,12 +26,27 @@ module Resumes
     end
 
     def apply_basic_filters(resumes)
-      resumes = resumes.where(major: filters[:major]) if filters[:major].present?
-      if filters[:organizational_role].present?
-        resumes = resumes.where(organizational_role: filters[:organizational_role])
-      end
-      resumes = resumes.where(graduation_date: filters[:graduation_year]) if filters[:graduation_year].present?
-      resumes
+      resumes = apply_major_filter(resumes)
+      resumes = apply_organizational_role_filter(resumes)
+      apply_graduation_year_filter(resumes)
+    end
+
+    def apply_major_filter(resumes)
+      return resumes unless filters[:major].present?
+
+      resumes.where(major: filters[:major])
+    end
+
+    def apply_organizational_role_filter(resumes)
+      return resumes unless filters[:organizational_role].present?
+
+      resumes.where(organizational_role: filters[:organizational_role])
+    end
+
+    def apply_graduation_year_filter(resumes)
+      return resumes unless filters[:graduation_year].present?
+
+      resumes.where(graduation_date: filters[:graduation_year])
     end
 
     def apply_gpa_filter(resumes)

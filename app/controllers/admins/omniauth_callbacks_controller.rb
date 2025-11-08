@@ -8,7 +8,7 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     # Store user session for application flow (for non-admin users)
     session[:user_id] = user.id if user.present?
 
-    # Check if they're trying to apply for a role
+    # Check if they're trying to apply for a role (only if flag is set)
     if session[:applying_for_role]
       session.delete(:applying_for_role)
 
@@ -28,10 +28,13 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         redirect_to new_role_application_path
       end
     elsif admin.present?
+      # Normal sign-in - clear any stale apply flag
+      session.delete(:applying_for_role)
       # Normal admin sign-in flow
       sign_out_all_scopes
       flash[:success] = t 'devise.omniauth_callbacks.success', kind: 'Google'
-      sign_in_and_redirect admin, event: :authentication
+      sign_in(:admin, admin)
+      redirect_to root_path
     else
       # Not an admin and not applying - deny access
       flash[:alert] =
@@ -47,7 +50,7 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def after_sign_in_path_for(resource_or_scope)
-    stored_location_for(resource_or_scope) || homepage_path
+    stored_location_for(resource_or_scope) || root_path
   end
 
   private

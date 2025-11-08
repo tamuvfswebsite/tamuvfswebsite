@@ -1,14 +1,40 @@
-<h1>Welcome, Sponsor</h1>
+<div class="sponsor-dashboard">
+  <% if @sponsor %>
+    <h1>Welcome, <%= @sponsor.company_name %></h1>
+    <p>Welcome to your Sponsor Dashboard. Quick links and company details are shown below.</p>
 
-<p>Welcome to your Sponsor Dashboard. Quick links and current logos are shown below.</p>
+    <div class="sponsor-info">
+      <h2>Company Details</h2>
+      <p><strong>Company:</strong> <%= @sponsor.company_name %></p>
+      <p><strong>Tier:</strong> <%= @sponsor.tier %></p>
+      <p><strong>Website:</strong>
+        <%= link_to @sponsor.website, @sponsor.website, target: '_blank' if @sponsor.website.present? %>
+      </p>
+      <p><strong>Contact Email:</strong> <%= @sponsor.contact_email.presence || "Not provided" %></p>
+      <p><strong>Phone Number:</strong> <%= @sponsor.phone_number.presence || "Not provided" %></p>
+      <p><strong>Description:</strong> <%= @sponsor.company_description.presence || "No description provided." %></p>
 
-<ul>
-    <li><%= link_to 'View student resumes', '/resumes' %></li>
-    <li>Logo Placements</li>
-    <li>Major Design Updates</li>
-    <!-- <li><%= link_to 'Logo Placements - Store Images Using Active Storage?', '/sponsor_dashboard/index' %></li> -->
-</ul>
+      <% if @sponsor.resume_access %>
+        <p><strong>View Resumes:</strong> <%= link_to "Access Resumes", resumes_path %></p>
+      <% end %>
+    </div>
 
-<div>
-  <%= link_to "Home", root_path %>
+    <div class="logo-placements">
+      <% if @sponsor.logo_placements.any? %>
+        <h3>Your Current Logo Placements</h3>
+        <ul>
+          <% @sponsor.logo_placements.each do |placement| %>
+            <li><%= placement.page_name.titleize %> Page, <%= placement.section %> Section</li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No logo placements yet.</p>
+      <% end %>
+    </div>
+
+    <div class="actions">
+      <%= link_to "Edit Company Info", edit_sponsor_path, class: "btn-primary" %>
+      <%= link_to "Home", root_path, class: "btn-secondary" %>
+    </div>
+  <% end %>
 </div>

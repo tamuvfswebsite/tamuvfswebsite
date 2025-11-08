@@ -1,4 +1,8 @@
-<%= form_with(model: [@sponsor, @logo_placement], url: admin_panel_sponsor_logo_placements_path(@sponsor)) do |form| %>
+<%= form_with(model: @logo_placement, 
+              scope: :logo_placement,
+              url: @logo_placement.new_record? ? 
+                   admin_panel_sponsor_logo_placements_path(@sponsor) : 
+                   admin_panel_sponsor_logo_placement_path(@sponsor, @logo_placement)) do |form| %>
   <% if @logo_placement.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(@logo_placement.errors.count, "error") %> prohibited this logo placement from being saved:</h2>

@@ -6,7 +6,7 @@ RSpec.describe ApplicationController, type: :request do
       allow_any_instance_of(ApplicationController).to receive(:admin_signed_in?).and_return(false)
 
       get '/users'
-      expect(response).to redirect_to(homepage_path)
+      expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to include('Admin privileges required')
     end
 
@@ -20,7 +20,7 @@ RSpec.describe ApplicationController, type: :request do
       create_user(role: 'user', uid: 'user123')
 
       get '/users'
-      expect(response).to redirect_to(homepage_path)
+      expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to include('Admin privileges required')
     end
 
@@ -45,50 +45,48 @@ RSpec.describe ApplicationController, type: :request do
       create_user(role: 'sponsor', uid: 'sponsor123')
 
       get '/users'
-      expect(response).to redirect_to(homepage_path)
+      expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to include('Admin privileges required')
     end
   end
 
   describe 'sponsor authorization' do
     it 'allows sponsor users to access sponsor dashboard' do
-      admin = double('Admin', uid: 'sponsor123')
-      allow_any_instance_of(ApplicationController).to receive(:admin_signed_in?).and_return(true)
-      allow_any_instance_of(ApplicationController).to receive(:current_admin).and_return(admin)
-      create_user(role: 'sponsor', uid: 'sponsor123')
+      sponsor = Sponsor.create!(company_name: 'TechCorp', website: 'https://techcorp.com', resume_access: true)
+      user = User.create!(
+        email: 'sponsor@example.com',
+        first_name: 'Sponsor',
+        last_name: 'User',
+        google_uid: '123',
+        role: 'sponsor'
+      )
+      user.sponsors << sponsor
+
+      # Stub current_user to this sponsor user
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
 
       get '/sponsor_dashboard/index'
       expect(response).to have_http_status(:success)
     end
 
-    it 'allows admin users to access sponsor dashboard' do
-      admin = double('Admin', uid: 'admin123')
+    it 'redirects regular users from sponsor dashboard with appropriate message when signed in' do
+      admin = double('Admin', uid: 'user123')
       allow_any_instance_of(ApplicationController).to receive(:admin_signed_in?).and_return(true)
       allow_any_instance_of(ApplicationController).to receive(:current_admin).and_return(admin)
-      create_user(role: 'admin', uid: 'admin123')
+      create_user(role: 'user', uid: 'user123')
 
       get '/sponsor_dashboard/index'
-      expect(response).to have_http_status(:success)
+      expect(response).to redirect_to(root_path)
+      expect(flash[:alert]).to include('Sponsor privileges required')
     end
 
-    # it 'redirects regular users from sponsor dashboard with appropriate message when signed in' do
-    #   admin = double('Admin', uid: 'user123')
-    #   allow_any_instance_of(ApplicationController).to receive(:admin_signed_in?).and_return(true)
-    #   allow_any_instance_of(ApplicationController).to receive(:current_admin).and_return(admin)
-    #   create_user(role: 'user', uid: 'user123')
+    it 'redirects non-signed-in users from sponsor dashboard' do
+      allow_any_instance_of(ApplicationController).to receive(:admin_signed_in?).and_return(false)
+      allow_any_instance_of(ApplicationController).to receive(:current_admin).and_return(nil)
 
-    #   get '/sponsor_dashboard/index'
-    #   expect(response).to redirect_to(root_path)
-    #   expect(flash[:alert]).to include('Sponsor privileges required')
-    # end
-
-    # it 'redirects non-signed-in users from sponsor dashboard' do
-    #   allow_any_instance_of(ApplicationController).to receive(:admin_signed_in?).and_return(false)
-    #   allow_any_instance_of(ApplicationController).to receive(:current_admin).and_return(nil)
-
-    #   get '/sponsor_dashboard/index'
-    #   expect(response).to redirect_to(root_path)
-    #   expect(flash[:alert]).to include('need to sign in first')
-    # end
+      get '/sponsor_dashboard/index'
+      expect(response).to redirect_to(root_path)
+      expect(flash[:alert]).to include('need to sign in first')
+    end
   end
 end

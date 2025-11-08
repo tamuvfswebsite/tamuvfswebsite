@@ -1,3 +1,7 @@
+<% if notice %>
+  <div class="alert alert-success"><%= notice %></div>
+<% end %>
+
 <% content_for :title, "Users" %>
 
 <div class="users-page">
@@ -22,12 +26,7 @@
 
   <div id="users" class="users-grid">
     <% @users.each do |user| %>
-      <div class="user-card-wrapper">
-        <%= render user %>
-        <div class="user-actions">
-          <%= link_to "View Profile", user, class: "btn btn-outline" %>
-        </div>
-      </div>
+      <%= render user %>
     <% end %>
   </div>
 

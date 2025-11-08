@@ -1,30 +1,39 @@
 require 'rails_helper'
 
 RSpec.describe 'admin_panel/logo_placements/edit', type: :view do
-  # let(:admin_panel_logo_placement) do
-  #   AdminPanel::LogoPlacement.create!(
-  #     sponsor: nil,
-  #     page_name: 'MyString',
-  #     section: 'MyString',
-  #     displayed: false
-  #   )
-  # end
+  let(:sponsor) do
+    Sponsor.create!(
+      company_name: 'Test Company',
+      website: 'https://example.com',
+      tier: 'Gold',
+      contact_email: 'contact@example.com',
+      phone_number: '123-456-7890',
+      company_description: 'A test company for specs.',
+      resume_access: false
+    )
+  end
 
-  # before(:each) do
-  #   assign(:admin_panel_logo_placement, admin_panel_logo_placement)
-  # end
+  let(:logo_placement) do
+    sponsor.logo_placements.create!(
+      page_name: 'MyString',
+      section: 'MyString',
+      displayed: false
+    )
+  end
 
-  # it 'renders the edit admin_panel_logo_placement form' do
-  #   render
+  before(:each) do
+    assign(:sponsor, sponsor)
+    assign(:logo_placement, logo_placement)
+  end
 
-  #   assert_select 'form[action=?][method=?]', admin_panel_logo_placement_path(admin_panel_logo_placement), 'post' do
-  #     assert_select 'input[name=?]', 'admin_panel_logo_placement[sponsor_id]'
+  it 'renders the edit logo_placement form' do
+    render
 
-  #     assert_select 'input[name=?]', 'admin_panel_logo_placement[page_name]'
-
-  #     assert_select 'input[name=?]', 'admin_panel_logo_placement[section]'
-
-  #     assert_select 'input[name=?]', 'admin_panel_logo_placement[displayed]'
-  #   end
-  # end
+    assert_select 'form[action=?][method=?]', admin_panel_sponsor_logo_placement_path(sponsor, logo_placement),
+                  'post' do
+      assert_select 'input[name=?]', 'logo_placement[page_name]'
+      assert_select 'input[name=?]', 'logo_placement[section]'
+      assert_select 'input[name=?]', 'logo_placement[displayed]'
+    end
+  end
 end
