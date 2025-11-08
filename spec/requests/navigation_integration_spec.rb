@@ -24,13 +24,13 @@ RSpec.describe 'Navigation Integration', type: :request do
       end
 
       it 'displays navigation on homepage' do
-        get homepage_path
+        get root_path
         expect(response.body).to include('class="navbar"')
         expect(response.body).to include('Main navigation')
       end
 
       it 'includes navigation links for regular users' do
-        get homepage_path
+        get root_path
         expect(response.body).to include('Home')
         expect(response.body).to include('Events')
         expect(response.body).to include('My Resume')
@@ -38,7 +38,7 @@ RSpec.describe 'Navigation Integration', type: :request do
       end
 
       it 'does not show admin panel to regular users' do
-        get homepage_path
+        get root_path
         expect(response.body).not_to include('Admin Panel')
       end
     end
@@ -51,13 +51,13 @@ RSpec.describe 'Navigation Integration', type: :request do
       end
 
       it 'displays admin-specific links' do
-        get homepage_path
+        get root_path
         expect(response.body).to include('Admin Panel')
         expect(response.body).to include('Sign Out')
       end
 
       it 'displays all resumes link for admins' do
-        get homepage_path
+        get root_path
         expect(response.body).to include('Resumes')
         expect(response.body).not_to include('My Resume')
       end
@@ -151,19 +151,19 @@ RSpec.describe 'Navigation Integration', type: :request do
       end
 
       it 'shows sign out link' do
-        get homepage_path
+        get root_path
         expect(response.body).to include('Sign Out')
         expect(response.body).not_to include('Sign In')
       end
 
       it 'shows my resume link' do
-        get homepage_path
+        get root_path
         expect(response.body).to include('My Resume')
         expect(response.body).not_to include('Resumes')
       end
 
       it 'does not show admin panel link' do
-        get homepage_path
+        get root_path
         expect(response.body).not_to include('Admin Panel')
       end
     end
@@ -176,12 +176,12 @@ RSpec.describe 'Navigation Integration', type: :request do
       end
 
       it 'shows admin panel link' do
-        get homepage_path
+        get root_path
         expect(response.body).to include('Admin Panel')
       end
 
       it 'shows all resumes link' do
-        get homepage_path
+        get root_path
         expect(response.body).to include('Resumes')
         expect(response.body).not_to include('My Resume')
       end

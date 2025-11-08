@@ -16,8 +16,23 @@
   </div>
 
   <div class="field">
-    <%= form.label :logo_url, "Logo URL" %>
-    <%= form.text_field :logo_url %>
+    <%= form.label :tier, "Sponsorship Tier" %>
+    <%= form.select :tier, options_for_select(["Gold", "Silver", "Bronze", "Maroon"], sponsor.tier) %>
+  </div>
+
+  <div class="field">
+    <%= form.label :contact_email, "Contact Email" %>
+    <%= form.email_field :contact_email %>
+  </div>
+
+  <div class="field">
+    <%= form.label :phone_number, "Phone Number" %>
+    <%= form.telephone_field :phone_number %>
+  </div>
+
+  <div class="field">
+    <%= form.label :company_description, "Company Description" %>
+    <%= form.text_area :company_description, rows: 4 %>
   </div>
 
   <div class="field">

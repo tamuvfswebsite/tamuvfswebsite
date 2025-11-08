@@ -1,0 +1,42 @@
+<h1>Assign Users to <%= @sponsor.company_name %></h1>
+
+<p>Currently assigned: <strong><%= @sponsor.users.count %></strong> user(s)</p>
+
+<%= form_with model: @sponsor, url: update_users_admin_panel_sponsor_path(@sponsor), method: :patch, local: true do |f| %>
+  <div>
+    <h3>Select Users (only users with 'sponsor' role):</h3>
+    
+    <% if @available_users.any? %>
+      <%= f.collection_check_boxes :user_ids, @available_users, :id, :email, checked: @sponsor.user_ids do |b| %>
+        <div style="margin: 10px 0;">
+          <%= b.check_box %>
+          <%= b.label do %>
+            <%= b.object.email %> 
+            <% if b.object.first_name.present? %>
+              (<%= b.object.first_name %> <%= b.object.last_name %>)
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <p>No users with 'sponsor' role found. Please create sponsor users first.</p>
+    <% end %>
+  </div>
+
+  <div style="margin-top: 20px;">
+    <%= f.submit "Update Users", class: "btn btn-primary" %>
+    <%= link_to "Cancel", admin_panel_sponsor_path(@sponsor), class: "btn btn-secondary" %>
+  </div>
+<% end %>
+
+<hr>
+<h3>Currently Assigned Users:</h3>
+<% if @sponsor.users.any? %>
+  <ul>
+    <% @sponsor.users.each do |user| %>
+      <li><%= user.email %> (<%= user.first_name %> <%= user.last_name %>)</li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No users currently assigned to this sponsor.</p>
+<% end %>

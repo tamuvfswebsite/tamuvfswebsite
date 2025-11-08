@@ -1,0 +1,76 @@
+/* Form container */
+.form-container {
+  background: var(--color-white);
+  border-radius: var(--border-radius);
+  padding: var(--space-xl);
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+  @media (max-width: 767px) { padding: var(--space-lg); }
+}
+
+/* Labels */
+label,
+.form-label {
+  display: block;
+  font-weight: 500;
+  color: var(--color-primary);
+  margin-bottom: var(--space-xs);
+  font-size: 16px;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+textarea,
+select {
+  width: 100%;
+  padding: 12px var(--space-sm);
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  font-family: var(--font-primary);
+  font-size: 16px;
+  color: var(--color-text-dark);
+  transition: var(--transition-standard);
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(80,0,0,.1);
+  }
+
+  &::placeholder { color: var(--color-text-medium); }
+}
+
+/* Textarea */
+textarea { resize: vertical; min-height: 120px; line-height: 1.6; }
+
+/* Actions */
+.form-actions {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+  @media (max-width: 767px) { flex-direction: column; }
+}
+
+/* Errors */
+.error-messages {
+  background: #fee;
+  border: 2px solid #c33;
+  border-radius: 4px;
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+  color: #c33;
+}
+
+/* Filter forms – guide colours */
+.filter-section {
+  background: var(--color-white);
+  border-radius: var(--border-radius);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 1px 4px rgba(0,0,0,.05);
+}

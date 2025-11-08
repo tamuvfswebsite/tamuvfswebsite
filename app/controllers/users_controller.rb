@@ -62,7 +62,7 @@ class UsersController < ApplicationController
     return if own_account?(@user)
 
     flash[:alert] = 'Access denied. You can only view your own profile.'
-    redirect_to homepage_path
+    redirect_to root_path
   end
 
   def prevent_self_role_change

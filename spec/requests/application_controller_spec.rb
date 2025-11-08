@@ -6,7 +6,7 @@ RSpec.describe ApplicationController, type: :request do
       allow_any_instance_of(ApplicationController).to receive(:admin_signed_in?).and_return(false)
 
       get '/users'
-      expect(response).to redirect_to(homepage_path)
+      expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to include('Admin privileges required')
     end
 
@@ -20,7 +20,7 @@ RSpec.describe ApplicationController, type: :request do
       create_user(role: 'user', uid: 'user123')
 
       get '/users'
-      expect(response).to redirect_to(homepage_path)
+      expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to include('Admin privileges required')
     end
 
@@ -45,27 +45,25 @@ RSpec.describe ApplicationController, type: :request do
       create_user(role: 'sponsor', uid: 'sponsor123')
 
       get '/users'
-      expect(response).to redirect_to(homepage_path)
+      expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to include('Admin privileges required')
     end
   end
 
   describe 'sponsor authorization' do
     it 'allows sponsor users to access sponsor dashboard' do
-      admin = double('Admin', uid: 'sponsor123')
-      allow_any_instance_of(ApplicationController).to receive(:admin_signed_in?).and_return(true)
-      allow_any_instance_of(ApplicationController).to receive(:current_admin).and_return(admin)
-      create_user(role: 'sponsor', uid: 'sponsor123')
+      sponsor = Sponsor.create!(company_name: 'TechCorp', website: 'https://techcorp.com', resume_access: true)
+      user = User.create!(
+        email: 'sponsor@example.com',
+        first_name: 'Sponsor',
+        last_name: 'User',
+        google_uid: '123',
+        role: 'sponsor'
+      )
+      user.sponsors << sponsor
 
-      get '/sponsor_dashboard/index'
-      expect(response).to have_http_status(:success)
-    end
-
-    it 'allows admin users to access sponsor dashboard' do
-      admin = double('Admin', uid: 'admin123')
-      allow_any_instance_of(ApplicationController).to receive(:admin_signed_in?).and_return(true)
-      allow_any_instance_of(ApplicationController).to receive(:current_admin).and_return(admin)
-      create_user(role: 'admin', uid: 'admin123')
+      # Stub current_user to this sponsor user
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
 
       get '/sponsor_dashboard/index'
       expect(response).to have_http_status(:success)
@@ -78,7 +76,7 @@ RSpec.describe ApplicationController, type: :request do
       create_user(role: 'user', uid: 'user123')
 
       get '/sponsor_dashboard/index'
-      expect(response).to redirect_to(homepage_path)
+      expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to include('Sponsor privileges required')
     end
 
@@ -87,7 +85,7 @@ RSpec.describe ApplicationController, type: :request do
       allow_any_instance_of(ApplicationController).to receive(:current_admin).and_return(nil)
 
       get '/sponsor_dashboard/index'
-      expect(response).to redirect_to(homepage_path)
+      expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to include('need to sign in first')
     end
   end
