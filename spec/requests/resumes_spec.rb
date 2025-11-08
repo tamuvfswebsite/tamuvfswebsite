@@ -146,11 +146,22 @@ RSpec.describe '/resumes', type: :request do
       expect(response).to redirect_to(user_path(user))
     end
 
-    it 'prevents deleting another users resume' do
+    it 'prevents non-admin users from deleting another users resume' do
+      # Create a non-admin user
+      regular_user = create_user(role: 'member', uid: 'regular_uid')
+      regular_admin = Admin.find_or_create_by!(
+        email: regular_user.email,
+        uid: regular_user.google_uid,
+        full_name: "#{regular_user.first_name} #{regular_user.last_name}"
+      )
+
+      # Create another user with a resume
       other_user = create_user(role: 'member', uid: 'other_uid')
       other_resume = Resume.create!(user: other_user,
                                     file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf'))
-      sign_in admin
+
+      # Sign in as the regular (non-admin) user
+      sign_in regular_admin
 
       # Use the nested route which sets @user properly
       delete user_resume_url(other_user)
@@ -159,6 +170,21 @@ RSpec.describe '/resumes', type: :request do
       expect(other_resume.reload).to be_present # Resume should still exist
       expect(response).to redirect_to(user_path(other_user))
       expect(flash[:alert]).to include('You can only delete your own resume')
+    end
+
+    it 'allows admins to delete any users resume' do
+      other_user = create_user(role: 'member', uid: 'other_uid')
+      other_resume = Resume.create!(user: other_user,
+                                    file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf'))
+      sign_in admin
+
+      # Admin should be able to delete any resume
+      expect do
+        delete user_resume_url(other_user)
+      end.to change(Resume, :count).by(-1)
+
+      expect(response).to redirect_to(user_path(other_user))
+      expect(flash[:notice]).to include('Resume was successfully deleted')
     end
   end
 
