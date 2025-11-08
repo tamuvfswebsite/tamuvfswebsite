@@ -1,4 +1,4 @@
-<div id="<%= dom_id user %>" class="user-card">
+<%= link_to user, id: dom_id(user), class: "user-card" do %>
   <div class="user-header">
     <div class="user-avatar">
       <% if user.google_avatar_url.present? %>
@@ -26,4 +26,4 @@
       <strong>Points:</strong> <%= user.points %>
     </div>
   </div>
-</div>
+<% end %>
