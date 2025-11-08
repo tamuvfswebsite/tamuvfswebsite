@@ -32,7 +32,8 @@
         <%= link_to "Download", download_resume_path(@resume), class: "btn btn-resume-download", data: { turbo: false } %>
         <%= link_to "Edit this resume", edit_resume_path(@resume), class: "btn btn-resume-edit" %>
 
-        <%= button_to "Delete Resume", @resume, method: :delete, class: "btn btn-danger" %>
+        <%= button_to "Delete Resume", @resume, method: :delete, class: "btn btn-danger", 
+            form_class: "inline-form" %>
         <% if current_user&.role&.in?(['admin', 'sponsor']) %>
           <span class="vertical-divider"></span>
           <%= link_to "Browse Resumes", resumes_path, class: "btn btn-resume-index" %>

@@ -34,7 +34,7 @@ RSpec.describe 'Navigation Integration', type: :request do
         expect(response.body).to include('Home')
         expect(response.body).to include('Events')
         expect(response.body).to include('My Resume')
-        expect(response.body).to include('Apply for Role')
+        expect(response.body).to include('My Applications')
       end
 
       it 'does not show admin panel to regular users' do

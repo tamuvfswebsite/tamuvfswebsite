@@ -38,9 +38,9 @@ module Resumes
     end
 
     def apply_organizational_role_filter(resumes)
-      return resumes unless filters[:organizational_role].present?
+      return resumes unless filters[:organizational_role_id].present?
 
-      resumes.where(organizational_role: filters[:organizational_role])
+      resumes.joins(:user).where(users: { organizational_role_id: filters[:organizational_role_id] })
     end
 
     def apply_graduation_year_filter(resumes)
@@ -66,8 +66,10 @@ module Resumes
       case sort
       when 'user'
         resumes.joins(:user).order("users.email #{direction}")
-      when 'gpa', 'graduation_date', 'major', 'organizational_role'
+      when 'gpa', 'graduation_date', 'major'
         resumes.order("#{sort} #{direction}")
+      when 'organizational_role'
+        resumes.joins(user: :organizational_role).order("organizational_roles.name #{direction}")
       else
         resumes.order(created_at: :desc)
       end

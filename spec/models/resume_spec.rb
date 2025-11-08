@@ -9,8 +9,7 @@ RSpec.describe Resume, type: :model do
   end
 
   it 'is valid with a file and optional fields within bounds' do
-    resume = user.build_resume(gpa: 3.5, graduation_date: Date.today.year, major: 'Computer Science',
-                               organizational_role: 'Student')
+    resume = user.build_resume(gpa: 3.5, graduation_date: Date.today.year, major: 'Computer Science')
     attach_fixture(resume)
     expect(resume).to be_valid
   end
@@ -50,13 +49,12 @@ RSpec.describe Resume, type: :model do
     expect(resume.errors[:graduation_date]).to be_present
   end
 
-  it 'validates string length for major and organizational_role' do
+  it 'validates string length for major' do
     long_string = 'a' * 200
-    resume = user.build_resume(major: long_string, organizational_role: long_string)
+    resume = user.build_resume(major: long_string)
     attach_fixture(resume)
     expect(resume).not_to be_valid
     expect(resume.errors[:major]).to be_present
-    expect(resume.errors[:organizational_role]).to be_present
   end
 
   it 'rejects files larger than 5MB' do

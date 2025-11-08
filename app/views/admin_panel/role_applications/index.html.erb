@@ -34,6 +34,10 @@
           <span class="status-label in-review">● In Review</span>
         </label>
         <label>
+          <%= check_box_tag 'status[interview_needed]', '1', params.dig(:status, :interview_needed) == '1' %>
+          <span class="status-label interview-needed">● Interview Needed</span>
+        </label>
+        <label>
           <%= check_box_tag 'status[accepted]', '1', params.dig(:status, :accepted) == '1' %>
           <span class="status-label accepted">● Accepted</span>
         </label>
@@ -125,8 +129,8 @@
             <%= link_to "View Full Application", admin_panel_role_application_path(application), class: "btn-view" %>
             <%= button_to "Delete", admin_panel_role_application_path(application), 
                 method: :delete,
-                data: { turbo_confirm: "Are you sure you want to delete this application?" },
-                class: "btn-delete" %>
+                class: "btn-delete",
+                form_class: "inline-form" %>
           </div>
         </div>
       <% end %>

@@ -6,8 +6,7 @@ RSpec.describe 'role_applications/index', type: :view do
   let(:organizational_role) { OrganizationalRole.create!(name: 'Test Role') }
 
   let!(:resume1) do
-    resume = Resume.new(user: user1, gpa: 3.5, graduation_date: 2025, major: 'Computer Science',
-                        organizational_role: 'Student')
+    resume = Resume.new(user: user1, gpa: 3.5, graduation_date: 2025, major: 'Computer Science')
     resume.file.attach(io: File.open(Rails.root.join('spec/fixtures/test.pdf')), filename: 'test.pdf',
                        content_type: 'application/pdf')
     resume.save!
@@ -15,8 +14,7 @@ RSpec.describe 'role_applications/index', type: :view do
   end
 
   let!(:resume2) do
-    resume = Resume.new(user: user2, gpa: 3.8, graduation_date: 2026, major: 'Engineering',
-                        organizational_role: 'Student')
+    resume = Resume.new(user: user2, gpa: 3.8, graduation_date: 2026, major: 'Engineering')
     resume.file.attach(io: File.open(Rails.root.join('spec/fixtures/test.pdf')), filename: 'test.pdf',
                        content_type: 'application/pdf')
     resume.save!
@@ -38,8 +36,12 @@ RSpec.describe 'role_applications/index', type: :view do
 
   it 'renders a list of role_applications' do
     render
-    assert_select 'div>p', text: /Test1 User/, count: 1
-    assert_select 'div>p', text: /Test2 User/, count: 1
-    assert_select 'div>p', text: /Test Role/, count: 2
+    # Check for the table structure
+    assert_select 'table.table'
+    assert_select 'tbody>tr', count: 2
+    # Check for organizational role names
+    assert_select 'td', text: /Test Role/, count: 2
+    # Check for application count
+    assert_select 'p', text: /2 of 10 applications used/, count: 1
   end
 end

@@ -94,6 +94,11 @@ function initializeRoleQuestions() {
       return;
     }
     
+    // Preserve existing values before replacing HTML
+    const existingAnswer1 = document.getElementById('role_application_answer_1')?.value || '';
+    const existingAnswer2 = document.getElementById('role_application_answer_2')?.value || '';
+    const existingAnswer3 = document.getElementById('role_application_answer_3')?.value || '';
+    
     let questionsHTML = '';
     
     if (selectedRole.question_1) {
@@ -104,7 +109,7 @@ function initializeRoleQuestions() {
           </label>
           <textarea name="role_application[answer_1]" id="role_application_answer_1" rows="10" 
                     placeholder="Your answer here..." 
-                    style="width: 100%; padding: 8px; font-size: 14px; font-family: inherit;"></textarea>
+                    style="width: 100%; padding: 8px; font-size: 14px; font-family: inherit;">${existingAnswer1}</textarea>
         </div>
       `;
     }
@@ -117,7 +122,7 @@ function initializeRoleQuestions() {
           </label>
           <textarea name="role_application[answer_2]" id="role_application_answer_2" rows="10" 
                     placeholder="Your answer here..." 
-                    style="width: 100%; padding: 8px; font-size: 14px; font-family: inherit;"></textarea>
+                    style="width: 100%; padding: 8px; font-size: 14px; font-family: inherit;">${existingAnswer2}</textarea>
         </div>
       `;
     }
@@ -130,7 +135,7 @@ function initializeRoleQuestions() {
           </label>
           <textarea name="role_application[answer_3]" id="role_application_answer_3" rows="10" 
                     placeholder="Your answer here..." 
-                    style="width: 100%; padding: 8px; font-size: 14px; font-family: inherit;"></textarea>
+                    style="width: 100%; padding: 8px; font-size: 14px; font-family: inherit;">${existingAnswer3}</textarea>
         </div>
       `;
     }

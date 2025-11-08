@@ -3,6 +3,11 @@ class Resume < ApplicationRecord
   has_one_attached :file
   has_many :resume_downloads, dependent: :destroy
 
+  # Delegate organizational_role (primary) to user for convenience
+  delegate :organizational_role, to: :user, allow_nil: true
+  # Delegate organizational_roles (all) to user
+  delegate :organizational_roles, to: :user
+
   validates :file, presence: true
   validates :gpa,
             numericality: { greater_than_or_equal_to: 0.0, less_than_or_equal_to: 4.0 },
@@ -15,7 +20,6 @@ class Resume < ApplicationRecord
             },
             allow_nil: true
   validates :major, length: { maximum: 100 }, allow_blank: true
-  validates :organizational_role, length: { maximum: 100 }, allow_blank: true
 
   validate :file_format
 

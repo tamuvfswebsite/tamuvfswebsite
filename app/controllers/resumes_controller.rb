@@ -10,6 +10,9 @@ class ResumesController < ApplicationController
   # Require explicit authentication for create/update/delete actions
   before_action :authenticate_admin!, only: %i[new create edit update destroy]
 
+  # Prevent sponsors from creating/editing/deleting resumes
+  before_action :prevent_sponsor_access, only: %i[new create edit update destroy]
+
   before_action :set_user
   before_action :set_resume, only: %i[show edit update destroy download]
   before_action :authorize_own_resume, only: %i[show]
@@ -24,8 +27,14 @@ class ResumesController < ApplicationController
   def new
     @return_to = params[:return_to]
 
+    # Admins can create resumes for anyone, users can only create their own
+    unless current_authenticated_user&.role == 'admin' || @user.id == current_authenticated_user&.id
+      redirect_to root_path, alert: 'You can only create your own resume.'
+      return
+    end
+
     if @user.resume.present?
-      redirect_to @user, alert: 'You already have a resume.'
+      redirect_to @user, alert: 'User already has a resume.'
     else
       @resume = @user.build_resume
     end
@@ -35,7 +44,8 @@ class ResumesController < ApplicationController
     @user ||= @resume.user
     @return_to = params[:return_to]
 
-    # Only allow users to edit their own resume
+    # Admins can edit any resume, users can only edit their own
+    return if current_authenticated_user&.role == 'admin'
     return if @resume.user_id == current_authenticated_user&.id
 
     redirect_to resumes_path, alert: 'You can only edit your own resume.'
@@ -56,8 +66,8 @@ class ResumesController < ApplicationController
   end
 
   def destroy
-    # Only allow users to delete their own resume
-    if @resume.user_id != current_authenticated_user&.id
+    # Admins can delete any resume, users can only delete their own
+    unless current_authenticated_user&.role == 'admin' || @resume.user_id == current_authenticated_user&.id
       redirect_to user_path(@user), alert: 'You can only delete your own resume.'
       return
     end
@@ -103,7 +113,7 @@ class ResumesController < ApplicationController
   end
 
   def resume_params
-    params.require(:resume).permit(:file, :gpa, :graduation_date, :major, :organizational_role)
+    params.require(:resume).permit(:file, :gpa, :graduation_date, :major)
   end
 
   def validate_user_for_create
@@ -112,11 +122,23 @@ class ResumesController < ApplicationController
       return false
     end
 
+    # Admins can create resumes for anyone, users can only create their own
+    unless current_authenticated_user&.role == 'admin' || @user.id == current_authenticated_user&.id
+      redirect_to root_path, alert: 'You can only create your own resume.'
+      return false
+    end
+
     if @user.resume.present?
-      redirect_to @user, alert: 'You already have a resume.'
+      redirect_to @user, alert: 'User already has a resume.'
       return false
     end
 
     true
+  end
+
+  def prevent_sponsor_access
+    return unless current_authenticated_user&.sponsor?
+
+    redirect_to root_path, alert: 'Sponsors cannot create, edit, or delete resumes.'
   end
 end

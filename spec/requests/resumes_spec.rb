@@ -146,7 +146,7 @@ RSpec.describe '/resumes', type: :request do
       expect(response).to redirect_to(user_path(user))
     end
 
-    it 'prevents deleting another users resume' do
+    it 'allows admins to delete any resume' do
       other_user = create_user(role: 'member', uid: 'other_uid')
       other_resume = Resume.create!(user: other_user,
                                     file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf'))
@@ -155,10 +155,10 @@ RSpec.describe '/resumes', type: :request do
       # Use the nested route which sets @user properly
       delete user_resume_url(other_user)
 
-      # The controller should prevent deletion and redirect
-      expect(other_resume.reload).to be_present # Resume should still exist
+      # Admins can delete any resume
+      expect { other_resume.reload }.to raise_error(ActiveRecord::RecordNotFound)
       expect(response).to redirect_to(user_path(other_user))
-      expect(flash[:alert]).to include('You can only delete your own resume')
+      expect(flash[:notice]).to include('Resume was successfully deleted')
     end
   end
 
@@ -174,7 +174,7 @@ RSpec.describe '/resumes', type: :request do
 
       get new_user_resume_url(user)
       expect(response).to redirect_to(user_path(user))
-      expect(flash[:alert]).to include('You already have a resume')
+      expect(flash[:alert]).to include('User already has a resume')
     end
 
     it 'allows editing own resume' do
@@ -184,16 +184,15 @@ RSpec.describe '/resumes', type: :request do
       expect(response).to have_http_status(:success)
     end
 
-    it 'prevents editing another users resume' do
+    it 'allows admins to edit any resume' do
       other_user = create_user(role: 'member', uid: 'other_uid')
-      Resume.create!(user: other_user,
-                     file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf'))
+      other_resume = Resume.create!(user: other_user,
+                                    file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf'))
       sign_in admin
 
-      # Use the nested route
-      get edit_user_resume_url(other_user)
-      expect(response).to redirect_to(resumes_path)
-      expect(flash[:alert]).to include('You can only edit your own resume')
+      # Admins can edit any resume
+      get edit_resume_url(other_resume)
+      expect(response).to have_http_status(:success)
     end
   end
 end

@@ -21,3 +21,9 @@ body {
   padding: 0;
   padding-top: 60px; /* Account for sticky navbar */
 }
+
+/* Make button forms display inline */
+.inline-form {
+  display: inline-block;
+  margin: 0;
+}

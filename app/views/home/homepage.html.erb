@@ -41,9 +41,9 @@
           <% end %>
         <% end %>
         
-        <%# Show application status/link if user has submitted one %>
-        <% if current_user.role_application.present? %>
-          <%= link_to "Review My Application", role_application_path(current_user.role_application), class: "btn btn-application" %>
+        <%# Show application link - users can now have multiple applications %>
+        <% unless current_user.sponsor? %>
+          <%= link_to "My Applications", role_applications_path, class: "btn btn-application" %>
         <% end %>
       <% end %>
     <% end %>

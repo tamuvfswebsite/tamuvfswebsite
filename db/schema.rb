@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 20_251_105_165_132) do
+ActiveRecord::Schema[8.0].define(version: 20_251_108_173_948) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_catalog.plpgsql'
 
@@ -155,7 +155,8 @@ ActiveRecord::Schema[8.0].define(version: 20_251_105_165_132) do
     t.float 'gpa'
     t.integer 'graduation_date'
     t.string 'major'
-    t.string 'organizational_role'
+    t.bigint 'organizational_role_id'
+    t.index ['organizational_role_id'], name: 'index_resumes_on_organizational_role_id'
     t.index ['user_id'], name: 'index_resumes_on_user_id'
   end
 
@@ -206,7 +207,9 @@ ActiveRecord::Schema[8.0].define(version: 20_251_105_165_132) do
     t.string 'google_uid'
     t.string 'google_avatar_url'
     t.integer 'points', default: 0, null: false
+    t.bigint 'organizational_role_id'
     t.index ['google_uid'], name: 'index_users_on_google_uid', unique: true
+    t.index ['organizational_role_id'], name: 'index_users_on_organizational_role_id'
   end
 
   add_foreign_key 'active_storage_attachments', 'active_storage_blobs', column: 'blob_id'
@@ -220,9 +223,11 @@ ActiveRecord::Schema[8.0].define(version: 20_251_105_165_132) do
   add_foreign_key 'organizational_role_users', 'users'
   add_foreign_key 'resume_downloads', 'resumes'
   add_foreign_key 'resume_downloads', 'users'
+  add_foreign_key 'resumes', 'organizational_roles'
   add_foreign_key 'resumes', 'users'
   add_foreign_key 'role_applications', 'organizational_roles', column: 'org_role_id'
   add_foreign_key 'role_applications', 'users'
   add_foreign_key 'sponsor_user_joins', 'sponsors'
   add_foreign_key 'sponsor_user_joins', 'users'
+  add_foreign_key 'users', 'organizational_roles'
 end

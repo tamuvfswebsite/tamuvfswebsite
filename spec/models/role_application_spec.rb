@@ -167,9 +167,10 @@ RSpec.describe RoleApplication, type: :model do
       end
     end
 
-    context 'user uniqueness' do
-      it 'requires user_id to be unique' do
+    context 'user application limit' do
+      it 'allows users to submit multiple applications' do
         resume # Create resume for user
+        # Create first application
         RoleApplication.create!(
           user: user,
           organizational_role: organizational_role,
@@ -178,7 +179,8 @@ RSpec.describe RoleApplication, type: :model do
           answer_3: 'I can bring strong Python and data analysis skills to the team'
         )
 
-        duplicate = RoleApplication.new(
+        # Create second application for same user
+        second_application = RoleApplication.new(
           user: user,
           organizational_role: organizational_role,
           answer_1: 'Different answer with more than fifty characters to meet requirements',
@@ -186,8 +188,7 @@ RSpec.describe RoleApplication, type: :model do
           answer_3: 'Yet another answer with more than fifty characters in this field'
         )
 
-        expect(duplicate).not_to be_valid
-        expect(duplicate.errors[:user_id]).to include('has already submitted an application')
+        expect(second_application).to be_valid
       end
 
       it 'allows different users to submit applications' do

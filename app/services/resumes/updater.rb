@@ -58,7 +58,7 @@ module Resumes
     end
 
     def permitted_params
-      params.require(:resume).permit(:gpa, :graduation_date, :major, :organizational_role)
+      params.require(:resume).permit(:gpa, :graduation_date, :major)
     end
 
     def success_response(message)

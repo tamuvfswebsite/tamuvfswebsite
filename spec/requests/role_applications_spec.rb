@@ -13,8 +13,7 @@ RSpec.describe '/role_applications', type: :request do
 
   # Create resume for the user
   let!(:resume) do
-    resume = Resume.new(user: user, gpa: 3.5, graduation_date: 2025, major: 'Computer Science',
-                        organizational_role: 'Student')
+    resume = Resume.new(user: user, gpa: 3.5, graduation_date: 2025, major: 'Computer Science')
     resume.file.attach(io: File.open(Rails.root.join('spec/fixtures/test.pdf')), filename: 'test.pdf',
                        content_type: 'application/pdf')
     resume.save!
@@ -56,7 +55,7 @@ RSpec.describe '/role_applications', type: :request do
   describe 'GET /show' do
     it 'renders a successful response' do
       sign_in_user
-      role_application = user.create_role_application!(valid_attributes)
+      role_application = user.role_applications.create!(valid_attributes)
       get role_application_url(role_application)
       expect(response).to be_successful
     end
@@ -65,7 +64,7 @@ RSpec.describe '/role_applications', type: :request do
   describe 'GET /edit' do
     it 'renders a successful response' do
       sign_in_user
-      role_application = user.create_role_application!(valid_attributes)
+      role_application = user.role_applications.create!(valid_attributes)
       get edit_role_application_url(role_application)
       expect(response).to be_successful
     end
@@ -172,7 +171,7 @@ RSpec.describe '/role_applications', type: :request do
     context 'with valid parameters' do
       it 'updates the requested role_application' do
         sign_in_user
-        role_application = user.create_role_application!(valid_attributes)
+        role_application = user.role_applications.create!(valid_attributes)
         patch role_application_url(role_application), params: { role_application: new_attributes }
         role_application.reload
         expect(role_application.answer_1).to eq(new_attributes[:answer_1])
@@ -182,7 +181,7 @@ RSpec.describe '/role_applications', type: :request do
 
       it 'redirects to the role_application' do
         sign_in_user
-        role_application = user.create_role_application!(valid_attributes)
+        role_application = user.role_applications.create!(valid_attributes)
         patch role_application_url(role_application), params: { role_application: new_attributes }
         expect(response).to redirect_to(role_application_url(role_application))
       end
@@ -191,7 +190,7 @@ RSpec.describe '/role_applications', type: :request do
     context 'with invalid parameters' do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         sign_in_user
-        role_application = user.create_role_application!(valid_attributes)
+        role_application = user.role_applications.create!(valid_attributes)
         patch role_application_url(role_application), params: { role_application: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_content)
       end
@@ -207,7 +206,7 @@ RSpec.describe '/role_applications', type: :request do
     end
 
     it 'allows admins to view any role application' do
-      role_application = user.create_role_application!(valid_attributes)
+      role_application = user.role_applications.create!(valid_attributes)
       admin = Admin.create!(email: admin_user.email, uid: admin_user.google_uid,
                             full_name: "#{admin_user.first_name} #{admin_user.last_name}")
 
@@ -220,7 +219,7 @@ RSpec.describe '/role_applications', type: :request do
     end
 
     it 'prevents viewing another users role application' do
-      role_application = user.create_role_application!(valid_attributes)
+      role_application = user.role_applications.create!(valid_attributes)
       allow_any_instance_of(RoleApplicationsController).to receive(:current_user).and_return(other_user)
 
       get role_application_url(role_application)
@@ -229,7 +228,7 @@ RSpec.describe '/role_applications', type: :request do
     end
 
     it 'prevents editing another users role application' do
-      role_application = user.create_role_application!(valid_attributes)
+      role_application = user.role_applications.create!(valid_attributes)
       allow_any_instance_of(RoleApplicationsController).to receive(:current_user).and_return(other_user)
 
       get edit_role_application_url(role_application)
@@ -238,7 +237,7 @@ RSpec.describe '/role_applications', type: :request do
     end
 
     it 'prevents updating another users role application' do
-      role_application = user.create_role_application!(valid_attributes)
+      role_application = user.role_applications.create!(valid_attributes)
       allow_any_instance_of(RoleApplicationsController).to receive(:current_user).and_return(other_user)
 
       patch role_application_url(role_application), params: { role_application: { answer_1: 'Hacked!' } }
@@ -266,13 +265,16 @@ RSpec.describe '/role_applications', type: :request do
       expect(flash[:alert]).to include('Please upload your resume before applying')
     end
 
-    it 'redirects when user already has a role application' do
-      user.create_role_application!(valid_attributes)
+    it 'redirects when user has reached the 10 application limit' do
+      # Create 10 applications for the user
+      10.times do |i|
+        user.role_applications.create!(valid_attributes.merge(answer_1: "Answer #{i} " + ('x' * 50)))
+      end
       sign_in_user
 
       get new_role_application_url
       expect(response).to redirect_to(root_path)
-      expect(flash[:alert]).to include('You have already submitted an application')
+      expect(flash[:alert]).to include('You have reached the maximum limit of 10 applications')
     end
   end
 
@@ -304,7 +306,7 @@ RSpec.describe '/role_applications', type: :request do
 
     it 'updates role application in JSON format' do
       sign_in_user
-      role_application = user.create_role_application!(valid_attributes)
+      role_application = user.role_applications.create!(valid_attributes)
       new_answer = 'This is a newly updated answer with more than fifty characters for validation.'
 
       patch role_application_url(role_application),
@@ -317,7 +319,7 @@ RSpec.describe '/role_applications', type: :request do
 
     it 'returns error on invalid JSON update' do
       sign_in_user
-      role_application = user.create_role_application!(valid_attributes)
+      role_application = user.role_applications.create!(valid_attributes)
 
       patch role_application_url(role_application),
             params: { role_application: invalid_attributes },
