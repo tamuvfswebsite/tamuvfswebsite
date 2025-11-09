@@ -27,7 +27,8 @@ module AuthHelpers
       uid: user.google_uid,
       full_name: "#{user.first_name} #{user.last_name}"
     )
-    sign_in admin
+    # Use Devise's sign_in helper with explicit scope for request specs
+    sign_in(admin, scope: :admin)
   end
 
   # Helper to sign in a user as admin in view/controller specs

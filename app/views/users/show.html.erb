@@ -22,7 +22,7 @@
     <% end %>
     <% if @user.resume.present? %>
       <%= button_to 'View Resume', user_resume_path(@user), method: :get, class: 'btn btn-primary', form: { style: 'display: inline;' } %>
-    <% else %>
+    <% elsif @user.id == current_user&.id %>
       <%= button_to 'Create Resume', new_user_resume_path(@user), method: :get, class: 'btn btn-primary', form: { style: 'display: inline;' } %>
     <% end %>
     <% if admin_user? %>

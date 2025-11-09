@@ -32,10 +32,12 @@
         </div>
 
         <div class="filter-group">
-          <%= f.label :organizational_role, "Filter by Role:", class: "filter-label" %>
-          <%= f.select :organizational_role,
-              options_for_select([["All Roles", ""]] + @organizational_roles.map { |r| [r, r] }, params[:organizational_role]),
-              {},
+          <%= f.label :organizational_role_id, "Filter by Role:", class: "filter-label" %>
+          <%= f.collection_select :organizational_role_id,
+              @organizational_roles,
+              :id,
+              :name,
+              { include_blank: "All Roles" },
               class: "filter-select" %>
         </div>
 
@@ -68,8 +70,8 @@
 
         <div class="filter-buttons">
           <%= f.submit "Apply Filters", class: "btn btn-apply-filters" %>
-          <% if params[:major].present? || params[:organizational_role].present? || params[:graduation_year].present? || params[:gpa_value].present? %>
-            <%= link_to "Clear Filters", resumes_path(request.query_parameters.except(:major, :organizational_role, :graduation_year, :gpa_operator, :gpa_value)), class: "btn btn-clear-filters" %>
+          <% if params[:major].present? || params[:organizational_role_id].present? || params[:graduation_year].present? || params[:gpa_value].present? %>
+            <%= link_to "Clear Filters", resumes_path(request.query_parameters.except(:major, :organizational_role_id, :graduation_year, :gpa_operator, :gpa_value)), class: "btn btn-clear-filters" %>
           <% end %>
         </div>
       </div>
@@ -118,7 +120,13 @@
         <td><%= resume.gpa %></td>
         <td><%= resume.graduation_date %></td>
         <td><%= resume.major %></td>
-        <td><%= resume.organizational_role %></td>
+        <td>
+          <% if resume.organizational_roles.any? %>
+            <%= resume.organizational_roles.map(&:name).join(", ") %>
+          <% else %>
+            <em>None</em>
+          <% end %>
+        </td>
         <td><%= link_to "Show", resume_path(resume) %></td>
       </tr>
     <% end %>

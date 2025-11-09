@@ -26,8 +26,8 @@ Rails.application.routes.draw do
     resource :resume, only: %i[new create show edit update destroy]
   end
 
-  # Role applications
-  resources :role_applications, only: %i[new create show edit update]
+  # Role applications - users can create/view their own, admins can view all
+  resources :role_applications, only: %i[index new create show edit update]
 
   # Admin authentication (Devise + OmniAuth)
   devise_for :admins, controllers: { omniauth_callbacks: 'admins/omniauth_callbacks' }

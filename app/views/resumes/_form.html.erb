@@ -31,13 +31,6 @@
         { required: true, style: "padding: 8px; width: 250px; border: 1px solid #ccc; border-radius: 4px;" } %>
   </div>
 
-  <div class="organizational-role" style="margin-bottom: 15px;">
-    <%= form.label :organizational_role, "Organizational Role *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
-    <%= form.select :organizational_role, ["X Team", "Y Team", "Z Team", "Student"], 
-        { prompt: "Select VFS Team" }, 
-        { required: true, style: "padding: 8px; width: 250px; border: 1px solid #ccc; border-radius: 4px;" } %>
-  </div>
-
   <div class="field" style="margin-bottom: 15px;">
     <%= form.label :file, "Upload Resume (PDF only) *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
     <%= form.file_field :file, accept: 'application/pdf', required: true,

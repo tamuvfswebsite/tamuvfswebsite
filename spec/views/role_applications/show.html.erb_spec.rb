@@ -5,8 +5,7 @@ RSpec.describe 'role_applications/show', type: :view do
   let(:organizational_role) { OrganizationalRole.create!(name: 'Test Role') }
 
   let!(:resume) do
-    resume = Resume.new(user: user, gpa: 3.5, graduation_date: 2025, major: 'Computer Science',
-                        organizational_role: 'Student')
+    resume = Resume.new(user: user, gpa: 3.5, graduation_date: 2025, major: 'Computer Science')
     resume.file.attach(io: File.open(Rails.root.join('spec/fixtures/test.pdf')), filename: 'test.pdf',
                        content_type: 'application/pdf')
     resume.save!
@@ -16,8 +15,7 @@ RSpec.describe 'role_applications/show', type: :view do
   before(:each) do
     assign(:role_application, RoleApplication.create!(
                                 user: user,
-                                organizational_role: organizational_role,
-                                essay: 'This is a test essay that is at least fifty characters long for validation.'
+                                organizational_role: organizational_role
                               ))
     # Stub the helper method that the view uses
     def view.current_user
@@ -30,6 +28,5 @@ RSpec.describe 'role_applications/show', type: :view do
     render
     expect(rendered).to match(/Test User/)
     expect(rendered).to match(/Test Role/)
-    expect(rendered).to match(/This is a test essay/)
   end
 end

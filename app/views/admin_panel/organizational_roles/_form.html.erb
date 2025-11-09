@@ -1,0 +1,47 @@
+<%= form_with(model: organizational_role, url: organizational_role.persisted? ? admin_panel_organizational_role_path(organizational_role) : admin_panel_organizational_roles_path, local: true) do |form| %>
+  <% if organizational_role.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <h4 class="alert-heading"><%= pluralize(organizational_role.errors.count, "error") %> prohibited this organizational role from being saved:</h4>
+      <ul class="mb-0">
+        <% organizational_role.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :name, "Role Name", class: "font-weight-bold" %>
+    <%= form.text_field :name, class: "form-control", placeholder: "e.g., Web Developer" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :description, class: "font-weight-bold" %>
+    <%= form.text_area :description, rows: 4, class: "form-control", placeholder: "Describe the role and its responsibilities..." %>
+  </div>
+
+  <hr class="my-4">
+
+  <h5 class="mb-3">Application Questions</h5>
+  <p class="text-muted small">Configure up to three questions that applicants will answer when applying for this role. Leave blank if no questions are needed.</p>
+
+  <div class="form-group">
+    <%= form.label :question_1, "Question 1", class: "font-weight-bold" %>
+    <%= form.text_area :question_1, rows: 3, class: "form-control", placeholder: "Enter the first application question (optional)" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :question_2, "Question 2", class: "font-weight-bold" %>
+    <%= form.text_area :question_2, rows: 3, class: "form-control", placeholder: "Enter the second application question (optional)" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :question_3, "Question 3", class: "font-weight-bold" %>
+    <%= form.text_area :question_3, rows: 3, class: "form-control", placeholder: "Enter the third application question (optional)" %>
+  </div>
+
+  <div class="form-group mt-4">
+    <%= form.submit organizational_role.persisted? ? "Update Organizational Role" : "Create Organizational Role", class: "btn btn-primary" %>
+    <%= link_to "Cancel", organizational_role.persisted? ? admin_panel_organizational_role_path(organizational_role) : admin_panel_organizational_roles_path, class: "btn btn-secondary" %>
+  </div>
+<% end %>

@@ -42,6 +42,19 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :view
   config.include Devise::Test::IntegrationHelpers, type: :request
 
+  # Configure Warden test mode for Devise
+  config.before(:suite) do
+    Warden.test_mode!
+  end
+
+  config.before(:each) do
+    Warden.test_reset!
+  end
+
+  config.after(:each) do
+    Warden.test_reset!
+  end
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [
     Rails.root.join('spec/fixtures')

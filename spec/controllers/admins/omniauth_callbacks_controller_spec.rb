@@ -94,7 +94,7 @@ RSpec.describe 'Admins::OmniauthCallbacksController', type: :request do
         expect(response).to redirect_to(new_role_application_path)
       end
 
-      it 'redirects to root if user already has an application' do
+      it 'redirects to applications list if user has reached application limit' do
         user = User.create!(
           google_uid: '123545',
           email: 'test@example.com',
@@ -107,13 +107,14 @@ RSpec.describe 'Admins::OmniauthCallbacksController', type: :request do
         resume.save!
 
         org_role = OrganizationalRole.create!(name: 'Test Role')
-        user.create_role_application!(org_role_id: org_role.id, essay: 'Test essay' * 20)
+        # Create 10 applications to reach the limit
+        10.times { |i| user.role_applications.create!(org_role_id: org_role.id, answer_1: "Answer #{i} " + ('x' * 50)) }
 
         get apply_path # Set applying_for_role flag
         get '/admins/auth/google_oauth2/callback'
 
-        expect(response).to redirect_to(root_path)
-        expect(flash[:alert]).to include('already submitted an application')
+        expect(response).to redirect_to(role_applications_path)
+        expect(flash[:alert]).to include('reached the maximum limit of 10 applications')
       end
 
       it 'allows non-admin users to apply' do

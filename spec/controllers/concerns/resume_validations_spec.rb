@@ -4,6 +4,9 @@ RSpec.describe ResumeValidations, type: :controller do
   controller(ApplicationController) do
     include ResumeValidations
 
+    # Mock the current_authenticated_user method
+    attr_accessor :current_authenticated_user
+
     def test_validate_user_for_create
       @user = User.find_by(id: params[:user_id])
       validate_user_for_create
@@ -59,6 +62,9 @@ RSpec.describe ResumeValidations, type: :controller do
     let(:resume) { Resume.create!(user: user, file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf')) }
 
     it 'succeeds when user and resume exist and match' do
+      # Set the current user for the test
+      @controller.current_authenticated_user = user
+
       get :test_validate_user_and_resume_for_update, params: { user_id: user.id, id: resume.id }
       expect(response).to have_http_status(:success)
       expect(JSON.parse(response.body)['valid']).to eq(true)
@@ -78,6 +84,7 @@ RSpec.describe ResumeValidations, type: :controller do
 
     it 'redirects when resume does not belong to the user' do
       other_user = create_user(uid: 'other123')
+      @controller.current_authenticated_user = other_user
 
       get :test_validate_user_and_resume_for_update, params: { user_id: other_user.id, id: resume.id }
       expect(response).to redirect_to(user_path(other_user))
