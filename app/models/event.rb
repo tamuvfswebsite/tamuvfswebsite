@@ -1,4 +1,7 @@
 class Event < ApplicationRecord
+  has_many :attendances, dependent: :destroy
+  has_many :event_rsvps, dependent: :destroy
+
   validates :title, presence: true, length: { minimum: 3 }
   validates :event_date, presence: true
   validates :location, presence: true

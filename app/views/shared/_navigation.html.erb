@@ -26,13 +26,15 @@
         </li>
         <% if admin_signed_in? && current_user %>
           <li class="nav-item">
-            <% if admin_user? %>
+            <% if admin_user? || (sponsor_user? && current_user.sponsors.first.resume_access) %>
               <%= link_to 'Resumes', resumes_path, class: "nav-link #{current_page?(resumes_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
             <% else %>
-              <%= link_to 'My Resume', user_resume_path(current_user), class: "nav-link #{request.path.start_with?("/users/#{current_user.id}/resume") ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+              <% if !(sponsor_user?) %>
+                <%= link_to 'My Resume', user_resume_path(current_user), class: "nav-link #{request.path.start_with?("/users/#{current_user.id}/resume") ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+              <% end %>
             <% end %>
           </li>
-          <% unless current_user.sponsor? %>
+          <% if !(admin_user? || sponsor_user?) %>
             <li class="nav-item">
               <%= link_to 'My Applications', role_applications_path, class: "nav-link #{current_page?(role_applications_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
             </li>
@@ -45,8 +47,13 @@
               <%= link_to 'Admin Panel', admin_panel_root_path, class: "nav-link #{request.path.start_with?('/admin_panel') ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
             </li>
           <% end %>
+          <% if sponsor_user? %>
+            <li class="nav-item">
+              <%= link_to 'Sponsor Dashboard', sponsor_dashboard_index_path, class: "nav-link #{request.path.start_with?('/sponsor_dashboard') ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+            </li>
+          <% end %>
           <li class="nav-item">
-            <%= link_to 'Sign Out', destroy_admin_session_path, class: 'nav-link', data: { action: 'click->navigation#closeMenu' } %>
+            <%= link_to 'Sign Out', destroy_admin_session_path, class: 'nav-link', data: { turbo_prefetch: false, action: 'click->navigation#closeMenu' } %>
           </li>
         <% else %>
           <li class="nav-item">
