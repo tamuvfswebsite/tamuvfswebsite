@@ -39,6 +39,12 @@ Rails.application.routes.draw do
 
   # Admin Panel
   namespace :admin_panel do
+    get 'design_updates/index'
+    get 'design_updates/new'
+    get 'design_updates/create'
+    get 'design_updates/edit'
+    get 'design_updates/update'
+    get 'design_updates/destroy'
     root to: 'dashboard#index'
 
     get 'dashboard',   to: 'dashboard#index'
@@ -58,9 +64,8 @@ Rails.application.routes.draw do
         get   :assign_users
         patch :update_users
       end
-      # Future sponsor routes (e.g., resumes, applications)
-      # resources :resumes, only: [:index]
-      # resources :applications, only: [:index]
     end
+
+    resources :design_updates
   end
 end
