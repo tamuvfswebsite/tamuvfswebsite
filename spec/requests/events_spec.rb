@@ -109,7 +109,7 @@ RSpec.describe 'Events', type: :request do
           get '/events', params: { organizational_role_id: design_role.id }
           # When filtering by a specific role, should show that role's events and public events
           expect(response.body).to include('Design Event')
-          # Note: Public events may or may not appear depending on implementation
+          # NOTE: Public events may or may not appear depending on implementation
           # The key is that Design Event appears and AI Event doesn't
           expect(response.body).not_to include('AI Event')
         end

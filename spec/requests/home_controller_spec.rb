@@ -15,9 +15,9 @@ RSpec.describe HomeController, type: :request do
 
       it 'displays upcoming events' do
         Event.create!(title: 'Upcoming Event 1', event_date: 1.day.from_now, location: 'Test Location',
-                      capacity: 100, attendance_points: 10, is_published: true)
+                      capacity: 100, attendance_points: 10, is_published: true, is_public: true)
         Event.create!(title: 'Upcoming Event 2', event_date: 2.days.from_now, location: 'Test Location',
-                      capacity: 100, attendance_points: 15, is_published: true)
+                      capacity: 100, attendance_points: 15, is_published: true, is_public: true)
 
         get root_path
         expect(response.body).to include('Upcoming Event 1')
