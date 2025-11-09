@@ -66,8 +66,8 @@ class ResumesController < ApplicationController
   end
 
   def destroy
-    # Only allow users to delete their own resume
-    if @resume.user_id != current_authenticated_user&.id
+    # Admins can delete any resume, users can only delete their own
+    unless current_authenticated_user&.role == 'admin' || @resume.user_id == current_authenticated_user&.id
       redirect_to user_path(@user), alert: 'You can only delete your own resume.'
       return
     end

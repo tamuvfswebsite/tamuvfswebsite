@@ -60,13 +60,13 @@
 <div class="quick-actions">
   <h2>Quick Actions</h2>
   <ul>
-    <li><a href="/users">Manage Users</a></li>
-    <li><a href="/admin_panel/events">Manage Events</a></li>
-    <li><a href="/admin_panel/organizational_roles">Manage Organizational Roles</a></li>
-    <li><a href="/admin_panel/leaderboard">Attendance Leaderboard</a></li>
-    <li><a href="/admin_panel/role_applications">Review Applications</a></li>
-    <li><a href="<%= resumes_path %>">View Resumes</a></li>
-    <li><a href="/admin_panel/sponsors">Manage Sponsors</a></li>
+    <li><%= link_to "Manage Users", users_path %></li>
+    <li><%= link_to "Manage Events", admin_panel_events_path %></li>
+    <li><%= link_to "Manage Organizational Roles", admin_panel_organizational_roles_path %></li>
+    <li><%= link_to "Attendance Leaderboard", admin_panel_leaderboard_path %></li>
+    <li><%= link_to "Review Applications", admin_panel_role_applications_path %></li>
+    <li><%= link_to "View Resumes", resumes_path %></li>
+    <li><%= link_to "Manage Sponsors", admin_panel_sponsors_path %></li>
   </ul>
 </div>
 
@@ -81,4 +81,4 @@
   <% end %>
 </div>
 
-<a href="/homepage">Back to Home</a>
+<%= link_to "Back to Home", root_path %>

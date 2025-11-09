@@ -23,7 +23,7 @@ RSpec.describe '/resumes', type: :request do
   end
 
   before do
-    sign_in admin
+    sign_in admin, scope: :admin
   end
 
   let(:valid_attributes) do
@@ -147,27 +147,35 @@ RSpec.describe '/resumes', type: :request do
     end
 
     it 'prevents deleting another users resume' do
+      # Create a non-admin user
+      non_admin_user = create_user(role: 'member', uid: 'non_admin_uid')
+      non_admin = Admin.find_or_create_by!(
+        email: non_admin_user.email,
+        uid: non_admin_user.google_uid,
+        full_name: "#{non_admin_user.first_name} #{non_admin_user.last_name}"
+      )
+
+      # Create another user with a resume
       other_user = create_user(role: 'member', uid: 'other_uid')
       other_resume = Resume.create!(user: other_user,
                                     file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf'))
 
-      # Sign in as the regular (non-admin) user
-      sign_in regular_admin
+      # Sign in as the non-admin user
+      sign_in non_admin, scope: :admin
 
-      # Use the nested route which sets @user properly
+      # Try to delete the other user's resume
       delete user_resume_url(other_user)
 
-      # Admins can delete any resume
-      expect { other_resume.reload }.to raise_error(ActiveRecord::RecordNotFound)
-      expect(response).to redirect_to(user_path(other_user))
-      expect(flash[:notice]).to include('Resume was successfully deleted')
+      # Non-admins should NOT be able to delete other users' resumes
+      expect { other_resume.reload }.not_to raise_error
+      expect(response).to have_http_status(:forbidden).or have_http_status(:redirect)
     end
 
     it 'allows admins to delete any users resume' do
       other_user = create_user(role: 'member', uid: 'other_uid')
       Resume.create!(user: other_user,
                      file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf'))
-      sign_in admin
+      sign_in admin, scope: :admin
 
       # Admin should be able to delete any resume
       expect do

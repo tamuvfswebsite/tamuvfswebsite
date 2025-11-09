@@ -215,7 +215,7 @@
 // Resume Buttons (use primary maroon scheme)
 .btn-resume-download,
 .btn-resume-edit {
-  @extend .btn-primary;
+  @extend .btn-primary !optional;
 }
 
 .btn-resume-index {
