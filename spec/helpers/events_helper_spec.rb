@@ -20,7 +20,7 @@ RSpec.describe EventsHelper, type: :helper do
         allow(event).to receive(:is_public?).and_return(false)
         allow(event).to receive(:organizational_roles).and_return([role1, role2])
         allow(event.organizational_roles).to receive(:any?).and_return(true)
-        allow(event.organizational_roles).to receive(:pluck).with(:name).and_return(['AI', 'Design'])
+        allow(event.organizational_roles).to receive(:pluck).with(:name).and_return(%w[AI Design])
       end
 
       it 'returns comma-separated role names' do
@@ -111,19 +111,22 @@ RSpec.describe EventsHelper, type: :helper do
     context 'when event has organizational roles' do
       let(:role1) { OrganizationalRole.new(name: 'AI') }
       let(:role2) { OrganizationalRole.new(name: 'Design') }
+      let(:roles_array) { [role1, role2] }
 
       before do
         allow(event).to receive(:is_public?).and_return(false)
-        allow(event).to receive(:organizational_roles).and_return([role1, role2])
-        allow(event.organizational_roles).to receive(:any?).and_return(true)
-        allow(event.organizational_roles).to receive(:map).and_yield(role1).and_yield(role2)
-        allow(helper).to receive(:content_tag).with(:span, 'AI', class: 'badge badge-role').and_return('<span>AI</span>')
-        allow(helper).to receive(:content_tag).with(:span, 'Design', class: 'badge badge-role').and_return('<span>Design</span>')
+        allow(event).to receive(:organizational_roles).and_return(roles_array)
+        allow(helper).to receive(:content_tag).with(:span, 'AI',
+                                                    class: 'badge badge-role').and_return('<span>AI</span>')
+        allow(helper).to receive(:content_tag).with(:span, 'Design',
+                                                    class: 'badge badge-role').and_return('<span>Design</span>')
       end
 
       it 'returns badges for each role' do
         result = helper.event_tag_badge(event)
         expect(result).to be_a(String)
+        expect(result).to include('AI')
+        expect(result).to include('Design')
       end
     end
 
@@ -132,7 +135,8 @@ RSpec.describe EventsHelper, type: :helper do
         allow(event).to receive(:is_public?).and_return(false)
         allow(event).to receive(:organizational_roles).and_return([])
         allow(event.organizational_roles).to receive(:any?).and_return(false)
-        allow(helper).to receive(:content_tag).with(:span, 'All Roles', class: 'badge badge-all').and_return('<span>All Roles</span>')
+        allow(helper).to receive(:content_tag).with(:span, 'All Roles',
+                                                    class: 'badge badge-all').and_return('<span>All Roles</span>')
       end
 
       it 'returns an "All Roles" badge' do
@@ -142,4 +146,3 @@ RSpec.describe EventsHelper, type: :helper do
     end
   end
 end
-

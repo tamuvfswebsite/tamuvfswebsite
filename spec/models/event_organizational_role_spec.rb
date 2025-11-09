@@ -2,8 +2,19 @@ require 'rails_helper'
 
 RSpec.describe EventOrganizationalRole, type: :model do
   describe 'associations' do
-    it { is_expected.to belong_to(:event) }
-    it { is_expected.to belong_to(:organizational_role) }
+    it 'belongs to an event' do
+      event = Event.create!(title: 'Test Event', event_date: 1.day.from_now, location: 'Test', capacity: 50)
+      role = OrganizationalRole.create!(name: 'Test Role', description: 'Test')
+      event_role = EventOrganizationalRole.create!(event: event, organizational_role: role)
+      expect(event_role.event).to eq(event)
+    end
+
+    it 'belongs to an organizational_role' do
+      event = Event.create!(title: 'Test Event', event_date: 1.day.from_now, location: 'Test', capacity: 50)
+      role = OrganizationalRole.create!(name: 'Test Role', description: 'Test')
+      event_role = EventOrganizationalRole.create!(event: event, organizational_role: role)
+      expect(event_role.organizational_role).to eq(role)
+    end
   end
 
   describe 'validations' do
@@ -32,4 +43,3 @@ RSpec.describe EventOrganizationalRole, type: :model do
     end
   end
 end
-
