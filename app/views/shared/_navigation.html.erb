@@ -44,7 +44,7 @@
             </li>
           <% end %>
           <li class="nav-item">
-            <%= link_to 'Sign Out', destroy_admin_session_path, class: 'nav-link', data: { action: 'click->navigation#closeMenu' } %>
+            <%= link_to 'Sign Out', destroy_admin_session_path, class: 'nav-link', data: { turbo_prefetch: false, action: 'click->navigation#closeMenu' } %>
           </li>
         <% else %>
           <li class="nav-item">
