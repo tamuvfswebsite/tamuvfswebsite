@@ -5,6 +5,17 @@
   <p><strong>Date & Time:</strong> <%= @event.formatted_date %></p>
   <p><strong>Location:</strong> <%= @event.location %></p>
   <p><strong>Status:</strong> <%= @event.upcoming? ? "Upcoming" : "Past Event" %></p>
+  <p><strong>Event Tags:</strong> 
+    <% if @event.is_public? %>
+      <span class="badge badge-public">Public (Everyone)</span>
+    <% elsif @event.organizational_roles.any? %>
+      <% @event.organizational_roles.each do |role| %>
+        <span class="badge badge-role"><%= role.name %></span>
+      <% end %>
+    <% else %>
+      <span class="badge badge-all">All Roles</span>
+    <% end %>
+  </p>
 </div>
 
 <div class="actions">

@@ -40,6 +40,23 @@
     <%= form.number_field :attendance_points, min: 0, step: 1 %>
   </div>
 
+  <div class="field">
+    <%= form.label :is_public, "Make this event public (visible to everyone)" %>
+    <%= form.check_box :is_public %>
+    <small class="form-text text-muted">Public events are visible to everyone, regardless of organizational role or sign-in status.</small>
+  </div>
+
+  <div class="field">
+    <%= form.label :organizational_role_ids, "Target Organizational Roles" %>
+    <small class="form-text text-muted">Select specific roles this event is for. Leave empty if event is for all roles (or if marked as Public above).</small>
+    <%= form.collection_check_boxes :organizational_role_ids, OrganizationalRole.all.order(:name), :id, :name do |b| %>
+      <div class="form-check">
+        <%= b.check_box class: "form-check-input" %>
+        <%= b.label class: "form-check-label" %>
+      </div>
+    <% end %>
+  </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>

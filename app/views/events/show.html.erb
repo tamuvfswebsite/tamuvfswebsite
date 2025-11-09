@@ -35,6 +35,15 @@
         <p><%= @event.description %></p>
       </div>
     <% end %>
+
+    <div class="event-tags" style="margin-top: 15px;">
+      <p><strong>Event Tags:</strong> <%= event_target_roles_display(@event) %></p>
+      <% if event_relevant_to_user?(@event, @user_roles) && !@event.is_public? %>
+        <div style="background-color: #e8f5e9; border-left: 4px solid #4caf50; padding: 10px; margin: 15px 0; border-radius: 4px;">
+          <strong style="color: #2e7d32;">✓ This event is relevant to your organizational role(s)</strong>
+        </div>
+      <% end %>
+    </div>
   </div>
 
   <div class="rsvp-section">
