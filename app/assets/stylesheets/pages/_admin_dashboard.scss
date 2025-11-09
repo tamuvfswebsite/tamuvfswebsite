@@ -40,3 +40,167 @@
   color: var(--color-primary);
   text-align: center;
 }
+
+// Admin Events Page
+.admin-events-page {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: var(--space-md);
+
+  @media (min-width: 1600px) {
+    max-width: 1500px;
+  }
+}
+
+.admin-events-page .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-sm);
+  border-bottom: 2px solid var(--color-border);
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  h1 {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--color-primary);
+    line-height: 1.2;
+
+    @media (max-width: 767px) {
+      font-size: 32px;
+    }
+  }
+}
+
+.header-actions {
+  display: flex;
+  gap: var(--space-sm);
+
+  @media (max-width: 767px) {
+    width: 100%;
+    flex-direction: column;
+  }
+}
+
+.admin-events-page .events-section {
+  margin-bottom: var(--space-xl);
+
+  h2 {
+    margin-bottom: var(--space-md);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--color-text-dark);
+    line-height: 1.2;
+
+    @media (max-width: 767px) {
+      font-size: 24px;
+    }
+  }
+}
+
+.events-table-container {
+  background: var(--color-white);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+.events-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead {
+    background: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  th {
+    padding: var(--space-sm);
+    text-align: left;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+    font-size: 14px;
+    vertical-align: middle;
+  }
+
+  tbody tr {
+    transition: var(--transition-standard);
+
+    &:hover {
+      background: var(--color-off-white);
+    }
+
+    &:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  .event-title {
+    font-weight: 600;
+    color: var(--color-text-dark);
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .actions-cell {
+    white-space: nowrap;
+
+    .btn {
+      margin-right: var(--space-xs);
+      width: 70px;
+      padding: 6px 8px;
+      text-align: center;
+      box-sizing: border-box;
+      height: 30px;
+      line-height: 1.2;
+      display: inline-block;
+      font-weight: 500;
+      font-size: 14px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+
+    form {
+      display: inline;
+      margin: 0;
+      vertical-align: top;
+    }
+  }
+}
+
+.admin-events-page .empty-state {
+  text-align: center;
+  padding: var(--space-xl);
+  background: var(--color-white);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+
+  p {
+    color: var(--color-text-medium);
+    font-size: 16px;
+  }
+}
+
+.admin-events-page .page-footer {
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+}
