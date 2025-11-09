@@ -26,21 +26,30 @@
         </li>
         <% if admin_signed_in? %>
           <li class="nav-item">
-            <% if admin_user? %>
+            <% if admin_user? || (sponsor_user? && current_user.sponsors.first.resume_access) %>
               <%= link_to 'Resumes', resumes_path, class: "nav-link #{current_page?(resumes_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
             <% else %>
-              <%= link_to 'My Resume', user_resume_path(current_user), class: "nav-link #{request.path.start_with?("/users/#{current_user.id}/resume") ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+              <% if !(sponsor_user?) %>
+                <%= link_to 'My Resume', user_resume_path(current_user), class: "nav-link #{request.path.start_with?("/users/#{current_user.id}/resume") ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+              <% end %>
             <% end %>
           </li>
-          <li class="nav-item">
-            <%= link_to 'Apply for Role', new_role_application_path, class: "nav-link #{current_page?(new_role_application_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
-          </li>
+          <% if !(admin_user? || sponsor_user?) %>
+            <li class="nav-item">
+              <%= link_to 'Apply for Role', new_role_application_path, class: "nav-link #{current_page?(new_role_application_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+            </li>
+          <% end %>
           <% if admin_user? %>
             <li class="nav-item">
               <%= link_to 'Manage Events', admin_panel_events_path, class: "nav-link #{request.path.start_with?('/admin_panel/events') ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
             </li>
             <li class="nav-item">
               <%= link_to 'Admin Panel', admin_panel_root_path, class: "nav-link #{request.path.start_with?('/admin_panel') ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+            </li>
+          <% end %>
+          <% if sponsor_user? %>
+            <li class="nav-item">
+              <%= link_to 'Sponsor Dashboard', sponsor_dashboard_index_path, class: "nav-link #{request.path.start_with?('/sponsor_dashboard') ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
             </li>
           <% end %>
           <li class="nav-item">
