@@ -7,6 +7,14 @@ class Sponsor < ApplicationRecord
   has_one_attached :logo
   validate :acceptable_logo
 
+  # app/models/sponsor.rb
+  validates :website,
+            format: {
+              with: URI::DEFAULT_PARSER.make_regexp(%w[http https]),
+              message: 'must be a valid http(s) URL',
+              allow_blank: true
+            }
+
   # Check if this is the default sponsor
   def default_sponsor?
     company_name == 'Unassigned Sponsor'

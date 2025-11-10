@@ -7,11 +7,11 @@ class SponsorsController < ApplicationController
   end
 
   def edit
-    if @sponsor.nil? || @sponsor.default_sponsor?
-      redirect_to sponsor_dashboard_index_path,
-                  alert:
-                  'You cannot edit this sponsor profile. Please contact an administrator to be assigned to a company.'
-    end
+    return unless @sponsor.nil? || @sponsor.default_sponsor?
+
+    redirect_to sponsor_dashboard_index_path,
+                alert:
+                'You cannot edit this sponsor profile. Please contact an administrator to be assigned to a company.'
   end
 
   def update
