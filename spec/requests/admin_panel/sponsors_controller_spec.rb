@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe AdminPanel::SponsorsController, type: :request do
+  before do
+    allow_any_instance_of(AdminPanel::BaseController).to receive(:ensure_admin_user).and_return(true)
+  end
+
   let!(:sponsor) { Sponsor.create!(company_name: 'Test Company', website: 'https://test.com') }
 
   describe 'GET /admin_panel/sponsors' do

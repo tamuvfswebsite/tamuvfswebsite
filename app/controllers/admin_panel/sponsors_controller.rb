@@ -1,5 +1,5 @@
 module AdminPanel
-  class SponsorsController < ApplicationController
+  class SponsorsController < BaseController
     before_action :set_sponsor, only: %i[show edit update destroy assign_users update_users]
 
     def index

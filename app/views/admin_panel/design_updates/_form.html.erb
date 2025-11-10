@@ -1,0 +1,42 @@
+<!-- app/views/admin_panel/design_updates/_form.html.erb -->
+<%= form_with(model: [:admin_panel, @design_update], local: true) do |f| %>
+  <% if @design_update.errors.any? %>
+    <div class="error-messages">
+      <h3><%= pluralize(@design_update.errors.count, "error") %> prohibited this design update from being saved:</h3>
+      <ul>
+        <% @design_update.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :title %>
+    <%= f.text_field :title, required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :update_date, "Date" %>
+    <%= f.date_field :update_date, required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :pdf_file, "PDF Slides" %>
+    <%= f.file_field :pdf_file, accept: "application/pdf", required: @design_update.new_record? %>
+    <small>Upload a PDF file (max 10MB)</small>
+    
+    <% if @design_update.pdf_file.attached? %>
+      <div class="current-file">
+        <p><strong>Current file:</strong> <%= @design_update.pdf_file.filename %></p>
+        <%= link_to "View current PDF", rails_blob_path(@design_update.pdf_file, disposition: "inline"), 
+                   target: "_blank", class: "btn-small" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit class: "btn-primary" %>
+    <%= link_to "Cancel", admin_panel_design_updates_path, class: "btn-secondary" %>
+  </div>
+<% end %>
