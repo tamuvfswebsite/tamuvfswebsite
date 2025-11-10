@@ -72,6 +72,12 @@ RSpec.describe 'Navigation Integration', type: :request do
   end
 
   describe 'Active page highlighting' do
+    let(:user) { create_user(role: 'user') }
+
+    before do
+      sign_in_as_admin(user)
+    end
+
     it 'marks current page as active on root path' do
       get root_path
       expect(response.body).to match(%r{<a[^>]*class="[^"]*nav-link[^"]*active[^"]*"[^>]*>Home</a>})
