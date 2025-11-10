@@ -18,12 +18,15 @@
   </p>
 </div>
 
-<div class="actions">
-  <%= link_to 'Edit Event', edit_admin_panel_event_path(@event) %>
+<div class="actions" style="display: flex; gap: 10px;">
+  <%= button_to 'Edit Event', edit_admin_panel_event_path(@event), method: :get, class: 'btn btn-primary', style: 'height: 48px; padding: 12px 32px; box-sizing: border-box; font-weight: 500; font-size: 16px; line-height: 1.2;', form: { style: 'display: inline; margin: 0; vertical-align: top;' } %>
   <%= button_to 'Delete Event', admin_panel_event_path(@event),
               method: :delete,
-              data: { confirm: "Are you sure you want to delete this event?" } %>
-  <%= link_to 'Back to Events', admin_panel_events_path %>
+              class: 'btn btn-danger',
+              style: 'height: 48px; padding: 12px 32px; box-sizing: border-box; font-weight: 500; font-size: 16px; line-height: 1.2;',
+              data: { confirm: "Are you sure you want to delete this event?" },
+              form: { style: 'display: inline; margin: 0; vertical-align: top;' } %>
+  <%= button_to 'Back to Events', admin_panel_events_path, method: :get, class: 'btn btn-outline', style: 'height: 48px; padding: 12px 32px; box-sizing: border-box; font-weight: 500; font-size: 16px; line-height: 1.2;', form: { style: 'display: inline; margin: 0; vertical-align: top;' } %>
 </div>
 
 <hr>

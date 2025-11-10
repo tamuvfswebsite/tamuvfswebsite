@@ -23,9 +23,9 @@
     <% end %>
   </div>
 
-  <div style="margin-top: 20px;">
-    <%= f.submit "Update Users", class: "btn btn-primary" %>
-    <%= link_to "Cancel", admin_panel_sponsor_path(@sponsor), class: "btn btn-secondary" %>
+  <div style="margin-top: 20px; display: flex; gap: 10px;">
+    <%= f.submit "Update Users", class: "btn btn-primary", style: 'height: 48px; padding: 12px 32px; box-sizing: border-box; font-weight: 500; font-size: 16px; line-height: 1.2;' %>
+    <%= button_to "Cancel", admin_panel_sponsor_path(@sponsor), method: :get, class: "btn btn-outline", style: 'height: 48px; padding: 12px 32px; box-sizing: border-box; font-weight: 500; font-size: 16px; line-height: 1.2;', form: { style: 'display: inline; margin: 0; vertical-align: top;' } %>
   </div>
 <% end %>
 
