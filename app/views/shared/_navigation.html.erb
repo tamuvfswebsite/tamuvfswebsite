@@ -34,10 +34,10 @@
               <% end %>
             <% end %>
           </li>
+          <li class="nav-item">
+            <%= link_to 'My Applications', role_applications_path, class: "nav-link #{current_page?(role_applications_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+          </li>
           <% if !(admin_user? || sponsor_user?) %>
-            <li class="nav-item">
-              <%= link_to 'My Applications', role_applications_path, class: "nav-link #{current_page?(role_applications_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
-            </li>
             <li class="nav-item">
               <%= link_to 'My Profile', user_path(current_user), class: "nav-link #{current_page?(user_path(current_user)) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
             </li>
@@ -59,9 +59,6 @@
             <%= link_to 'Sign Out', destroy_admin_session_path, class: 'nav-link', data: { turbo_prefetch: false, action: 'click->navigation#closeMenu' } %>
           </li>
         <% else %>
-          <li class="nav-item">
-            <%= link_to 'Apply Now', apply_path, class: "nav-link #{current_page?(apply_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
-          </li>
           <li class="nav-item">
             <form action="/admins/auth/google_oauth2" method="post" style="display: inline; margin: 0;">
               <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
