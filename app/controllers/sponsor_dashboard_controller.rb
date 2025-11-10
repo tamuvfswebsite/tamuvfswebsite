@@ -11,8 +11,8 @@ class SponsorDashboardController < ApplicationController
     end
 
     # Show a notice if they're on the default sponsor
-    if @sponsor.default_sponsor?
-      flash.now[:notice] = 'You are currently not assigned to a sponsor company. Please contact an administrator.'
-    end
+    return unless @sponsor.default_sponsor?
+
+    flash.now[:notice] = 'You are currently not assigned to a sponsor company. Please contact an administrator.'
   end
 end

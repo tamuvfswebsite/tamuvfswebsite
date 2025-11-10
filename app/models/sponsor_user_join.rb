@@ -13,13 +13,13 @@ class SponsorUserJoin < ApplicationRecord
 
   def user_can_only_have_one_sponsor
     return if user.nil? || sponsor.nil?
-    
+
     # Allow if this is a persisted record (editing existing join)
     return if persisted?
-    
+
     # Check if user already has a sponsor
-    if user.sponsors.exists?
-      errors.add(:user, "can only be assigned to one sponsor at a time")
-    end
+    return unless user.sponsors.exists?
+
+    errors.add(:user, 'can only be assigned to one sponsor at a time')
   end
 end

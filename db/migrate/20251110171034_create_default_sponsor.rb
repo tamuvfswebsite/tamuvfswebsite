@@ -11,9 +11,7 @@ class CreateDefaultSponsor < ActiveRecord::Migration[7.0]
 
     # Assign all sponsor users without a sponsor to the default sponsor
     User.where(role: 'sponsor').includes(:sponsors).each do |user|
-      if user.sponsors.empty?
-        SponsorUserJoin.create!(user: user, sponsor: default_sponsor)
-      end
+      SponsorUserJoin.create!(user: user, sponsor: default_sponsor) if user.sponsors.empty?
     end
   end
 

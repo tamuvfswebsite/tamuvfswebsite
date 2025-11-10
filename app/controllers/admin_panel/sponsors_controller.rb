@@ -33,14 +33,15 @@ module AdminPanel
 
     def destroy
       if @sponsor.default_sponsor?
-        redirect_to admin_panel_sponsors_path, 
+        redirect_to admin_panel_sponsors_path,
                     alert: 'Cannot delete the default sponsor.'
         return
       end
 
       @sponsor.destroy
-      redirect_to admin_panel_sponsors_path, 
-                  notice: 'Sponsor was successfully deleted. Associated users were moved to the default sponsor.'
+      redirect_to admin_panel_sponsors_path,
+                  notice:
+                  'Sponsor was successfully deleted. Associated users were moved to the default sponsor.'
     end
 
     def assign_users
@@ -78,33 +79,6 @@ module AdminPanel
       params.dig(:sponsor, :user_ids)&.reject(&:blank?) || []
     end
 
-    def assign_users_to_sponsor(user_ids)
-      default_sponsor = Sponsor.default_sponsor
-      
-      # Clear existing assignments for this sponsor
-      @sponsor.users.each do |user|
-        user.sponsors.clear
-      end
-
-      # Assign selected users to this sponsor
-      if user_ids.any?
-        users = User.where(id: user_ids, role: 'sponsor')
-        users.each do |user|
-          # Clear any existing sponsor assignments
-          user.sponsors.clear
-          # Assign to this sponsor
-          user.sponsors << @sponsor
-        end
-      end
-
-      # Ensure all sponsor users without a sponsor get assigned to default
-      User.where(role: 'sponsor').includes(:sponsors).each do |user|
-        if user.sponsors.empty?
-          user.sponsors << default_sponsor
-        end
-      end
-    end
-
     def redirect_success
       redirect_to admin_panel_sponsor_path(@sponsor),
                   notice: "Users updated successfully. #{@sponsor.users.count} user(s) assigned."
@@ -113,6 +87,39 @@ module AdminPanel
     def redirect_failure(exception)
       redirect_to assign_users_admin_panel_sponsor_path(@sponsor),
                   alert: "Error updating users: #{exception.message}"
+    end
+
+    def assign_users_to_sponsor(user_ids)
+      @sponsor = find_sponsor # assuming @sponsor is set elsewhere, or pass as param
+      default_sponsor = Sponsor.default_sponsor
+
+      clear_existing_assignments
+      assign_selected_users(user_ids)
+      assign_unassigned_sponsor_users(default_sponsor)
+    end
+
+    def clear_existing_assignments
+      @sponsor.users.find_each do |user|
+        user.sponsors.clear
+      end
+    end
+
+    def assign_selected_users(user_ids)
+      return unless user_ids.any?
+
+      User.where(id: user_ids, role: 'sponsor').find_each do |user|
+        user.sponsors.clear
+        user.sponsors << @sponsor
+      end
+    end
+
+    def assign_unassigned_sponsor_users(default_sponsor)
+      User.where(role: 'sponsor')
+          .left_joins(:sponsors)
+          .where(sponsors: { id: nil })
+          .find_each do |user|
+        user.sponsors << default_sponsor
+      end
     end
   end
 end
