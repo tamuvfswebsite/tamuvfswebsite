@@ -47,6 +47,12 @@
   </div>
 
   <div class="form-group">
+    <%= form.label :points, "Points", class: "form-label" %>
+    <%= form.number_field :points, class: "form-control", min: 0 %>
+    <small class="form-text">Manually adjust the user's points balance.</small>
+  </div>
+
+  <div class="form-group">
     <%= form.label :organizational_role_ids, "Organizational Roles", class: "form-label" %>
     <%= form.collection_check_boxes :organizational_role_ids, OrganizationalRole.all, :id, :name do |b| %>
       <div class="form-check">
@@ -58,6 +64,6 @@
   </div>
 
   <div class="form-actions">
-    <%= form.submit "Update Role", class: "btn btn-primary" %>
+    <%= form.submit "Update", class: "btn btn-primary" %>
   </div>
 <% end %>
