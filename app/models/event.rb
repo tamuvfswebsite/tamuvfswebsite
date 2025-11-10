@@ -42,9 +42,11 @@ class Event < ApplicationRecord
                       end
 
     # Combine: public events OR events for user's roles OR events for all roles (if user has roles)
-    where(id: public_scope.select(:id))
-      .or(where(id: role_scope.select(:id)))
-      .or(where(id: all_roles_scope.select(:id)))
+    combined_ids = []
+    combined_ids += public_scope.pluck(:id)
+    combined_ids += role_scope.pluck(:id)
+    combined_ids += all_roles_scope.pluck(:id)
+    where(id: combined_ids.uniq)
   }
 
   def formatted_date
