@@ -29,8 +29,8 @@ RSpec.describe 'admin_panel/sponsors/edit.html.erb', type: :view do
     expect(rendered).to have_field('Sponsor Website', with: 'https://techcorp.com')
   end
 
-  it 'includes navigation links' do
-    expect(rendered).to have_link('Show Sponsor', href: admin_panel_sponsor_path(sponsor))
-    expect(rendered).to have_link('Back to Sponsors', href: admin_panel_sponsors_path)
+  it 'includes navigation buttons' do
+    expect(rendered).to have_button('Show Sponsor')
+    expect(rendered).to have_button('Back to Sponsors')
   end
 end

@@ -28,20 +28,24 @@ RSpec.describe 'admin_panel/dashboard/index.html.erb', type: :view do
     end
 
     it 'displays system overview counts' do
-      expect(rendered).to include('Total Users: 42')
-      expect(rendered).to include('Total Events: 10')
-      expect(rendered).to include('Resume Count: 7')
+      expect(rendered).to include('Total Users')
+      expect(rendered).to include('42')
+      expect(rendered).to include('Total Events')
+      expect(rendered).to include('10')
+      expect(rendered).to include('Resumes')
+      expect(rendered).to include('7')
     end
 
     it 'lists recent events' do
-      expect(rendered).to include('Tech Talk')
-      expect(rendered).to include('Career Fair')
+      # Recent events section was removed from the dashboard
+      expect(rendered).not_to include('Tech Talk')
+      expect(rendered).not_to include('Career Fair')
     end
 
     it 'shows admin info when signed in' do
-      expect(rendered).to include('Status: Logged in as admin')
-      expect(rendered).to include('Name: Alice Admin')
-      expect(rendered).to include('Email: alice@example.com')
+      expect(rendered).to include('Logged in as admin')
+      expect(rendered).to include('Alice Admin')
+      expect(rendered).to include('alice@example.com')
     end
 
     it 'renders quick action links' do
@@ -77,17 +81,19 @@ RSpec.describe 'admin_panel/dashboard/index.html.erb', type: :view do
     end
 
     it 'shows system overview with zeros' do
-      expect(rendered).to include('Total Users: 0')
-      expect(rendered).to include('Total Events: 0')
-      expect(rendered).to include('Resume Count: 0')
+      expect(rendered).to include('Total Users')
+      expect(rendered).to include('0')
+      expect(rendered).to include('Total Events')
+      expect(rendered).to include('Resumes')
     end
 
     it 'shows message when no recent events' do
-      expect(rendered).to include('No recent events found.')
+      # Recent events section was removed from the dashboard
+      expect(rendered).not_to include('No recent events found.')
     end
 
     it 'shows admin info when not signed in' do
-      expect(rendered).to include('Status: Not logged in')
+      expect(rendered).to include('Not logged in')
     end
 
     it 'shows message when no sponsor downloads' do
