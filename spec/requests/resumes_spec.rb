@@ -45,6 +45,81 @@ RSpec.describe '/resumes', type: :request do
       get resumes_url
       expect(response).to be_successful
     end
+
+    context 'with search functionality' do
+      let(:john) { create_user(first_name: 'John', last_name: 'Smith', email: 'jsmith@email.com', role: 'admin') }
+      let(:jane) { create_user(first_name: 'Jane', last_name: 'Doe', email: 'jane.doe@test.com', role: 'admin') }
+      let(:bob) { create_user(first_name: 'Bob', last_name: 'Johnson', email: 'bjohnson@company.org', role: 'admin') }
+
+      before do
+        # Create resumes for each user
+        Resume.create!(
+          user_id: john.id,
+          file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf')
+        )
+        Resume.create!(
+          user_id: jane.id,
+          file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf')
+        )
+        Resume.create!(
+          user_id: bob.id,
+          file: fixture_file_upload('spec/fixtures/test.pdf', 'application/pdf')
+        )
+      end
+
+      it 'searches by full first name' do
+        get resumes_url, params: { search: 'John' }
+        expect(response.body).to include('John Smith')
+        expect(response.body).not_to include('Jane Doe')
+      end
+
+      it 'searches by partial first name' do
+        get resumes_url, params: { search: 'Jo' }
+        expect(response.body).to include('John Smith')
+        expect(response.body).to include('Bob Johnson')
+        expect(response.body).not_to include('Jane Doe')
+      end
+
+      it 'searches by last name' do
+        get resumes_url, params: { search: 'Smith' }
+        expect(response.body).to include('John Smith')
+        expect(response.body).not_to include('Jane Doe')
+      end
+
+      it 'searches by partial name with space (e.g., "hn smi")' do
+        get resumes_url, params: { search: 'hn smi' }
+        expect(response.body).to include('John Smith')
+        expect(response.body).not_to include('Jane Doe')
+      end
+
+      it 'searches by email' do
+        get resumes_url, params: { search: 'jsmith@email.com' }
+        expect(response.body).to include('John Smith')
+        expect(response.body).not_to include('Jane Doe')
+      end
+
+      it 'searches by partial email' do
+        get resumes_url, params: { search: 'jsm' }
+        expect(response.body).to include('John Smith')
+        expect(response.body).not_to include('Jane Doe')
+      end
+
+      it 'returns all resumes when search is empty' do
+        get resumes_url, params: { search: '' }
+        expect(response.body).to include('John Smith')
+        expect(response.body).to include('Jane Doe')
+        expect(response.body).to include('Bob Johnson')
+      end
+
+      it 'works with other filters' do
+        john_resume = john.resume
+        john_resume.update!(major: 'Computer Science', gpa: 3.5)
+
+        get resumes_url, params: { search: 'John', major: 'Computer Science' }
+        expect(response.body).to include('John Smith')
+        expect(response.body).not_to include('Jane Doe')
+      end
+    end
   end
 
   describe 'GET /show' do

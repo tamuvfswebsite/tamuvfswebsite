@@ -15,6 +15,9 @@ gem 'csv'
 
 gem 'pg', '~> 1.1'
 
+# Search functionality with PostgreSQL full-text search
+gem 'pg_search'
+
 # Use Puma as the app server
 
 gem 'puma', '~> 6.0'
