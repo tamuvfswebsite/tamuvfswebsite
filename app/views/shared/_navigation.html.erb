@@ -1,7 +1,9 @@
 <nav class="navbar" role="navigation" aria-label="Main navigation" data-controller="navigation">
   <div class="navbar-container">
     <div class="navbar-brand">
-      <%= link_to 'Home', root_path, class: 'navbar-logo' %>
+      <%= link_to root_path, class: 'navbar-logo', style: 'display: flex; align-items: center;' do %>
+        <%= image_tag 'whitelogo.png', alt: 'Home', style: 'height: 40px; width: auto; display: block;' %>
+      <% end %>
     </div>
 
     <button class="navbar-toggle"
@@ -43,9 +45,6 @@
             </li>
           <% end %>
           <% if admin_user? %>
-            <li class="nav-item">
-              <%= link_to 'Manage Events', admin_panel_events_path, class: "nav-link #{request.path.start_with?('/admin_panel/events') ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
-            </li>
             <li class="nav-item">
               <%= link_to 'Admin Panel', admin_panel_root_path, class: "nav-link #{request.path.start_with?('/admin_panel') ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
             </li>
