@@ -21,7 +21,7 @@
 
   <% if @upcoming_events.present? %>
     <div class="home-events-grid">
-      <% @upcoming_events.limit(3).each do |event| %>
+      <% @upcoming_events.each do |event| %>
         <% if admin_signed_in? %>
           <%= link_to event, class: 'home-event-card' do %>
             <div class="home-event-card-header">
