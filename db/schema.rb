@@ -83,7 +83,7 @@ ActiveRecord::Schema[8.0].define(version: 20_251_109_000_001) do
     t.index ['event_id'], name: 'index_event_organizational_roles_on_event_id'
     t.index ['organizational_role_id'], name: 'index_event_organizational_roles_on_organizational_role_id'
   end
-  
+
   create_table 'design_updates', force: :cascade do |t|
     t.string 'title', null: false
     t.date 'update_date', null: false
