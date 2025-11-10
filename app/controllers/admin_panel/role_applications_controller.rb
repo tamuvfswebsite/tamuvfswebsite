@@ -1,7 +1,10 @@
+require 'csv'
+
 module AdminPanel
   class RoleApplicationsController < BaseController
     before_action :set_role_application, only: %i[show destroy update_status]
 
+    # rubocop:disable Metrics/AbcSize
     def index
       @role_applications = RoleApplication.includes(:user, :organizational_role)
 
@@ -12,7 +15,17 @@ module AdminPanel
       end
 
       @role_applications = @role_applications.order(created_at: :desc)
+
+      respond_to do |format|
+        format.html
+        format.csv do
+          send_data generate_csv(@role_applications),
+                    filename: "role_applications_#{Time.zone.today}.csv",
+                    type: 'text/csv'
+        end
+      end
     end
+    # rubocop:enable Metrics/AbcSize
 
     def show
       # Display full application details
@@ -36,5 +49,39 @@ module AdminPanel
     def set_role_application
       @role_application = RoleApplication.find(params[:id])
     end
+
+    def generate_csv(applications)
+      CSV.generate(headers: true) do |csv|
+        csv << csv_headers
+        applications.each { |app| csv << csv_row(app) }
+      end
+    end
+
+    def csv_headers
+      [
+        'Applicant Name', 'Email', 'Role', 'Status',
+        'Submitted Date', 'Last Updated',
+        'Question 1', 'Answer 1', 'Question 2', 'Answer 2', 'Question 3', 'Answer 3'
+      ]
+    end
+
+    # rubocop:disable Metrics/AbcSize
+    def csv_row(app)
+      [
+        "#{app.user.first_name} #{app.user.last_name}",
+        app.user.email,
+        app.organizational_role.name,
+        app.status.humanize,
+        app.created_at.strftime('%Y-%m-%d %H:%M'),
+        app.updated_at.strftime('%Y-%m-%d %H:%M'),
+        app.organizational_role.question_1 || '',
+        app.answer_1 || '',
+        app.organizational_role.question_2 || '',
+        app.answer_2 || '',
+        app.organizational_role.question_3 || '',
+        app.answer_3 || ''
+      ]
+    end
+    # rubocop:enable Metrics/AbcSize
   end
 end

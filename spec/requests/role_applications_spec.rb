@@ -108,6 +108,27 @@ RSpec.describe '/role_applications', type: :request do
         post role_applications_url, params: { role_application: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_content)
       end
+
+      it 'retains form field values after validation failure' do
+        sign_in_user
+        partial_answer = 'This answer is long enough to pass length validation requirements'
+        post role_applications_url, params: { role_application: {
+          org_role_id: organizational_role.id,
+          answer_1: partial_answer,
+          answer_2: 'Short', # Too short - will cause validation failure
+          answer_3: 'Also valid answer with more than fifty characters for validation'
+        } }
+
+        expect(response).to have_http_status(:unprocessable_content)
+        # Verify the form displays with the submitted values retained
+        expect(response.body).to include(partial_answer)
+        expect(response.body).to include('Short')
+        expect(response.body).to include('Also valid answer')
+        # Verify the organizational role questions are displayed
+        expect(response.body).to include(organizational_role.question_1)
+        expect(response.body).to include(organizational_role.question_2)
+        expect(response.body).to include(organizational_role.question_3)
+      end
     end
 
     context 'when organizational role has no questions' do
@@ -193,6 +214,27 @@ RSpec.describe '/role_applications', type: :request do
         role_application = user.role_applications.create!(valid_attributes)
         patch role_application_url(role_application), params: { role_application: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_content)
+      end
+
+      it 'retains form field values after validation failure' do
+        sign_in_user
+        role_application = user.role_applications.create!(valid_attributes)
+        updated_answer = 'This is a valid updated answer with more than fifty characters'
+        patch role_application_url(role_application), params: { role_application: {
+          answer_1: updated_answer,
+          answer_2: 'Too short', # Will cause validation failure
+          answer_3: 'Valid third answer with more than fifty characters for validation'
+        } }
+
+        expect(response).to have_http_status(:unprocessable_content)
+        # Verify the form displays with the submitted values retained
+        expect(response.body).to include(updated_answer)
+        expect(response.body).to include('Too short')
+        expect(response.body).to include('Valid third answer')
+        # Verify the organizational role questions are displayed
+        expect(response.body).to include(organizational_role.question_1)
+        expect(response.body).to include(organizational_role.question_2)
+        expect(response.body).to include(organizational_role.question_3)
       end
     end
   end

@@ -8,6 +8,9 @@ gem 'concurrent-ruby', '1.3.5'
 
 gem 'rails', '~> 8.0.2.1', '>= 8.0.2.1'
 
+# CSV library for data export
+gem 'csv'
+
 # Use postgresql as the database for Active Record
 
 gem 'pg', '~> 1.1'
