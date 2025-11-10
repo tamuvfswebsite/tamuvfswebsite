@@ -18,6 +18,6 @@ RSpec.describe 'admin_panel/sponsors/new.html.erb', type: :view do
   end
 
   it 'includes navigation back to sponsors' do
-    expect(rendered).to have_link('Back to Sponsors', href: admin_panel_sponsors_path)
+    expect(rendered).to have_button('Back to Sponsors')
   end
 end
