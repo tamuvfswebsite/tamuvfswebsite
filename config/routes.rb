@@ -58,9 +58,8 @@ Rails.application.routes.draw do
         get   :assign_users
         patch :update_users
       end
-      # Future sponsor routes (e.g., resumes, applications)
-      # resources :resumes, only: [:index]
-      # resources :applications, only: [:index]
     end
+
+    resources :design_updates
   end
 end

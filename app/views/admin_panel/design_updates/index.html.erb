@@ -1,0 +1,46 @@
+<!-- app/views/admin_panel/design_updates/index.html.erb -->
+<div class="admin-design-updates">
+  <div class="header">
+    <h1>Design Updates</h1>
+    <%= link_to "New Design Update", new_admin_panel_design_update_path, class: "btn-primary" %>
+  </div>
+
+  <% if @design_updates.any? %>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Title</th>
+          <th>PDF</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @design_updates.each do |update| %>
+          <tr>
+            <td><%= update.update_date.strftime("%b %d, %Y") %></td>
+            <td><%= update.title %></td>
+            <td>
+              <% if update.pdf_file.attached? %>
+                <%= link_to "View PDF", rails_blob_path(update.pdf_file, disposition: "inline"), 
+                           target: "_blank", class: "btn-small" %>
+              <% else %>
+                <em>No PDF</em>
+              <% end %>
+            </td>
+            <td class="actions">
+              <%= link_to "Edit", edit_admin_panel_design_update_path(update), class: "btn-small" %>
+              <%= button_to "Delete", 
+                           admin_panel_design_update_path(update), 
+                           method: :delete, 
+                           data: { confirm: "Are you sure?" },
+                           class: "btn-small btn-danger" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No design updates yet.</p>
+  <% end %>
+</div>

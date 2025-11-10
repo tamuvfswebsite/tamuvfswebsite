@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe 'AdminPanel::Sponsors', type: :request do
   before do
-    # Skip authentication for tests
     allow_any_instance_of(ApplicationController).to receive(:admin_user?).and_return(true)
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(double('AdminUser'))
   end
