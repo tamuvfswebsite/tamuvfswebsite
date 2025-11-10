@@ -14,7 +14,7 @@
 <% end %>
 
 <div class="sponsor-details">
-  <p><strong>Website:</strong> <%= link_to @sponsor.website, @sponsor.website, target: '_blank' if @sponsor.website.present? %></p>
+  <p><strong>Website:</strong> <%= sponsor_website_link(@sponsor.website) %></p>
   <p><strong>Tier:</strong> <%= @sponsor.tier %></p>
   <p><strong>Contact Email:</strong> <%= @sponsor.contact_email %></p>
   <p><strong>Phone Number:</strong> <%= @sponsor.phone_number %></p>
