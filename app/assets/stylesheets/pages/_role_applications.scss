@@ -175,6 +175,24 @@
       display: flex;
       gap: var(--space-sm);
       margin-top: var(--space-sm);
+
+      .btn {
+        min-width: 160px;
+        height: 40px;
+        padding: 10px 16px;
+        box-sizing: border-box;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 1.2;
+        text-align: center;
+        display: inline-block;
+      }
+
+      form {
+        display: inline;
+        margin: 0;
+        vertical-align: top;
+      }
     }
   }
 
@@ -186,6 +204,30 @@
     border-radius: 4px;
     text-align: center;
     font-size: 16px;
+  }
+
+  .show-page-actions {
+    margin-top: 30px;
+    display: flex;
+    gap: var(--space-sm);
+
+    .btn {
+      min-width: 180px;
+      height: 40px;
+      padding: 10px 20px;
+      box-sizing: border-box;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 1.2;
+      text-align: center;
+      display: inline-block;
+    }
+
+    form {
+      display: inline;
+      margin: 0;
+      vertical-align: top;
+    }
   }
 }
 
