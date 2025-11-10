@@ -1,10 +1,19 @@
 <h1>Assign Users to <%= @sponsor.company_name %></h1>
 
+<% if @sponsor.default_sponsor? %>
+  <div style="background-color: #fff3cd; border: 1px solid #ffc107; padding: 12px; margin-bottom: 20px; border-radius: 4px;">
+    <strong>Note:</strong> This is the default sponsor. Users assigned here are not yet associated with a real sponsor company.
+  </div>
+<% end %>
+
 <p>Currently assigned: <strong><%= @sponsor.users.count %></strong> user(s)</p>
 
 <%= form_with model: @sponsor, url: update_users_admin_panel_sponsor_path(@sponsor), method: :patch, local: true do |f| %>
   <div>
     <h3>Select Users (only users with 'sponsor' role):</h3>
+    <p style="color: #666; font-size: 14px; margin-bottom: 15px;">
+      <em>Note: Each user can only be assigned to one sponsor at a time. Selecting a user will remove them from their current sponsor.</em>
+    </p>
     
     <% if @available_users.any? %>
       <%= f.collection_check_boxes :user_ids, @available_users, :id, :email, checked: @sponsor.user_ids do |b| %>
@@ -14,6 +23,11 @@
             <%= b.object.email %> 
             <% if b.object.first_name.present? %>
               (<%= b.object.first_name %> <%= b.object.last_name %>)
+            <% end %>
+            <% if b.object.primary_sponsor && b.object.primary_sponsor != @sponsor %>
+              <span style="color: #999; font-size: 13px;">
+                - Currently with: <%= b.object.primary_sponsor.company_name %>
+              </span>
             <% end %>
           <% end %>
         </div>

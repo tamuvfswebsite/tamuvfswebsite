@@ -6,11 +6,24 @@ class SponsorsController < ApplicationController
     @sponsors = Sponsor.all
   end
 
-  def edit; end
+  def edit
+    if @sponsor.nil? || @sponsor.default_sponsor?
+      redirect_to sponsor_dashboard_index_path, 
+                  alert: 'You cannot edit the default sponsor profile. Please contact an administrator to be assigned to a company.'
+      return
+    end
+  end
 
   def update
+    if @sponsor.nil? || @sponsor.default_sponsor?
+      redirect_to sponsor_dashboard_index_path, 
+                  alert: 'You cannot edit the default sponsor profile.'
+      return
+    end
+
     if @sponsor.update(sponsor_params)
-      redirect_to sponsor_dashboard_index_path(@sponsor), notice: 'Your company profile was successfully updated.'
+      redirect_to sponsor_dashboard_index_path, 
+                  notice: 'Your company profile was successfully updated.'
     else
       render :edit
     end
@@ -19,7 +32,14 @@ class SponsorsController < ApplicationController
   private
 
   def set_sponsor
-    @sponsor = current_user.sponsors.first
+    @sponsor = current_user.primary_sponsor
+    
+    # Assign to default sponsor if none exists
+    if @sponsor.nil?
+      default = Sponsor.default_sponsor
+      current_user.sponsors << default
+      @sponsor = default
+    end
   end
 
   def sponsor_params

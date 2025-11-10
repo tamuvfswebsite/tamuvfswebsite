@@ -3,7 +3,7 @@ module AdminPanel
     before_action :set_sponsor, only: %i[show edit update destroy assign_users update_users]
 
     def index
-      @sponsors = Sponsor.all
+      @sponsors = Sponsor.all.order(:company_name)
     end
 
     def show; end
@@ -32,8 +32,15 @@ module AdminPanel
     end
 
     def destroy
+      if @sponsor.default_sponsor?
+        redirect_to admin_panel_sponsors_path, 
+                    alert: 'Cannot delete the default sponsor.'
+        return
+      end
+
       @sponsor.destroy
-      redirect_to admin_panel_sponsors_path, notice: 'Sponsor was successfully deleted.'
+      redirect_to admin_panel_sponsors_path, 
+                  notice: 'Sponsor was successfully deleted. Associated users were moved to the default sponsor.'
     end
 
     def assign_users
@@ -72,11 +79,30 @@ module AdminPanel
     end
 
     def assign_users_to_sponsor(user_ids)
-      @sponsor.users.clear
-      return unless user_ids.any?
+      default_sponsor = Sponsor.default_sponsor
+      
+      # Clear existing assignments for this sponsor
+      @sponsor.users.each do |user|
+        user.sponsors.clear
+      end
 
-      users = User.where(id: user_ids, role: 'sponsor')
-      @sponsor.users << users
+      # Assign selected users to this sponsor
+      if user_ids.any?
+        users = User.where(id: user_ids, role: 'sponsor')
+        users.each do |user|
+          # Clear any existing sponsor assignments
+          user.sponsors.clear
+          # Assign to this sponsor
+          user.sponsors << @sponsor
+        end
+      end
+
+      # Ensure all sponsor users without a sponsor get assigned to default
+      User.where(role: 'sponsor').includes(:sponsors).each do |user|
+        if user.sponsors.empty?
+          user.sponsors << default_sponsor
+        end
+      end
     end
 
     def redirect_success
