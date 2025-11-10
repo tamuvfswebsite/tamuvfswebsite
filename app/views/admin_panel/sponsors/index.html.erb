@@ -1,59 +1,65 @@
-<h1>Sponsor Management</h1>
+<div class="admin-sponsors-page">
+  <div class="page-header">
+    <h1>Sponsor Management</h1>
+    <div class="header-actions">
+      <%= button_to "Create New Sponsor", new_admin_panel_sponsor_path, method: :get, class: "btn btn-primary", form: { style: 'display: inline;' } %>
+    </div>
+  </div>
 
-<div class="actions">
-  <%= link_to "Create New Sponsor", new_admin_panel_sponsor_path %>
-</div>
-
-<div class="sponsors-section">
-  <h2>Sponsors</h2>
   <% if @sponsors.any? %>
-    <table>
-      <thead>
-        <tr>
-          <th>Company Name</th>
-          <th>Website</th>
-          <th>Tier</th>
-          <th>Contact Email</th>
-          <th>Resume Access</th>
-          <th>Users</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <% @sponsors.each do |sponsor| %>
-          <tr <%= 'style="background-color: #f8f9fa;"'.html_safe if sponsor.default_sponsor? %>>
-            <td>
-              <%= sponsor.company_name %>
-              <% if sponsor.default_sponsor? %>
-                <span style="background-color: #6c757d; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px; margin-left: 5px;">DEFAULT</span>
-              <% end %>
-            </td>
-            <td><%= sponsor.website %></td>
-            <td><%= sponsor.tier %></td>
-            <td><%= sponsor.contact_email %></td>
-            <td><%= sponsor.resume_access? ? "Yes" : "No" %></td>
-            <td><%= sponsor.users.count %></td>
-            <td>
-              <%= link_to "View", admin_panel_sponsor_path(sponsor) %>
-              <% unless sponsor.default_sponsor? %>
-                <%= link_to "Edit", edit_admin_panel_sponsor_path(sponsor) %>
-                <%= button_to 'Delete', admin_panel_sponsor_path(sponsor),
-                  method: :delete,
-                  data: { confirm: "Are you sure? All users assigned to this sponsor will be moved to the default sponsor." } %>
-              <% else %>
-                <span style="color: #999; font-size: 13px;">Cannot edit/delete</span>
-              <% end %>
-            </td>
+    <div class="sponsors-table-wrapper">
+      <table class="sponsors-table">
+        <thead>
+          <tr>
+            <th>Company Name</th>
+            <th>Website</th>
+            <th>Tier</th>
+            <th>Contact Email</th>
+            <th>Resume Access</th>
+            <th>Users</th>
+            <th class="actions-column">Actions</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% else %>
-    <p>No sponsors found.</p>
-  <% end %>
-</div>
+        </thead>
 
-<div class="actions">
-  <%= link_to 'Back to Admin Dashboard', admin_panel_root_path %>
+        <tbody>
+          <% @sponsors.each do |sponsor| %>
+            <tr <%= 'class="default-sponsor-row"'.html_safe if sponsor.default_sponsor? %>>
+              <td class="company-name">
+                <%= sponsor.company_name %>
+                <% if sponsor.default_sponsor? %>
+                  <span class="default-badge">DEFAULT</span>
+                <% end %>
+              </td>
+              <td><%= sponsor.website %></td>
+              <td><span class="tier-badge tier-<%= sponsor.tier&.downcase %>"><%= sponsor.tier %></span></td>
+              <td><%= sponsor.contact_email %></td>
+              <td class="resume-access"><%= sponsor.resume_access? ? "Yes" : "No" %></td>
+              <td class="users-count"><%= sponsor.users.count %></td>
+              <td class="actions-cell">
+                <%= button_to "View", admin_panel_sponsor_path(sponsor), method: :get, class: "btn btn-primary", form: { style: 'display: inline;' } %>
+                <% unless sponsor.default_sponsor? %>
+                  <%= button_to "Edit", edit_admin_panel_sponsor_path(sponsor), method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
+                  <%= button_to 'Delete', admin_panel_sponsor_path(sponsor),
+                    method: :delete,
+                    class: "btn btn-danger",
+                    data: { turbo_confirm: "Are you sure? All users assigned to this sponsor will be moved to the default sponsor." },
+                    form: { style: 'display: inline;' } %>
+                <% else %>
+                  <span class="cannot-edit-text">Cannot edit/delete</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <p>No sponsors found.</p>
+    </div>
+  <% end %>
+
+  <div class="page-footer">
+    <%= button_to 'Back to Admin Dashboard', admin_panel_root_path, method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
+  </div>
 </div>

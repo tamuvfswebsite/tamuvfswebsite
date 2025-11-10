@@ -1,0 +1,261 @@
+..........................................................................................................................................................................................F....................................................................................................................................................................................................................................................................FF..FF.F..........................
+
+Failures:
+
+  1) AdminPanel::Events show attendance and RSVPs shows RSVP counts and attendance stats (sunny)
+     Failure/Error: expect(response.body).to include('1 attended out of 1 RSVPs')
+
+       expected "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Vertical Flight Society</title>\n    \n    \n    <link...  </tr>\n          </tbody>\n        </table>\n      </div>\n  </div>\n</div>\n  </body>\n</html>\n" to include "1 attended out of 1 RSVPs"
+       Diff:
+       @@ -1 +1,209 @@
+       -1 attended out of 1 RSVPs
+       +<!DOCTYPE html>
+       +<html>
+       +  <head>
+       +    <title>Vertical Flight Society</title>
+       +    
+       +    
+       +    <link rel="stylesheet" href="/assets/application-7ec8e5935a7c68beaed1fd8d305e42c54d5f5629dbd31d21eeeb679510361325.css" media="all" data-turbolinks-track="reload" />
+       +    <script type="importmap" data-turbo-track="reload">{
+       +  "imports": {
+       +    "application": "/assets/application-da90317cb7ff540538207ad109cc05043774a0bed4ed9965575e3ca23d7d0b47.js",
+       +    "@hotwired/turbo-rails": "/assets/turbo.min-38d030897e3554a265d3a3b6bdf4fb7509b08197ba2b6e3761683c07e776c1bc.js",
+       +    "@hotwired/stimulus": "/assets/stimulus.min-dd364f16ec9504dfb72672295637a1c8838773b01c0b441bd41008124c407894.js",
+       +    "@hotwired/stimulus-loading": "/assets/stimulus-loading-3576ce92b149ad5d6959438c6f291e2426c86df3b874c525b30faad51b0d96b3.js",
+       +    "role_applications": "/assets/role_applications-010331b7e0a0e5ce6c29eff0ad558090645c7ff8c2edf55d992e4958376b3846.js",
+       +    "controllers/application": "/assets/controllers/application-368d98631bccbf2349e0d4f8269afb3fe9625118341966de054759d96ea86c7e.js",
+       +    "controllers/hello_controller": "/assets/controllers/hello_controller-549135e8e7c683a538c3d6d517339ba470fcfb79d62f738a0a089ba41851a554.js",
+       +    "controllers": "/assets/controllers/index-2db729dddcc5b979110e98de4b6720f83f91a123172e87281d5a58410fc43806.js",
+       +    "controllers/navigation_controller": "/assets/controllers/navigation_controller-397c62dd99385ef71fdd7ba7dae26e12ea00601a7723178bac9373b91862bf20.js"
+       +  }
+       +}</script>
+       +<link rel="modulepreload" href="/assets/application-da90317cb7ff540538207ad109cc05043774a0bed4ed9965575e3ca23d7d0b47.js">
+       +<link rel="modulepreload" href="/assets/turbo.min-38d030897e3554a265d3a3b6bdf4fb7509b08197ba2b6e3761683c07e776c1bc.js">
+       +<link rel="modulepreload" href="/assets/stimulus.min-dd364f16ec9504dfb72672295637a1c8838773b01c0b441bd41008124c407894.js">
+       +<link rel="modulepreload" href="/assets/stimulus-loading-3576ce92b149ad5d6959438c6f291e2426c86df3b874c525b30faad51b0d96b3.js">
+       +<link rel="modulepreload" href="/assets/role_applications-010331b7e0a0e5ce6c29eff0ad558090645c7ff8c2edf55d992e4958376b3846.js">
+       +<link rel="modulepreload" href="/assets/controllers/application-368d98631bccbf2349e0d4f8269afb3fe9625118341966de054759d96ea86c7e.js">
+       +<link rel="modulepreload" href="/assets/controllers/hello_controller-549135e8e7c683a538c3d6d517339ba470fcfb79d62f738a0a089ba41851a554.js">
+       +<link rel="modulepreload" href="/assets/controllers/index-2db729dddcc5b979110e98de4b6720f83f91a123172e87281d5a58410fc43806.js">
+       +<link rel="modulepreload" href="/assets/controllers/navigation_controller-397c62dd99385ef71fdd7ba7dae26e12ea00601a7723178bac9373b91862bf20.js">
+       +<script type="module">import "application"</script>
+       +    <style>
+       +        .flash__alert   { color: red; }
+       +        .flash__notice  { color: blue; }
+       +        .flash__success { color: green; }
+       +    </style>
+       +  </head>
+       +
+       +  <body>
+       +    <nav class="navbar" role="navigation" aria-label="Main navigation" data-controller="navigation">
+       +  <div class="navbar-container">
+       +    <div class="navbar-brand">
+       +      <a class="navbar-logo" style="display: flex; align-items: center;" href="/">
+       +        <img alt="Home" style="height: 40px; width: auto; display: block;" src="/assets/whitelogo-3c190a6ccf8991ae84cfbef556f6da25cc7103e93a5d8467647c84bc74729b3c.png" />
+       +</a>    </div>
+       +
+       +    <button class="navbar-toggle"
+       +            aria-label="Toggle navigation menu"
+       +            aria-expanded="false"
+       +            aria-controls="navbar-menu"
+       +            type="button"
+       +            data-navigation-target="toggle"
+       +            data-action="click->navigation#toggle">
+       +      <span class="navbar-toggle-icon"></span>
+       +      <span class="navbar-toggle-icon"></span>
+       +      <span class="navbar-toggle-icon"></span>
+       +    </button>
+       +
+       +    <div class="navbar-menu" id="navbar-menu" data-navigation-target="menu">
+       +      <ul class="navbar-nav">
+       +          <li class="nav-item">
+       +            <a class="nav-link " data-action="click-&gt;navigation#closeMenu" href="/">Home</a>
+       +          </li>
+       +          <li class="nav-item">
+       +            <a class="nav-link " data-action="click-&gt;navigation#closeMenu" href="/events">Events</a>
+       +          </li>
+       +          <li class="nav-item">
+       +              <li class="nav-item">
+       +                <a class="nav-link " data-action="click-&gt;navigation#closeMenu" href="/resumes">All Resumes</a>
+       +              </li>
+       +              <li class="nav-item">
+       +                <a class="nav-link " data-action="click-&gt;navigation#closeMenu" href="/users/1526/resume/new">My Resume</a>
+       +              </li>
+       +          </li>
+       +            <li class="nav-item">
+       +              <a class="nav-link " data-action="click-&gt;navigation#closeMenu" href="/users/1526">My Profile</a>
+       +            </li>
+       +            <li class="nav-item">
+       +              <a class="nav-link active" data-action="click-&gt;navigation#closeMenu" href="/admin_panel">Admin Panel</a>
+       +            </li>
+       +          <li class="nav-item">
+       +            <a class="nav-link" data-turbo-prefetch="false" data-action="click-&gt;navigation#closeMenu" href="/admins/sign_out">Sign Out</a>
+       +          </li>
+       +      </ul>
+       +    </div>
+       +  </div>
+       +</nav>
+       +
+       +    <div class="admin-event-show-page">
+       +  <div class="page-header">
+       +    <h1>Workshop</h1>
+       +    <div class="header-actions">
+       +      <form style="display: inline;" class="button_to" method="get" action="/admin_panel/events/716/edit"><input class="btn btn-primary" type="submit" value="Edit Event" /></form>
+       +      <form style="display: inline;" class="button_to" method="post" action="/admin_panel/events/716"><input type="hidden" name="_method" value="delete" autocomplete="off" /><input class="btn btn-danger" data-turbo-confirm="Are you sure you want to delete this event?" type="submit" value="Delete Event" /></form>
+       +      <form style="display: inline;" class="button_to" method="get" action="/admin_panel/events"><input class="btn btn-outline" type="submit" value="Back to Events" /></form>
+       +    </div>
+       +  </div>
+       +
+       +  <!-- Event Details Card -->
+       +  <div class="event-details-card">
+       +    <h2>Event Details</h2>
+       +    <div class="details-grid">
+       +      <div class="detail-item">
+       +        <span class="detail-label">Date & Time:</span>
+       +        <span class="detail-value">November 11, 2025 at 01:29 PM</span>
+       +      </div>
+       +      <div class="detail-item">
+       +        <span class="detail-label">Location:</span>
+       +        <span class="detail-value">Lab</span>
+       +      </div>
+       +      <div class="detail-item">
+       +        <span class="detail-label">Status:</span>
+       +        <span class="detail-value">
+       +          <span class="status-badge status-upcoming">
+       +            Upcoming
+       +          </span>
+       +        </span>
+       +      </div>
+       +      <div class="detail-item">
+       +        <span class="detail-label">Visibility:</span>
+       +        <span class="detail-value">
+       +            <span class="badge badge-all">All Roles</span>
+       +        </span>
+       +      </div>
+       +    </div>
+       +    <div class="description-section">
+       +      <span class="detail-label">Description:</span>
+       +      <p class="description-text">desc</p>
+       +    </div>
+       +  </div>
+       +
+       +  <!-- RSVP Summary Card -->
+       +  <div class="rsvp-summary-card">
+       +    <h2>RSVP Summary</h2>
+       +    <div class="rsvp-counts-grid">
+       +      <div class="count-card count-yes">
+       +        <div class="count-number">1</div>
+       +        <div class="count-label">Yes</div>
+       +      </div>
+       +      <div class="count-card count-maybe">
+       +        <div class="count-number">0</div>
+       +        <div class="count-label">Maybe</div>
+       +      </div>
+       +      <div class="count-card count-no">
+       +        <div class="count-number">0</div>
+       +        <div class="count-label">No</div>
+       +      </div>
+       +    </div>
+       +    <div class="rsvp-status-message">
+       +        <span class="status-open">✓ RSVP is currently open</span>
+       +    </div>
+       +  </div>
+       +
+       +  <!-- RSVPs Table Card -->
+       +  <div class="data-table-card">
+       +    <h2>RSVPs (1)</h2>
+       +      <div class="table-container">
+       +        <table class="data-table">
+       +          <thead>
+       +            <tr>
+       +              <th>Name</th>
+       +              <th>Email</th>
+       +              <th>Status</th>
+       +              <th>Responded At</th>
+       +            </tr>
+       +          </thead>
+       +          <tbody>
+       +              <tr>
+       +                <td class="name-cell">Test User</td>
+       +                <td class="email-cell">rsvpuser@test.com</td>
+       +                <td>
+       +                  <span class="rsvp-badge rsvp-yes">Yes</span>
+       +                </td>
+       +                <td class="date-cell">November 10, 2025 at 01:29 PM</td>
+       +              </tr>
+       +          </tbody>
+       +        </table>
+       +      </div>
+       +  </div>
+       +
+       +  <!-- Attendance Table Card -->
+       +  <div class="data-table-card">
+       +    <h2>Attendance</h2>
+       +    <div class="attendance-stats">
+       +      <span class="stats-text">
+       +        <strong>1</strong> attended out of <strong>1</strong> RSVPs (Yes)
+       +      </span>
+       +    </div>
+       +      <div class="table-container">
+       +        <table class="data-table">
+       +          <thead>
+       +            <tr>
+       +              <th>Name</th>
+       +              <th>Email</th>
+       +              <th>Checked In At</th>
+       +            </tr>
+       +          </thead>
+       +          <tbody>
+       +              <tr>
+       +                <td class="name-cell">Test User</td>
+       +                <td class="email-cell">rsvpuser@test.com</td>
+       +                <td class="date-cell">November 10, 2025 at 01:29 PM</td>
+       +              </tr>
+       +          </tbody>
+       +        </table>
+       +      </div>
+       +  </div>
+       +</div>
+       +  </body>
+       +</html>
+     # ./spec/requests/admin_panel/events_show_attendance_spec.rb:24:in 'block (2 levels) in <top (required)>'
+
+  2) admin_panel/sponsors/edit.html.erb renders the form with correct fields
+     Failure/Error: expect(rendered).to have_field('Sponsor Company Name', with: 'TechCorp')
+       expected to find field "Sponsor Company Name" that is not disabled but there were no matches
+     # ./spec/views/admin_panel/sponsors/edit.html.erb_spec.rb:28:in 'block (2 levels) in <top (required)>'
+
+  3) admin_panel/sponsors/edit.html.erb includes navigation buttons
+     Failure/Error: expect(rendered).to have_button('Show Sponsor')
+       expected to find button "Show Sponsor" that is not disabled but there were no matches
+     # ./spec/views/admin_panel/sponsors/edit.html.erb_spec.rb:33:in 'block (2 levels) in <top (required)>'
+
+  4) admin_panel/sponsors/index.html.erb renders action links for each sponsor
+     Failure/Error: expect(rendered).to have_link('Edit', href: edit_admin_panel_sponsor_path(sponsor1))
+       expected to find link "Edit" with href "/admin_panel/sponsors/1/edit" but there were no matches
+     # ./spec/views/admin_panel/sponsors/index.html.erb_spec.rb:22:in 'block (2 levels) in <top (required)>'
+
+  5) admin_panel/sponsors/index.html.erb has a link to create a new sponsor
+     Failure/Error: expect(rendered).to have_link('Create New Sponsor', href: new_admin_panel_sponsor_path)
+       expected to find link "Create New Sponsor" with href "/admin_panel/sponsors/new" but there were no matches
+     # ./spec/views/admin_panel/sponsors/index.html.erb_spec.rb:27:in 'block (2 levels) in <top (required)>'
+
+  6) admin_panel/sponsors/new.html.erb renders the sponsor form
+     Failure/Error: expect(rendered).to have_field('Sponsor Company Name')
+       expected to find field "Sponsor Company Name" that is not disabled but there were no matches
+     # ./spec/views/admin_panel/sponsors/new.html.erb_spec.rb:17:in 'block (2 levels) in <top (required)>'
+
+Finished in 16.63 seconds (files took 3.67 seconds to load)
+481 examples, 6 failures
+
+Failed examples:
+
+rspec ./spec/requests/admin_panel/events_show_attendance_spec.rb:15 # AdminPanel::Events show attendance and RSVPs shows RSVP counts and attendance stats (sunny)
+rspec ./spec/views/admin_panel/sponsors/edit.html.erb_spec.rb:26 # admin_panel/sponsors/edit.html.erb renders the form with correct fields
+rspec ./spec/views/admin_panel/sponsors/edit.html.erb_spec.rb:32 # admin_panel/sponsors/edit.html.erb includes navigation buttons
+rspec ./spec/views/admin_panel/sponsors/index.html.erb_spec.rb:21 # admin_panel/sponsors/index.html.erb renders action links for each sponsor
+rspec ./spec/views/admin_panel/sponsors/index.html.erb_spec.rb:26 # admin_panel/sponsors/index.html.erb has a link to create a new sponsor
+rspec ./spec/views/admin_panel/sponsors/new.html.erb_spec.rb:15 # admin_panel/sponsors/new.html.erb renders the sponsor form
+
+Coverage report generated for RSpec to /csce431/coverage.
+Line Coverage: 91.06% (957 / 1051)

@@ -1,50 +1,44 @@
-<div class="container-fluid">
-  <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800"><%= @organizational_role.name %></h1>
-    <div>
-      <%= link_to "Edit", edit_admin_panel_organizational_role_path(@organizational_role), class: "btn btn-sm btn-warning" %>
-      <%= link_to "Back to List", admin_panel_organizational_roles_path, class: "btn btn-sm btn-secondary" %>
+<div class="admin-org-role-show-page">
+  <div class="page-header">
+    <h1><%= @organizational_role.name %></h1>
+    <div class="header-actions">
+      <%= button_to "Edit", edit_admin_panel_organizational_role_path(@organizational_role), method: :get, class: "btn btn-primary", form: { style: 'display: inline;' } %>
+      <%= button_to "Back to List", admin_panel_organizational_roles_path, method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
     </div>
   </div>
 
-  <div class="card shadow mb-4">
-    <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Role Details</h6>
+  <!-- Role Details Card -->
+  <div class="details-card">
+    <h2>Role Details</h2>
+    <div class="detail-section">
+      <span class="detail-label">Description</span>
+      <p class="detail-text"><%= @organizational_role.description %></p>
     </div>
-    <div class="card-body">
-      <div class="mb-3">
-        <strong>Description:</strong>
-        <p><%= @organizational_role.description %></p>
+  </div>
+
+  <!-- Application Questions Card -->
+  <div class="questions-card">
+    <h2>Application Questions</h2>
+
+    <% questions = [@organizational_role.question_1, @organizational_role.question_2, @organizational_role.question_3].compact %>
+
+    <% if questions.any? %>
+      <div class="questions-list">
+        <% questions.each_with_index do |question, index| %>
+          <div class="question-item">
+            <div class="question-number">Question <%= index + 1 %></div>
+            <div class="question-text"><%= question %></div>
+          </div>
+        <% end %>
       </div>
+    <% else %>
+      <div class="empty-questions">
+        <p>No application questions configured for this role.</p>
+      </div>
+    <% end %>
+  </div>
 
-      <hr>
-
-      <h5 class="mt-4 mb-3">Application Questions</h5>
-      
-      <% if @organizational_role.question_1.present? %>
-        <div class="mb-4">
-          <strong>Question 1:</strong>
-          <p class="ml-3"><%= @organizational_role.question_1 %></p>
-        </div>
-      <% end %>
-
-      <% if @organizational_role.question_2.present? %>
-        <div class="mb-4">
-          <strong>Question 2:</strong>
-          <p class="ml-3"><%= @organizational_role.question_2 %></p>
-        </div>
-      <% end %>
-
-      <% if @organizational_role.question_3.present? %>
-        <div class="mb-4">
-          <strong>Question 3:</strong>
-          <p class="ml-3"><%= @organizational_role.question_3 %></p>
-        </div>
-      <% end %>
-
-      <% if [@organizational_role.question_1, @organizational_role.question_2, @organizational_role.question_3].all?(&:blank?) %>
-        <p class="text-muted">No application questions configured for this role.</p>
-      <% end %>
-    </div>
+  <div class="page-footer">
+    <%= button_to 'Back to Roles', admin_panel_organizational_roles_path, method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
   </div>
 </div>

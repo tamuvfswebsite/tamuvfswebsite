@@ -18,12 +18,12 @@ RSpec.describe 'admin_panel/sponsors/index.html.erb', type: :view do
     expect(rendered).to include('DataWorks')
   end
 
-  it 'renders action links for each sponsor' do
-    expect(rendered).to have_link('Edit', href: edit_admin_panel_sponsor_path(sponsor1))
+  it 'renders action buttons for each sponsor' do
+    expect(rendered).to have_button('Edit')
     expect(rendered).to have_button('Delete')
   end
 
-  it 'has a link to create a new sponsor' do
-    expect(rendered).to have_link('Create New Sponsor', href: new_admin_panel_sponsor_path)
+  it 'has a button to create a new sponsor' do
+    expect(rendered).to have_button('Create New Sponsor')
   end
 end

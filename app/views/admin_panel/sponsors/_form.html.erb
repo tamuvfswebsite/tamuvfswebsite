@@ -1,6 +1,6 @@
-<%= form_with(model: [:admin_panel, sponsor], local: true) do |form| %>
+<%= form_with(model: [:admin_panel, sponsor], local: true, class: 'sponsor-form') do |form| %>
   <% if sponsor.errors.any? %>
-    <div class="error-messages">
+    <div class="form-errors">
       <h4><%= pluralize(sponsor.errors.count, "error") %> prohibited this sponsor from being saved:</h4>
       <ul>
         <% sponsor.errors.full_messages.each do |message| %>
@@ -10,73 +10,87 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :company_name, "Sponsor Company Name" %>
-    <%= form.text_field :company_name %>
+  <div class="form-section">
+    <h3>Basic Information</h3>
+
+    <div class="form-field">
+      <%= form.label :company_name, "Company Name" %>
+      <%= form.text_field :company_name, class: "form-input", placeholder: "e.g., Acme Corporation" %>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <%= form.label :tier, "Sponsorship Tier" %>
+        <%= form.select :tier, options_for_select(["Gold", "Silver", "Bronze", "Maroon"], sponsor.tier), { prompt: "Select tier..." }, class: "form-select" %>
+      </div>
+
+      <div class="form-field">
+        <%= form.label :website, "Website" %>
+        <%= form.url_field :website, class: "form-input", placeholder: "https://example.com" %>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <%= form.label :company_description, "Company Description" %>
+      <%= form.text_area :company_description, rows: 4, class: "form-textarea", placeholder: "Describe the company and what they do..." %>
+    </div>
   </div>
 
-  <div class="field">
-    <%= form.label :tier, "Sponsorship Tier" %>
-    <%= form.select :tier, options_for_select(["Gold", "Silver", "Bronze", "Maroon"], sponsor.tier) %>
+  <div class="form-section">
+    <h3>Contact Information</h3>
+
+    <div class="form-row">
+      <div class="form-field">
+        <%= form.label :contact_email, "Contact Email" %>
+        <%= form.email_field :contact_email, class: "form-input", placeholder: "contact@example.com" %>
+      </div>
+
+      <div class="form-field">
+        <%= form.label :phone_number, "Phone Number" %>
+        <%= form.telephone_field :phone_number, class: "form-input", placeholder: "(555) 123-4567" %>
+      </div>
+    </div>
   </div>
 
-  <div class="field">
-    <%= form.label :contact_email, "Contact Email" %>
-    <%= form.email_field :contact_email %>
+  <div class="form-section">
+    <h3>Permissions</h3>
+
+    <div class="form-field checkbox-field">
+      <%= form.check_box :resume_access, class: "form-checkbox" %>
+      <%= form.label :resume_access, "Allow this sponsor to access student resumes", class: "checkbox-label" %>
+    </div>
   </div>
 
-  <div class="field">
-    <%= form.label :phone_number, "Phone Number" %>
-    <%= form.telephone_field :phone_number %>
-  </div>
+  <div class="form-section">
+    <h3>Company Logo</h3>
 
-  <div class="field">
-    <%= form.label :company_description, "Company Description" %>
-    <%= form.text_area :company_description, rows: 4 %>
-  </div>
-
-  <div class="field">
-    <%= form.label :website, "Sponsor Website" %>
-    <%= form.url_field :website %>
-  </div>
-
-  <div class="field">
-    <%= form.label :resume_access, "Resume Access" %>
-    <%= form.check_box :resume_access %>
-    <span>Allow this sponsor to access student resumes</span>
-  </div>
-
-  <!-- Logo Upload Section -->
-  <div class="field" style="margin-top: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 4px; background-color: #f9f9f9;">
-    <%= form.label :logo, "Company Logo" %>
-    
     <% if sponsor.logo.attached? %>
-      <div style="margin: 10px 0;">
-        <p style="font-weight: 500; color: #333;">Current Logo:</p>
-        <%= image_tag sponsor.logo, style: 'max-width: 200px; max-height: 200px; border: 1px solid #ddd; border-radius: 4px;' %>
-        
+      <div class="current-logo-display">
+        <div class="logo-preview">
+          <%= image_tag sponsor.logo, alt: "#{sponsor.company_name} logo", class: "logo-image" %>
+        </div>
+
         <% if sponsor.persisted? %>
-          <div style="margin-top: 10px;">
-            <%= button_to "Remove Current Logo", 
-                remove_logo_admin_panel_sponsor_path(sponsor), 
+          <div class="logo-actions">
+            <%= button_to "Remove Current Logo",
+                remove_logo_admin_panel_sponsor_path(sponsor),
                 method: :delete,
-                data: { confirm: "Are you sure you want to remove this logo?" },
-                class: "btn btn-danger",
-                style: 'padding: 8px 16px; font-size: 14px;' %>
+                data: { turbo_confirm: "Are you sure you want to remove this logo?" },
+                class: "btn btn-danger btn-sm",
+                form: { style: 'display: inline;' } %>
           </div>
         <% end %>
       </div>
     <% end %>
-    
-    <div style="margin-top: 10px;">
-      <%= form.file_field :logo, accept: 'image/png,image/jpeg,image/jpg,image/gif,image/webp', style: 'margin-top: 5px;' %>
-      <p style="font-size: 13px; color: #666; margin-top: 5px;">
-        Accepted formats: JPEG, PNG, GIF, WebP (Max size: 5MB)
-      </p>
+
+    <div class="form-field">
+      <%= form.label :logo, "Upload Logo" %>
+      <%= form.file_field :logo, accept: 'image/png,image/jpeg,image/jpg,image/gif,image/webp', class: "form-file-input" %>
+      <span class="field-hint">Accepted formats: JPEG, PNG, GIF, WebP (Max size: 5MB)</span>
     </div>
   </div>
 
-  <div class="actions" style="display: flex; gap: 10px; margin-top: var(--space-md);">
-    <%= form.submit class: 'btn btn-primary', style: 'height: 48px; padding: 12px 32px; box-sizing: border-box; font-weight: 500; font-size: 16px; line-height: 1.2;' %>
+  <div class="form-actions">
+    <%= form.submit sponsor.persisted? ? "Update Sponsor" : "Create Sponsor", class: 'btn btn-primary' %>
   </div>
 <% end %>

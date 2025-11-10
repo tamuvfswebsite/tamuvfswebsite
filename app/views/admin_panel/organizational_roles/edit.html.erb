@@ -1,12 +1,14 @@
-<div class="container-fluid">
-  <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Edit Organizational Role</h1>
-    <%= link_to "Back to Role", admin_panel_organizational_role_path(@organizational_role), class: "btn btn-sm btn-secondary" %>
+<div class="admin-org-role-form-page">
+  <div class="page-header">
+    <h1>Edit Organizational Role</h1>
   </div>
 
-  <div class="card shadow mb-4">
-    <div class="card-body">
-      <%= render "form", organizational_role: @organizational_role %>
-    </div>
+  <div class="form-card">
+    <%= render "form", organizational_role: @organizational_role %>
+  </div>
+
+  <div class="form-footer">
+    <%= button_to 'View Role', admin_panel_organizational_role_path(@organizational_role), method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
+    <%= button_to 'Back to Roles', admin_panel_organizational_roles_path, method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
   </div>
 </div>

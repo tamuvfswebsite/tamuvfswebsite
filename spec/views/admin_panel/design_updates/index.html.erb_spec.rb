@@ -49,16 +49,16 @@ RSpec.describe 'admin_panel/design_updates/index.html.erb', type: :view do
     expect(rendered).to include('Update 2')
   end
 
-  it 'has a new design update link' do
-    expect(rendered).to have_link('New Design Update', href: new_admin_panel_design_update_path)
+  it 'has a new design update button' do
+    expect(rendered).to have_button('New Design Update')
   end
 
-  it 'displays PDF links' do
-    expect(rendered).to have_link('View PDF')
+  it 'displays PDF buttons' do
+    expect(rendered).to have_button('View PDF')
   end
 
-  it 'has edit links' do
-    expect(rendered).to have_link('Edit')
+  it 'has edit buttons' do
+    expect(rendered).to have_button('Edit')
   end
 
   it 'has delete buttons' do
