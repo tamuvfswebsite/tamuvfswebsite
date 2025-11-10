@@ -50,7 +50,8 @@ class SponsorsController < ApplicationController
       :tier,
       :contact_email,
       :phone_number,
-      :company_description
+      :company_description,
+      :logo
     )
   end
 end

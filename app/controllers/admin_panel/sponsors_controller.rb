@@ -44,6 +44,15 @@ module AdminPanel
                   'Sponsor was successfully deleted. Associated users were moved to the default sponsor.'
     end
 
+    def remove_logo
+      if @sponsor.logo.attached?
+        @sponsor.logo.purge
+        redirect_to edit_admin_panel_sponsor_path(@sponsor), notice: 'Logo was successfully removed.'
+      else
+        redirect_to edit_admin_panel_sponsor_path(@sponsor), alert: 'No logo to remove.'
+      end
+    end
+
     def assign_users
       @available_users = User.where(role: 'sponsor')
       @assigned_users = @sponsor.users
@@ -51,7 +60,7 @@ module AdminPanel
 
     def update_users
       user_ids = extract_user_ids
-      assign_users_to_sponsor(user_ids)
+      AdminPanel::SponsorUserAssigner.new(@sponsor, user_ids).call
       redirect_success
     rescue StandardError => e
       redirect_failure(e)
@@ -71,7 +80,8 @@ module AdminPanel
         :contact_email,
         :phone_number,
         :company_description,
-        :resume_access
+        :resume_access,
+        :logo
       )
     end
 
@@ -87,39 +97,6 @@ module AdminPanel
     def redirect_failure(exception)
       redirect_to assign_users_admin_panel_sponsor_path(@sponsor),
                   alert: "Error updating users: #{exception.message}"
-    end
-
-    def assign_users_to_sponsor(user_ids)
-      @sponsor = find_sponsor # assuming @sponsor is set elsewhere, or pass as param
-      default_sponsor = Sponsor.default_sponsor
-
-      clear_existing_assignments
-      assign_selected_users(user_ids)
-      assign_unassigned_sponsor_users(default_sponsor)
-    end
-
-    def clear_existing_assignments
-      @sponsor.users.find_each do |user|
-        user.sponsors.clear
-      end
-    end
-
-    def assign_selected_users(user_ids)
-      return unless user_ids.any?
-
-      User.where(id: user_ids, role: 'sponsor').find_each do |user|
-        user.sponsors.clear
-        user.sponsors << @sponsor
-      end
-    end
-
-    def assign_unassigned_sponsor_users(default_sponsor)
-      User.where(role: 'sponsor')
-          .left_joins(:sponsors)
-          .where(sponsors: { id: nil })
-          .find_each do |user|
-        user.sponsors << default_sponsor
-      end
     end
   end
 end

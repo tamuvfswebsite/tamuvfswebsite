@@ -36,6 +36,30 @@
       <%= form.url_field :website, placeholder: "https://www.company.com" %>
     </div>
 
+    <!-- Logo Upload Section for Sponsor Users -->
+    <div class="field" style="margin-top: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 4px; background-color: #f9f9f9;">
+      <%= form.label :logo, "Company Logo" %>
+      
+      <% if sponsor.logo.attached? %>
+        <div style="margin: 10px 0;">
+          <p style="font-weight: 500; color: #333;">Current Logo:</p>
+          <%= image_tag sponsor.logo, style: 'max-width: 200px; max-height: 200px; border: 1px solid #ddd; border-radius: 4px;' %>
+        </div>
+      <% end %>
+      
+      <div style="margin-top: 10px;">
+        <%= form.file_field :logo, accept: 'image/png,image/jpeg,image/jpg,image/gif,image/webp', style: 'margin-top: 5px;' %>
+        <p style="font-size: 13px; color: #666; margin-top: 5px;">
+          Accepted formats: JPEG, PNG, GIF, WebP (Max size: 5MB)
+        </p>
+        <% if sponsor.logo.attached? %>
+          <p style="font-size: 13px; color: #666;">
+            <em>Upload a new file to replace the current logo</em>
+          </p>
+        <% end %>
+      </div>
+    </div>
+
     <div class="form-actions">
       <%= form.submit "Save Changes", class: "btn-primary" %>
       <%= link_to "Cancel", sponsor_dashboard_index_path, class: "btn-secondary" %>
