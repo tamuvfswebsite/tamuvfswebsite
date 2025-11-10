@@ -1,9 +1,9 @@
 module AdminPanel
   class SponsorsController < BaseController
-    before_action :set_sponsor, only: %i[show edit update destroy assign_users update_users]
+    before_action :set_sponsor, only: %i[show edit update destroy assign_users update_users remove_logo]
 
     def index
-      @sponsors = Sponsor.all
+      @sponsors = Sponsor.all.order(:company_name)
     end
 
     def show; end
@@ -32,8 +32,25 @@ module AdminPanel
     end
 
     def destroy
+      if @sponsor.default_sponsor?
+        redirect_to admin_panel_sponsors_path,
+                    alert: 'Cannot delete the default sponsor.'
+        return
+      end
+
       @sponsor.destroy
-      redirect_to admin_panel_sponsors_path, notice: 'Sponsor was successfully deleted.'
+      redirect_to admin_panel_sponsors_path,
+                  notice:
+                  'Sponsor was successfully deleted. Associated users were moved to the default sponsor.'
+    end
+
+    def remove_logo
+      if @sponsor.logo.attached?
+        @sponsor.logo.purge
+        redirect_to edit_admin_panel_sponsor_path(@sponsor), notice: 'Logo was successfully removed.'
+      else
+        redirect_to edit_admin_panel_sponsor_path(@sponsor), alert: 'No logo to remove.'
+      end
     end
 
     def assign_users
@@ -43,7 +60,7 @@ module AdminPanel
 
     def update_users
       user_ids = extract_user_ids
-      assign_users_to_sponsor(user_ids)
+      AdminPanel::SponsorUserAssigner.new(@sponsor, user_ids).call
       redirect_success
     rescue StandardError => e
       redirect_failure(e)
@@ -63,20 +80,13 @@ module AdminPanel
         :contact_email,
         :phone_number,
         :company_description,
-        :resume_access
+        :resume_access,
+        :logo
       )
     end
 
     def extract_user_ids
       params.dig(:sponsor, :user_ids)&.reject(&:blank?) || []
-    end
-
-    def assign_users_to_sponsor(user_ids)
-      @sponsor.users.clear
-      return unless user_ids.any?
-
-      users = User.where(id: user_ids, role: 'sponsor')
-      @sponsor.users << users
     end
 
     def redirect_success

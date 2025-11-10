@@ -16,6 +16,7 @@ module ResumeFiltering
     {
       sort: params[:sort],
       direction: params[:direction],
+      search: params[:search],
       major: params[:major],
       organizational_role_id: params[:organizational_role_id],
       graduation_year: params[:graduation_year],

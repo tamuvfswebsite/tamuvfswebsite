@@ -61,6 +61,35 @@
     </div>
   </div>
 
+  <div class="form-section">
+    <h3>Company Logo</h3>
+
+    <% if sponsor.logo.attached? %>
+      <div class="current-logo-display">
+        <div class="logo-preview">
+          <%= image_tag sponsor.logo, alt: "#{sponsor.company_name} logo", class: "logo-image" %>
+        </div>
+
+        <% if sponsor.persisted? %>
+          <div class="logo-actions">
+            <%= button_to "Remove Current Logo",
+                remove_logo_admin_panel_sponsor_path(sponsor),
+                method: :delete,
+                data: { turbo_confirm: "Are you sure you want to remove this logo?" },
+                class: "btn btn-danger btn-sm",
+                form: { style: 'display: inline;' } %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="form-field">
+      <%= form.label :logo, "Upload Logo" %>
+      <%= form.file_field :logo, accept: 'image/png,image/jpeg,image/jpg,image/gif,image/webp', class: "form-file-input" %>
+      <span class="field-hint">Accepted formats: JPEG, PNG, GIF, WebP (Max size: 5MB)</span>
+    </div>
+  </div>
+
   <div class="form-actions">
     <%= form.submit sponsor.persisted? ? "Update Sponsor" : "Create Sponsor", class: 'btn btn-primary' %>
   </div>

@@ -7,6 +7,16 @@
     </div>
   </div>
 
+  <!-- Logo Display Card -->
+  <% if @sponsor.logo.attached? %>
+    <div class="logo-card">
+      <h2>Company Logo</h2>
+      <div class="logo-display">
+        <%= image_tag @sponsor.logo, alt: "#{@sponsor.company_name} logo", class: "sponsor-logo" %>
+      </div>
+    </div>
+  <% end %>
+
   <!-- Sponsor Details Card -->
   <div class="details-card">
     <h2>Sponsor Information</h2>
@@ -96,11 +106,13 @@
   </div>
 
   <div class="page-footer">
-    <%= button_to 'Delete Sponsor', admin_panel_sponsor_path(@sponsor),
-                method: :delete,
-                class: 'btn btn-danger',
-                data: { turbo_confirm: "Are you sure you want to delete this sponsor?" },
-                form: { style: 'display: inline;' } %>
+    <% unless @sponsor.default_sponsor? %>
+      <%= button_to 'Delete Sponsor', admin_panel_sponsor_path(@sponsor),
+                  method: :delete,
+                  class: 'btn btn-danger',
+                  data: { turbo_confirm: "Are you sure? All users assigned to this sponsor will be moved to the default sponsor." },
+                  form: { style: 'display: inline;' } %>
+    <% end %>
     <%= button_to 'Back to Sponsors', admin_panel_sponsors_path, method: :get, class: 'btn btn-outline', form: { style: 'display: inline;' } %>
   </div>
 </div>

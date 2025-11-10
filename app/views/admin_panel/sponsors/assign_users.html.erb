@@ -6,11 +6,18 @@
     </div>
   </div>
 
+  <% if @sponsor.default_sponsor? %>
+    <div class="default-sponsor-warning">
+      <strong>Note:</strong> This is the default sponsor. Users assigned here are not yet associated with a real sponsor company.
+    </div>
+  <% end %>
+
   <div class="assign-form-card">
     <%= form_with model: @sponsor, url: update_users_admin_panel_sponsor_path(@sponsor), method: :patch, local: true, class: 'assign-users-form' do |f| %>
       <div class="form-section">
         <h3>Select Users</h3>
         <p class="form-help-text">Only users with 'sponsor' role can be assigned to sponsors.</p>
+        <p class="form-help-text"><em>Note: Each user can only be assigned to one sponsor at a time. Selecting a user will remove them from their current sponsor.</em></p>
 
         <% if @available_users.any? %>
           <div class="users-checkboxes">
@@ -21,6 +28,9 @@
                   <span class="user-email"><%= b.object.email %></span>
                   <% if b.object.first_name.present? %>
                     <span class="user-name">(<%= b.object.first_name %> <%= b.object.last_name %>)</span>
+                  <% end %>
+                  <% if b.object.primary_sponsor && b.object.primary_sponsor != @sponsor %>
+                    <span class="current-sponsor-text">- Currently with: <%= b.object.primary_sponsor.company_name %></span>
                   <% end %>
                 <% end %>
               </div>

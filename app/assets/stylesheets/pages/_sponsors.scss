@@ -137,6 +137,31 @@
     }
   }
 
+  .default-badge {
+    background-color: #6c757d;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    margin-left: 5px;
+    font-weight: 600;
+  }
+
+  .default-sponsor-row {
+    background-color: #f8f9fa !important;
+  }
+
+  .cannot-edit-text {
+    color: #9ca3af;
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  .users-count {
+    font-weight: 600;
+    color: #6b7280;
+  }
+
   .empty-state {
     background: white;
     border-radius: 8px;
@@ -184,6 +209,7 @@
     }
   }
 
+  .logo-card,
   .details-card,
   .placements-card {
     background: white;
@@ -198,6 +224,22 @@
       font-size: 20px;
       padding-bottom: var(--space-sm);
       border-bottom: 2px solid var(--color-primary);
+    }
+  }
+
+  .logo-card {
+    .logo-display {
+      text-align: center;
+      padding: var(--space-lg);
+      background: #f9fafb;
+      border-radius: 6px;
+
+      .sponsor-logo {
+        max-width: 300px;
+        max-height: 300px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
     }
   }
 
@@ -493,6 +535,65 @@
       }
     }
 
+    .current-logo-display {
+      margin-bottom: var(--space-md);
+      padding: var(--space-md);
+      background: #f9fafb;
+      border-radius: 6px;
+      border: 1px solid #e5e7eb;
+
+      .logo-preview {
+        text-align: center;
+        margin-bottom: var(--space-sm);
+
+        .logo-image {
+          max-width: 200px;
+          max-height: 200px;
+          border-radius: 4px;
+          border: 1px solid #d1d5db;
+        }
+      }
+
+      .logo-actions {
+        text-align: center;
+
+        .btn-sm {
+          padding: 6px 12px;
+          font-size: 13px;
+          height: auto;
+          min-width: auto;
+        }
+      }
+    }
+
+    .form-file-input {
+      padding: 10px 12px;
+      border: 2px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #111827;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        border-color: #9ca3af;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(80, 0, 0, 0.1);
+      }
+    }
+
+    .field-hint {
+      margin-top: 4px;
+      font-size: 12px;
+      color: #6b7280;
+      font-style: italic;
+    }
+
     .form-actions {
       margin-top: var(--space-lg);
       padding-top: var(--space-lg);
@@ -535,6 +636,19 @@
       strong {
         color: var(--color-primary);
       }
+    }
+  }
+
+  .default-sponsor-warning {
+    background-color: #fff3cd;
+    border: 1px solid #ffc107;
+    padding: 12px;
+    margin-bottom: var(--space-lg);
+    border-radius: 6px;
+    color: #856404;
+
+    strong {
+      font-weight: 700;
     }
   }
 
@@ -603,6 +717,12 @@
 
         .user-name {
           color: #6b7280;
+        }
+
+        .current-sponsor-text {
+          color: #9ca3af;
+          font-size: 13px;
+          font-style: italic;
         }
       }
     }
