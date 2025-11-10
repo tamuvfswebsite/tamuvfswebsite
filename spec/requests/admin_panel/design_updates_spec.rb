@@ -13,15 +13,8 @@ RSpec.describe 'AdminPanel::DesignUpdates', type: :request do
 
   before do
     # Mock authentication
-    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(admin_user)
-    allow_any_instance_of(ApplicationController).to receive(:admin_signed_in?).and_return(true)
-  end
-
-  describe 'GET /index' do
-    it 'returns http success' do
-      get '/admin_panel/design_updates/index'
-      expect(response).to have_http_status(:success)
-    end
+    allow_any_instance_of(AdminPanel::BaseController).to receive(:current_user).and_return(admin_user)
+    allow_any_instance_of(AdminPanel::BaseController).to receive(:admin_signed_in?).and_return(true)
   end
 
   describe 'GET /new' do

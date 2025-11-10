@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe '/admin_panel/sponsors/:sponsor_id/logo_placements', type: :request do
+  before do
+    allow_any_instance_of(AdminPanel::BaseController).to receive(:ensure_admin_user).and_return(true)
+  end
+
   let(:sponsor) do
     Sponsor.create!(
       company_name: 'Test Company',
