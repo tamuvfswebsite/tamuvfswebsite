@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 20_251_109_200_221) do
+ActiveRecord::Schema[8.0].define(version: 20_251_110_200_055) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_catalog.plpgsql'
+  enable_extension 'pg_trgm'
 
   create_table 'active_storage_attachments', force: :cascade do |t|
     t.string 'name', null: false
@@ -174,6 +175,8 @@ ActiveRecord::Schema[8.0].define(version: 20_251_109_200_221) do
     t.float 'gpa'
     t.integer 'graduation_date'
     t.string 'major'
+    t.bigint 'organizational_role_id'
+    t.index ['organizational_role_id'], name: 'index_resumes_on_organizational_role_id'
     t.index ['user_id'], name: 'index_resumes_on_user_id'
   end
 
@@ -245,6 +248,7 @@ ActiveRecord::Schema[8.0].define(version: 20_251_109_200_221) do
   add_foreign_key 'organizational_role_users', 'users'
   add_foreign_key 'resume_downloads', 'resumes'
   add_foreign_key 'resume_downloads', 'users'
+  add_foreign_key 'resumes', 'organizational_roles'
   add_foreign_key 'resumes', 'users'
   add_foreign_key 'role_applications', 'organizational_roles', column: 'org_role_id'
   add_foreign_key 'role_applications', 'users'
