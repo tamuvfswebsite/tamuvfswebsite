@@ -1,11 +1,18 @@
-<% content_for :title, "New resume" %>
+<% content_for :title, "Upload Resume" %>
 
-<h1>New resume</h1>
+<div class="resume-new-page">
+  <div class="resume-new-container">
+    <div class="page-header">
+      <h1>Upload Your Resume</h1>
+      <p class="subtitle">Please provide your resume and academic information</p>
+    </div>
 
-<%= render "form", resume: @resume %>
+    <div class="resume-form-card">
+      <%= render "form", resume: @resume %>
+    </div>
 
-<br>
-
-<div>
-  <%= link_to "Back to profile", user_path(@user) %>
+    <div class="back-link-container">
+      <%= button_to "Back to Profile", user_path(@user), method: :get, class: "btn btn-outline" %>
+    </div>
+  </div>
 </div>

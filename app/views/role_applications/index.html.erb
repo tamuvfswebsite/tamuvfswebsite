@@ -37,13 +37,10 @@
               </td>
               <td><%= application.created_at.strftime("%b %d, %Y") %></td>
               <td><%= application.updated_at.strftime("%b %d, %Y") %></td>
-              <td style="white-space: nowrap;">
-                <%= link_to "View", application, class: "btn btn-sm btn-outline" %>
-                <%= link_to "Edit", edit_role_application_path(application), class: "btn btn-sm btn-outline" %>
-                <%= button_to "Delete", role_application_path(application), 
-                    method: :delete,
-                    class: "btn btn-sm btn-danger",
-                    form_class: "inline-form" %>
+              <td class="actions-cell">
+                <%= button_to "View", application, method: :get, class: "btn btn-outline", form: { style: "display: inline; margin: 0; vertical-align: top;" } %>
+                <%= button_to "Edit", edit_role_application_path(application), method: :get, class: "btn btn-outline", form: { style: "display: inline; margin: 0; vertical-align: top;" } %>
+                <%= button_to "Delete", role_application_path(application), method: :delete, class: "btn btn-danger", form: { style: "display: inline; margin: 0; vertical-align: top;" }, data: { confirm: "Are you sure you want to delete this application?" } %>
               </td>
             </tr>
           <% end %>
