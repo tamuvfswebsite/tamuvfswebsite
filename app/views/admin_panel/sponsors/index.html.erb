@@ -1,48 +1,54 @@
-<h1>Sponsor Management</h1>
+<div class="admin-sponsors-page">
+  <div class="page-header">
+    <h1>Sponsor Management</h1>
+    <div class="header-actions">
+      <%= button_to "Create New Sponsor", new_admin_panel_sponsor_path, method: :get, class: "btn btn-primary", form: { style: 'display: inline;' } %>
+    </div>
+  </div>
 
-<div class="actions">
-  <%= link_to "Create New Sponsor", new_admin_panel_sponsor_path %>
-</div>
-
-<div class="sponsors-section">
-  <h2>Sponsors</h2>
   <% if @sponsors.any? %>
-    <table>
-      <thead>
-        <tr>
-          <th>Company Name</th>
-          <th>Website</th>
-          <th>Tier</th>
-          <th>Contact Email</th>
-          <th>Resume Access</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <% @sponsors.each do |sponsor| %>
+    <div class="sponsors-table-wrapper">
+      <table class="sponsors-table">
+        <thead>
           <tr>
-            <td><%= sponsor.company_name %></td>
-            <td><%= sponsor.website %></td>
-            <td><%= sponsor.tier %></td>
-            <td><%= sponsor.contact_email %></td>
-            <td><%= sponsor.resume_access? ? "Yes" : "No" %></td>
-            <td>
-              <%= link_to "View", admin_panel_sponsor_path(sponsor) %>
-              <%= link_to "Edit", edit_admin_panel_sponsor_path(sponsor) %>
-              <%= button_to 'Delete', admin_panel_sponsor_path(sponsor),
-                method: :delete,
-                data: { confirm: "Are you sure you want to delete this sponsor?" } %>
-            </td>
+            <th>Company Name</th>
+            <th>Website</th>
+            <th>Tier</th>
+            <th>Contact Email</th>
+            <th>Resume Access</th>
+            <th class="actions-column">Actions</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% else %>
-    <p>No sponsors found.</p>
-  <% end %>
-</div>
+        </thead>
 
-<div class="actions">
-  <%= link_to 'Back to Admin Dashboard', admin_panel_root_path %>
+        <tbody>
+          <% @sponsors.each do |sponsor| %>
+            <tr>
+              <td class="company-name"><%= sponsor.company_name %></td>
+              <td><%= sponsor.website %></td>
+              <td><span class="tier-badge tier-<%= sponsor.tier&.downcase %>"><%= sponsor.tier %></span></td>
+              <td><%= sponsor.contact_email %></td>
+              <td class="resume-access"><%= sponsor.resume_access? ? "Yes" : "No" %></td>
+              <td class="actions-cell">
+                <%= button_to "View", admin_panel_sponsor_path(sponsor), method: :get, class: "btn btn-primary", form: { style: 'display: inline;' } %>
+                <%= button_to "Edit", edit_admin_panel_sponsor_path(sponsor), method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
+                <%= button_to 'Delete', admin_panel_sponsor_path(sponsor),
+                  method: :delete,
+                  class: "btn btn-danger",
+                  data: { turbo_confirm: "Are you sure you want to delete this sponsor?" },
+                  form: { style: 'display: inline;' } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <p>No sponsors found.</p>
+    </div>
+  <% end %>
+
+  <div class="page-footer">
+    <%= button_to 'Back to Admin Dashboard', admin_panel_root_path, method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
+  </div>
 </div>

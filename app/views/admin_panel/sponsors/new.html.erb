@@ -1,7 +1,13 @@
-<h1>Create New Sponsor</h1>
+<div class="admin-sponsor-form-page">
+  <div class="page-header">
+    <h1>Create New Sponsor</h1>
+  </div>
 
-<%= render 'form', sponsor: @sponsor %>
+  <div class="form-card">
+    <%= render 'form', sponsor: @sponsor %>
+  </div>
 
-<div class="navigation" style="margin-top: var(--space-md);">
-  <%= button_to 'Back to Sponsors', admin_panel_sponsors_path, method: :get, class: 'btn btn-outline', style: 'height: 48px; padding: 12px 32px; box-sizing: border-box; font-weight: 500; font-size: 16px; line-height: 1.2;', form: { style: 'display: inline; margin: 0; vertical-align: top;' } %>
+  <div class="form-footer">
+    <%= button_to 'Back to Sponsors', admin_panel_sponsors_path, method: :get, class: 'btn btn-outline', form: { style: 'display: inline;' } %>
+  </div>
 </div>

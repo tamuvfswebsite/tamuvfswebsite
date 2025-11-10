@@ -1,46 +1,58 @@
-<!-- app/views/admin_panel/design_updates/index.html.erb -->
-<div class="admin-design-updates">
-  <div class="header">
+<div class="admin-design-updates-page">
+  <div class="page-header">
     <h1>Design Updates</h1>
-    <%= link_to "New Design Update", new_admin_panel_design_update_path, class: "btn-primary" %>
+    <div class="header-actions">
+      <%= button_to "New Design Update", new_admin_panel_design_update_path, method: :get, class: "btn btn-primary", form: { style: 'display: inline;' } %>
+    </div>
   </div>
 
   <% if @design_updates.any? %>
-    <table class="admin-table">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Title</th>
-          <th>PDF</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @design_updates.each do |update| %>
+    <div class="updates-table-wrapper">
+      <table class="updates-table">
+        <thead>
           <tr>
-            <td><%= update.update_date.strftime("%b %d, %Y") %></td>
-            <td><%= update.title %></td>
-            <td>
-              <% if update.pdf_file.attached? %>
-                <%= link_to "View PDF", rails_blob_path(update.pdf_file, disposition: "inline"), 
-                           target: "_blank", class: "btn-small" %>
-              <% else %>
-                <em>No PDF</em>
-              <% end %>
-            </td>
-            <td class="actions">
-              <%= link_to "Edit", edit_admin_panel_design_update_path(update), class: "btn-small" %>
-              <%= button_to "Delete", 
-                           admin_panel_design_update_path(update), 
-                           method: :delete, 
-                           data: { confirm: "Are you sure?" },
-                           class: "btn-small btn-danger" %>
-            </td>
+            <th>Date</th>
+            <th>Title</th>
+            <th>PDF</th>
+            <th class="actions-column">Actions</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% @design_updates.each do |update| %>
+            <tr>
+              <td class="update-date"><%= update.update_date.strftime("%b %d, %Y") %></td>
+              <td class="update-title"><%= update.title %></td>
+              <td class="pdf-cell">
+                <% if update.pdf_file.attached? %>
+                  <%= button_to "View PDF", rails_blob_path(update.pdf_file, disposition: "inline"),
+                             method: :get,
+                             class: "btn btn-primary btn-sm",
+                             form: { style: 'display: inline;', target: '_blank' } %>
+                <% else %>
+                  <span class="no-pdf">No PDF</span>
+                <% end %>
+              </td>
+              <td class="actions-cell">
+                <%= button_to "Edit", edit_admin_panel_design_update_path(update), method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
+                <%= button_to "Delete",
+                           admin_panel_design_update_path(update),
+                           method: :delete,
+                           class: "btn btn-danger",
+                           data: { turbo_confirm: "Are you sure you want to delete this design update?" },
+                           form: { style: 'display: inline;' } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   <% else %>
-    <p>No design updates yet.</p>
+    <div class="empty-state">
+      <p>No design updates yet. Create your first design update to share with users.</p>
+    </div>
   <% end %>
+
+  <div class="page-footer">
+    <%= button_to 'Back to Admin Dashboard', admin_panel_root_path, method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
+  </div>
 </div>

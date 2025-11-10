@@ -1,12 +1,13 @@
-<%= form_with(model: @logo_placement, 
+<%= form_with(model: @logo_placement,
               scope: :logo_placement,
-              url: @logo_placement.new_record? ? 
-                   admin_panel_sponsor_logo_placements_path(@sponsor) : 
-                   admin_panel_sponsor_logo_placement_path(@sponsor, @logo_placement)) do |form| %>
+              url: @logo_placement.new_record? ?
+                   admin_panel_sponsor_logo_placements_path(@sponsor) :
+                   admin_panel_sponsor_logo_placement_path(@sponsor, @logo_placement),
+              local: true,
+              class: 'logo-placement-form') do |form| %>
   <% if @logo_placement.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(@logo_placement.errors.count, "error") %> prohibited this logo placement from being saved:</h2>
-
+    <div class="form-errors">
+      <h4><%= pluralize(@logo_placement.errors.count, "error") %> prohibited this logo placement from being saved:</h4>
       <ul>
         <% @logo_placement.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -15,22 +16,29 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :page_name, style: "display: block" %>
-    <%= form.text_field :page_name %>
+  <div class="form-section">
+    <h3>Placement Details</h3>
+
+    <div class="form-field">
+      <%= form.label :page_name, "Page Name" %>
+      <%= form.text_field :page_name, class: "form-input", placeholder: "e.g., home, events, dashboard" %>
+      <span class="field-hint">The page where the logo should appear (e.g., home, events, dashboard)</span>
+    </div>
+
+    <div class="form-field">
+      <%= form.label :section, "Section" %>
+      <%= form.text_field :section, class: "form-input", placeholder: "e.g., header, footer, sidebar" %>
+      <span class="field-hint">The section of the page where the logo should be placed</span>
+    </div>
+
+    <div class="form-field checkbox-field">
+      <%= form.check_box :displayed, class: "form-checkbox" %>
+      <%= form.label :displayed, "Display this logo placement", class: "checkbox-label" %>
+      <span class="field-hint">Uncheck to temporarily hide this logo without deleting the placement</span>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :section, style: "display: block" %>
-    <%= form.text_field :section %>
-  </div>
-
-  <div>
-    <%= form.label :displayed, style: "display: block" %>
-    <%= form.checkbox :displayed %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div class="form-actions">
+    <%= form.submit @logo_placement.new_record? ? "Create Logo Placement" : "Update Logo Placement", class: 'btn btn-primary' %>
   </div>
 <% end %>
