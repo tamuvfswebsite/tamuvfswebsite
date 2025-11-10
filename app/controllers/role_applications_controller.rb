@@ -31,6 +31,7 @@ class RoleApplicationsController < ApplicationController
   def edit; end
 
   # POST /role_applications or /role_applications.json
+  # rubocop:disable Metrics/AbcSize
   def create
     @role_application = current_user.role_applications.build(role_application_params)
 
@@ -44,11 +45,14 @@ class RoleApplicationsController < ApplicationController
         format.json { render :show, status: :created, location: @role_application }
       else
         load_organizational_roles
+        # Ensure the organizational_role association is loaded so the form can display questions
+        @role_application.organizational_role if @role_application.org_role_id.present?
         format.html { render :new, status: :unprocessable_content }
         format.json { render json: @role_application.errors, status: :unprocessable_content }
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   # PATCH/PUT /role_applications/1 or /role_applications/1.json
   def update
@@ -61,6 +65,8 @@ class RoleApplicationsController < ApplicationController
         format.json { render :show, status: :ok, location: @role_application }
       else
         load_organizational_roles
+        # Ensure the organizational_role association is loaded so the form can display questions
+        @role_application.organizational_role if @role_application.org_role_id.present?
         format.html { render :edit, status: :unprocessable_content }
         format.json { render json: @role_application.errors, status: :unprocessable_content }
       end

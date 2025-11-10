@@ -29,16 +29,22 @@
           </li>
           <li class="nav-item">
             <% if admin_user? || (sponsor_user? && current_user.sponsors.first.resume_access) %>
-              <%= link_to 'Resumes', resumes_path, class: "nav-link #{current_page?(resumes_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
-            <% else %>
-              <% if !(sponsor_user?) %>
-                <%= link_to 'My Resume', user_resume_path(current_user), class: "nav-link #{request.path.start_with?("/users/#{current_user.id}/resume") ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
-              <% end %>
+              <li class="nav-item">
+                <%= link_to 'All Resumes', resumes_path, class: "nav-link #{current_page?(resumes_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+              </li>
+            <% end %>
+            <% if !sponsor_user? %>
+              <li class="nav-item">
+                <% resume_path_url = current_user.resume.present? ? user_resume_path(current_user) : new_user_resume_path(current_user) %>
+                <%= link_to 'My Resume', resume_path_url, class: "nav-link #{request.path.start_with?("/users/#{current_user.id}/resume") ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+              </li>
             <% end %>
           </li>
-          <li class="nav-item">
-            <%= link_to 'My Applications', role_applications_path, class: "nav-link #{current_page?(role_applications_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
-          </li>
+          <% if !(admin_user? || sponsor_user?) %>
+            <li class="nav-item">
+              <%= link_to 'My Applications', role_applications_path, class: "nav-link #{current_page?(role_applications_path) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>
+            </li>
+          <% end %>
           <% if !sponsor_user? %>
             <li class="nav-item">
               <%= link_to 'My Profile', user_path(current_user), class: "nav-link #{current_page?(user_path(current_user)) ? 'active' : ''}", data: { action: 'click->navigation#closeMenu' } %>

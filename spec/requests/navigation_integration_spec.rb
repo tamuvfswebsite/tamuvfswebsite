@@ -59,7 +59,8 @@ RSpec.describe 'Navigation Integration', type: :request do
       it 'displays all resumes link for admins' do
         get root_path
         expect(response.body).to include('Resumes')
-        expect(response.body).not_to include('My Resume')
+        # Admins now also see "My Resume" link for their own resume
+        expect(response.body).to include('My Resume')
       end
 
       it 'displays navigation on admin panel pages' do
@@ -189,7 +190,8 @@ RSpec.describe 'Navigation Integration', type: :request do
       it 'shows all resumes link' do
         get root_path
         expect(response.body).to include('Resumes')
-        expect(response.body).not_to include('My Resume')
+        # Admins now also see "My Resume" link for their own resume
+        expect(response.body).to include('My Resume')
       end
     end
   end

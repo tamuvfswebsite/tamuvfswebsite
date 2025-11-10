@@ -17,8 +17,14 @@
     <% end %>
   </div>
 
-  <h1>Role Applications</h1>
-  <p class="subtitle">Review and manage all submitted applications.</p>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+    <div>
+      <h1>Role Applications</h1>
+      <p class="subtitle">Review and manage all submitted applications.</p>
+    </div>
+    <% csv_params = params[:status].present? ? { format: :csv, status: params[:status].to_unsafe_h } : { format: :csv } %>
+    <%= link_to "Export to CSV", admin_panel_role_applications_path(csv_params), class: "btn btn-primary" %>
+  </div>
 
   <!-- Status Filters -->
   <%= form_with url: admin_panel_role_applications_path, method: :get, local: true do |form| %>

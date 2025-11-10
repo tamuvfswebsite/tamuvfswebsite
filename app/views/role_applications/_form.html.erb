@@ -1,7 +1,7 @@
 <%= form_with(model: role_application) do |form| %>
   <% if role_application.errors.any? %>
     <div style="color: red; background-color: #ffebee; border: 1px solid red; padding: 10px; margin-bottom: 15px;">
-      <h2><%= pluralize(role_application.errors.count, "error") %> prohibited this application from being saved:</h2>
+      <h3><%= pluralize(role_application.errors.count, "error") %> prohibited your application from being submitted:</h3>
 
       <ul>
         <% role_application.errors.each do |error| %>
@@ -11,10 +11,17 @@
     </div>
   <% end %>
 
+  <div style="margin-bottom: 20px; padding: 15px; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">
+    <i style="margin: 0; color: #856404;">
+      We highly recommend writing your free response answers in a separate document first then
+      pasting them here to account for potential technical issues.
+    </i>
+  </div>
+
   <div style="margin-bottom: 20px;">
     <h3>Your Resume</h3>
     <% if current_user.resume&.file&.attached? %>
-      <p>✅ Resume uploaded: <%= link_to current_user.resume.file.filename, user_resume_path(current_user), target: "_blank" %></p>
+      <p>Resume uploaded: <%= link_to current_user.resume.file.filename, user_resume_path(current_user), target: "_blank" %></p>
       <% 
         # Determine the return path based on whether we're editing or creating
         return_param = role_application.persisted? ? "application_edit_#{role_application.id}" : 'application'
@@ -31,7 +38,7 @@
   </div>
 
   <div style="margin-bottom: 15px;">
-    <%= form.label :org_role_id, "Select Organization Role", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
+    <%= form.label :org_role_id, "Select VFS Role", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
     <%= form.collection_select :org_role_id, @organizational_roles, :id, :name, { prompt: "Choose a role to apply for..." }, { style: "width: 100%; padding: 8px; font-size: 14px;", id: "role_application_org_role_id" } %>
   </div>
 
