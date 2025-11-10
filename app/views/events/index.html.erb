@@ -3,6 +3,22 @@
     <h1>Events</h1>
   </div>
 
+  <%# AC4: Event filtering available by organizational role if you have multiple and admins can see all events %>
+  <% if @organizational_roles.any? && (admin_user? || @user_roles.count > 1) %>
+    <div class="events-filter" style="margin-bottom: 20px;">
+      <%= form_with url: events_path, method: :get, local: true, style: "display: flex; align-items: center; gap: 10px;" do |f| %>
+        <%= f.label :organizational_role_id, "Filter by Role:", style: "font-weight: bold;" %>
+        <%= f.select :organizational_role_id, 
+            options_for_select([['All Events', '']] + @organizational_roles.map { |r| [r.name, r.id] }, params[:organizational_role_id]),
+            {},
+            { id: 'role_filter', onchange: 'this.form.submit();', style: "padding: 5px; min-width: 200px;" } %>
+        <% if params[:organizational_role_id].present? %>
+          <%= link_to "Clear Filter", events_path, class: "btn btn-sm btn-outline" %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
   <% if @events.any? %>
     <div class="events-grid">
       <% @events.each do |event| %>

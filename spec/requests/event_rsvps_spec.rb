@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Event RSVPs', type: :request do
   let!(:event) do
     Event.create!(title: 'Tech Talk', description: 'desc', event_date: 2.days.from_now, location: 'Hall', capacity: 100,
-                  attendance_points: 1, is_published: true)
+                  attendance_points: 1, is_published: true, is_public: true)
   end
   let!(:user) { create_user }
 
@@ -31,7 +31,7 @@ RSpec.describe 'Event RSVPs', type: :request do
     it 'disallows RSVP when event is closed' do
       # create an event in the future (to pass validation) then freeze time to after it
       past_event = Event.create!(title: 'Past', description: 'd', event_date: 1.hour.from_now, location: 'Hall',
-                                 capacity: 50, attendance_points: 1, is_published: true)
+                                 capacity: 50, attendance_points: 1, is_published: true, is_public: true)
       sign_in_as_admin(user)
 
       travel_to 2.hours.from_now do
@@ -39,7 +39,7 @@ RSpec.describe 'Event RSVPs', type: :request do
       end
       expect(response).to redirect_to(past_event)
       follow_redirect!
-      expect(response.body).to include('RSVP is closed')
+      expect(response.body).to include('RSVP is closed for this event')
       expect(EventRsvp.where(event: past_event, user: user)).not_to exist
     end
   end
