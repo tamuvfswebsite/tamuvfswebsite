@@ -1288,3 +1288,153 @@
     }
   }
 }
+
+// Admin Organizational Role Form Page (New/Edit)
+.admin-org-role-form-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-md);
+
+  .page-header {
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-sm);
+    border-bottom: 2px solid var(--color-border);
+
+    h1 {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--color-primary);
+      line-height: 1.2;
+      margin: 0;
+
+      @media (max-width: 767px) {
+        font-size: 32px;
+      }
+    }
+  }
+
+  .form-card {
+    background: var(--color-white);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+  }
+
+  .form-footer {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+
+    .btn {
+      min-width: 150px;
+    }
+
+    form {
+      display: inline;
+      margin: 0;
+      vertical-align: top;
+    }
+  }
+}
+
+// Organizational Role Form Styles
+.org-role-form {
+  .form-errors {
+    background: #fee2e2;
+    border: 1px solid #fecaca;
+    border-radius: var(--border-radius);
+    padding: var(--space-md);
+    margin-bottom: var(--space-lg);
+    color: #991b1b;
+
+    h4 {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0 0 var(--space-sm) 0;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: var(--space-md);
+
+      li {
+        margin-bottom: var(--space-xs);
+        font-size: 14px;
+      }
+    }
+  }
+
+  .form-section {
+    margin-bottom: var(--space-xl);
+
+    h3 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-xs);
+      border-bottom: 2px solid var(--color-border);
+    }
+
+    .form-help-text {
+      color: var(--color-text-medium);
+      font-size: 13px;
+      font-style: italic;
+      margin-bottom: var(--space-md);
+    }
+  }
+
+  .form-field {
+    margin-bottom: var(--space-md);
+
+    label {
+      display: block;
+      font-weight: 600;
+      color: var(--color-text-dark);
+      margin-bottom: var(--space-xs);
+      font-size: 14px;
+    }
+  }
+
+  .form-input,
+  .form-textarea {
+    width: 100%;
+    padding: var(--space-sm);
+    border: 2px solid var(--color-border);
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: var(--transition-standard);
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(80, 0, 0, 0.1);
+    }
+
+    &::placeholder {
+      color: var(--color-text-medium);
+      opacity: 0.6;
+    }
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.5;
+  }
+
+  .form-actions {
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+
+    .btn {
+      min-width: 250px;
+      font-size: 16px;
+    }
+  }
+}
