@@ -25,7 +25,7 @@ class Sponsor < ApplicationRecord
 
   # Override destroy to reassign users to default sponsor
   def destroy
-    return super if default_sponsor?
+    return false if default_sponsor?
 
     default = self.class.default_sponsor
     users.each do |user|
