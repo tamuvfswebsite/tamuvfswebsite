@@ -1,8 +1,17 @@
 <!-- app/views/sponsors/dashboard.html.erb -->
 <div class="sponsor-dashboard">
   <% if @sponsor %>
-    <h1>Welcome, <%= @sponsor.company_name %></h1>
-    <p>Welcome to your Sponsor Dashboard. Quick links and company details are shown below.</p>
+    <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px;">
+      <% if @sponsor.logo.attached? %>
+        <%= image_tag @sponsor.logo, 
+            style: 'max-width: 150px; max-height: 150px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);',
+            alt: "#{@sponsor.company_name} logo" %>
+      <% end %>
+      <div>
+        <h1 style="margin: 0;">Welcome, <%= @sponsor.company_name %></h1>
+        <p style="margin: 5px 0 0 0; color: #666;">Welcome to your Sponsor Dashboard. Quick links and company details are shown below.</p>
+      </div>
+    </div>
 
     <!-- Recent Design Updates Section with PDF Embeds -->
     <div class="design-updates">
@@ -52,6 +61,16 @@
 
     <div class="sponsor-info">
       <h2>Company Details</h2>
+      
+      <% if @sponsor.logo.attached? %>
+        <div style="margin: 20px 0;">
+          <p><strong>Company Logo:</strong></p>
+          <%= image_tag @sponsor.logo, 
+              style: 'max-width: 250px; max-height: 250px; border: 1px solid #ddd; border-radius: 4px; padding: 10px; background: white;',
+              alt: "#{@sponsor.company_name} logo" %>
+        </div>
+      <% end %>
+      
       <p><strong>Company:</strong> <%= @sponsor.company_name %></p>
       <p><strong>Tier:</strong> <%= @sponsor.tier %></p>
       <p><strong>Website:</strong>

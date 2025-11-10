@@ -57,6 +57,7 @@ Rails.application.routes.draw do
       member do
         get   :assign_users
         patch :update_users
+        delete :remove_logo
       end
     end
 

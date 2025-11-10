@@ -113,12 +113,20 @@ RSpec.describe AdminPanel::SponsorsController, type: :request do
     it 'destroys the sponsor' do
       sponsor_id = sponsor.id
 
-      expect do
-        delete admin_panel_sponsor_path(sponsor_id)
-      end.to change(Sponsor, :count).by(-1)
+      if Sponsor.count == 1
+        expect do
+          delete admin_panel_sponsor_path(sponsor_id)
+        end.to change(Sponsor, :count).by(0)
+      else
+        expect do
+          delete admin_panel_sponsor_path(sponsor_id)
+        end.to change(Sponsor, :count).by(-1)
+      end
 
       expect(response).to redirect_to(admin_panel_sponsors_path)
-      expect(flash[:notice]).to eq('Sponsor was successfully deleted.')
+      expect(flash[:notice]).to eq(
+        'Sponsor was successfully deleted. Associated users were moved to the default sponsor.'
+      )
     end
   end
 end
