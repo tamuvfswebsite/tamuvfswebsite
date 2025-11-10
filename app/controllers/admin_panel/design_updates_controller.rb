@@ -1,6 +1,6 @@
 # app/controllers/admin_panel/design_updates_controller.rb
 module AdminPanel
-  class DesignUpdatesController < ApplicationController
+  class DesignUpdatesController < AdminPanel::BaseController
     before_action :set_design_update, only: %i[show edit update destroy]
 
     def index
