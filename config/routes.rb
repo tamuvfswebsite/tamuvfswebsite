@@ -39,12 +39,6 @@ Rails.application.routes.draw do
 
   # Admin Panel
   namespace :admin_panel do
-    get 'design_updates/index'
-    get 'design_updates/new'
-    get 'design_updates/create'
-    get 'design_updates/edit'
-    get 'design_updates/update'
-    get 'design_updates/destroy'
     root to: 'dashboard#index'
 
     get 'dashboard',   to: 'dashboard#index'
