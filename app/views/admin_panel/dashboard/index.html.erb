@@ -1,85 +1,87 @@
-<h1>Admin Dashboard</h1>
-<p>Welcome to the admin control panel</p>
+<div class="admin-dashboard-page">
+  <h1>Admin Dashboard</h1>
+  <p class="page-subtitle">Welcome to the admin control panel</p>
 
-<div class="dashboard-overview">
-  <h2>System Overview</h2>
-  <ul>
-    <li>Total Users: <%= @total_users %></li>
-    <li>Total Events: <%= @total_events %></li>
-  </ul>
-</div>
+  <!-- Stats Overview -->
+  <div class="stats-overview">
+    <div class="stat-card">
+      <div class="stat-value"><%= @total_users %></div>
+      <div class="stat-label">Total Users</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value"><%= @total_events %></div>
+      <div class="stat-label">Total Events</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value"><%= @resume_count %></div>
+      <div class="stat-label">Resumes</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value"><%= (@resume_count.to_f / @total_users * 100).round(0) %>%</div>
+      <div class="stat-label">Resume Coverage</div>
+    </div>
+  </div>
 
-<div class="resume-overview">
-  <h2>Resume Overview</h2>
-  <ul>
-    <li>Resume Count: <%= @resume_count %></li>
-    <li>% Users with Resumes: <%= (@resume_count.to_f / @total_users * 100).round(2) %>%</li>
-  </ul>
-  <h3>Sponsor Download Statistics</h3>
-  <% if @sponsor_download_stats&.any? %>
-    <table class="sponsor-stats-table">
-      <thead>
-        <tr>
-          <th>Sponsor Name</th>
-          <th>Email</th>
-          <th>Downloads</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @sponsor_download_stats.each do |stat| %>
-          <tr>
-            <td><%= "#{stat.first_name} #{stat.last_name}" %></td>
-            <td><%= stat.email %></td>
-            <td><%= stat.download_count %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% else %>
-    <p>No sponsor downloads recorded yet.</p>
-  <% end %>
-</div>
-
-<div class="recent-activity">
-  <h2>Recent Activity</h2>
-  <% if @recent_events.any? %>
-    <ul>
-      <% @recent_events.each do |event| %>
-        <li>
-          <strong><%= event.title %></strong>
-        </li>
+  <!-- Main Dashboard Grid -->
+  <div class="dashboard-grid">
+    <!-- Resume Overview -->
+    <div class="dashboard-card">
+      <h2>Resume Overview</h2>
+      <h3>Sponsor Download Statistics</h3>
+      <% if @sponsor_download_stats&.any? %>
+        <table class="sponsor-stats-table">
+          <thead>
+            <tr>
+              <th>Sponsor Name</th>
+              <th>Email</th>
+              <th>Downloads</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @sponsor_download_stats.each do |stat| %>
+              <tr>
+                <td><%= "#{stat.first_name} #{stat.last_name}" %></td>
+                <td><%= stat.email %></td>
+                <td><%= stat.download_count %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <p>No sponsor downloads recorded yet.</p>
       <% end %>
-    </ul>
-  <% else %>
-    <p>No recent events found.</p>
-  <% end %>
+    </div>
 
-  <p> Soon to also have recent application activity! </p>
+    <!-- Admin Information -->
+    <div class="dashboard-card admin-info-card">
+      <h2>Admin Information</h2>
+      <% if admin_signed_in? %>
+        <p><strong>Status:</strong> Logged in as admin</p>
+        <p><strong>Name:</strong> <%= current_admin.try(:full_name) || "Not available" %></p>
+        <p><strong>Email:</strong> <%= current_admin.try(:email) || "Not available" %></p>
+      <% else %>
+        <p><strong>Status:</strong> Not logged in</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="dashboard-card">
+    <h2>Quick Actions</h2>
+    <div class="quick-actions-grid">
+      <%= link_to "Manage Users", users_path %>
+      <%= link_to "Manage Events", admin_panel_events_path %>
+      <%= link_to "Manage Organizational Roles", admin_panel_organizational_roles_path %>
+      <%= link_to "Attendance Leaderboard", admin_panel_leaderboard_path %>
+      <%= link_to "Review Applications", admin_panel_role_applications_path %>
+      <%= link_to "View Resumes", resumes_path %>
+      <%= link_to "Manage Sponsors", admin_panel_sponsors_path %>
+      <%= link_to "Design Updates", admin_panel_design_updates_path %>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="text-align: center; margin-top: var(--space-lg); padding-top: var(--space-md); border-top: 1px solid var(--color-border);">
+    <%= button_to "Back to Home", root_path, method: :get, class: "btn btn-outline" %>
+  </div>
 </div>
-
-<div class="quick-actions">
-  <h2>Quick Actions</h2>
-  <ul>
-    <li><%= link_to "Manage Users", users_path %></li>
-    <li><%= link_to "Manage Events", admin_panel_events_path %></li>
-    <li><%= link_to "Manage Organizational Roles", admin_panel_organizational_roles_path %></li>
-    <li><%= link_to "Attendance Leaderboard", admin_panel_leaderboard_path %></li>
-    <li><%= link_to "Review Applications", admin_panel_role_applications_path %></li>
-    <li><%= link_to "View Resumes", resumes_path %></li>
-    <li><%= link_to "Manage Sponsors", admin_panel_sponsors_path %></li>
-    <li><%= link_to "Design Updates", admin_panel_design_updates_path %></li>
-  </ul>
-</div>
-
-<div class="admin-info">
-  <h2>Admin Information</h2>
-  <% if admin_signed_in? %>
-    <p>Status: Logged in as admin</p>
-    <p>Name: <%= current_admin.try(:full_name) || "Not available" %>
-    <br> Email: <%= current_admin.try(:email) || "Not available" %></p>
-  <% else %>
-    <p>Status: Not logged in</p>
-  <% end %>
-</div>
-
-<%= link_to "Back to Home", root_path %>
