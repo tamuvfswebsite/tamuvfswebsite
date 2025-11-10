@@ -3,7 +3,7 @@ module EventsHelper
     if event.is_public?
       'Public (Everyone)'
     elsif event.organizational_roles.any?
-      event.organizational_roles.pluck(:name).join(', ')
+      event.organizational_roles.map(&:name).join(', ')
     else
       'All Roles'
     end
