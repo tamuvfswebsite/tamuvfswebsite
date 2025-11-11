@@ -34,7 +34,7 @@ RSpec.describe 'Navigation Integration', type: :request do
         expect(response.body).to include('Home')
         expect(response.body).to include('Events')
         expect(response.body).to include('My Resume')
-        expect(response.body).to include('Apply for Role')
+        expect(response.body).to include('My Applications')
       end
 
       it 'does not show admin panel to regular users' do
@@ -59,7 +59,8 @@ RSpec.describe 'Navigation Integration', type: :request do
       it 'displays all resumes link for admins' do
         get root_path
         expect(response.body).to include('Resumes')
-        expect(response.body).not_to include('My Resume')
+        # Admins now also see "My Resume" link for their own resume
+        expect(response.body).to include('My Resume')
       end
 
       it 'displays navigation on admin panel pages' do
@@ -72,6 +73,12 @@ RSpec.describe 'Navigation Integration', type: :request do
   end
 
   describe 'Active page highlighting' do
+    let(:user) { create_user(role: 'user') }
+
+    before do
+      sign_in_as_admin(user)
+    end
+
     it 'marks current page as active on root path' do
       get root_path
       expect(response.body).to match(%r{<a[^>]*class="[^"]*nav-link[^"]*active[^"]*"[^>]*>Home</a>})
@@ -183,7 +190,8 @@ RSpec.describe 'Navigation Integration', type: :request do
       it 'shows all resumes link' do
         get root_path
         expect(response.body).to include('Resumes')
-        expect(response.body).not_to include('My Resume')
+        # Admins now also see "My Resume" link for their own resume
+        expect(response.body).to include('My Resume')
       end
     end
   end

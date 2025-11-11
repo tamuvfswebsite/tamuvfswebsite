@@ -1,0 +1,44 @@
+<div class="admin-org-role-show-page">
+  <div class="page-header">
+    <h1><%= @organizational_role.name %></h1>
+    <div class="header-actions">
+      <%= button_to "Edit", edit_admin_panel_organizational_role_path(@organizational_role), method: :get, class: "btn btn-primary", form: { style: 'display: inline;' } %>
+      <%= button_to "Back to List", admin_panel_organizational_roles_path, method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
+    </div>
+  </div>
+
+  <!-- Role Details Card -->
+  <div class="details-card">
+    <h2>Role Details</h2>
+    <div class="detail-section">
+      <span class="detail-label">Description</span>
+      <p class="detail-text"><%= @organizational_role.description %></p>
+    </div>
+  </div>
+
+  <!-- Application Questions Card -->
+  <div class="questions-card">
+    <h2>Application Questions</h2>
+
+    <% questions = [@organizational_role.question_1, @organizational_role.question_2, @organizational_role.question_3].compact %>
+
+    <% if questions.any? %>
+      <div class="questions-list">
+        <% questions.each_with_index do |question, index| %>
+          <div class="question-item">
+            <div class="question-number">Question <%= index + 1 %></div>
+            <div class="question-text"><%= question %></div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="empty-questions">
+        <p>No application questions configured for this role.</p>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="page-footer">
+    <%= button_to 'Back to Roles', admin_panel_organizational_roles_path, method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
+  </div>
+</div>

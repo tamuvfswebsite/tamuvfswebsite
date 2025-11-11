@@ -1,0 +1,56 @@
+<%= form_with(model: [:admin_panel, @design_update], local: true, class: 'design-update-form') do |f| %>
+  <% if @design_update.errors.any? %>
+    <div class="form-errors">
+      <h4><%= pluralize(@design_update.errors.count, "error") %> prohibited this design update from being saved:</h4>
+      <ul>
+        <% @design_update.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-section">
+    <h3>Update Information</h3>
+
+    <div class="form-field">
+      <%= f.label :title, "Title" %>
+      <%= f.text_field :title, required: true, class: "form-input", placeholder: "e.g., Weekly Design Review - Oct 2024" %>
+      <span class="field-hint">A descriptive title for this design update</span>
+    </div>
+
+    <div class="form-field">
+      <%= f.label :update_date, "Date" %>
+      <%= f.date_field :update_date, required: true, class: "form-input" %>
+      <span class="field-hint">The date of this design update</span>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3>PDF Slides</h3>
+
+    <div class="form-field">
+      <%= f.label :pdf_file, "Upload PDF" %>
+      <%= f.file_field :pdf_file, accept: "application/pdf", required: @design_update.new_record?, class: "form-file-input" %>
+      <span class="field-hint">Upload a PDF file (max 10MB)</span>
+    </div>
+
+    <% if @design_update.pdf_file.attached? %>
+      <div class="current-file-info">
+        <div class="file-details">
+          <span class="file-label">Current file:</span>
+          <span class="file-name"><%= @design_update.pdf_file.filename %></span>
+        </div>
+        <%= button_to "View Current PDF", rails_blob_path(@design_update.pdf_file, disposition: "inline"),
+                   method: :get,
+                   class: "btn btn-outline btn-sm",
+                   form: { style: 'display: inline;', target: '_blank' } %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit @design_update.new_record? ? "Create Design Update" : "Update Design Update", class: "btn btn-primary" %>
+    <%= button_to "Cancel", admin_panel_design_updates_path, method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
+  </div>
+<% end %>

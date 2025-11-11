@@ -25,6 +25,9 @@ module ResumeValidations
       return false
     end
 
+    # Admins can update any resume
+    return true if current_authenticated_user&.role == 'admin'
+
     if @resume.user != @user
       redirect_to user_path(@user), alert: 'You can only update your own resume.'
       return false

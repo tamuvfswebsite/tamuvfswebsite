@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AdminPanel::RoleApplicationsController, type: :request do
   let(:admin_user) { create_user(role: 'admin') }
+  # Create a role with no questions to simplify testing
   let(:org_role) { OrganizationalRole.create!(name: 'Test Role', description: 'Test Description') }
   let(:user1) do
     user = create_user(uid: 'user1', email: 'user1@test.com')
@@ -27,8 +28,8 @@ RSpec.describe AdminPanel::RoleApplicationsController, type: :request do
 
   describe 'GET /admin_panel/role_applications' do
     it 'displays all role applications' do
-      user1.create_role_application!(org_role_id: org_role.id, essay: 'Essay 1' * 20, status: 'not_reviewed')
-      user2.create_role_application!(org_role_id: org_role.id, essay: 'Essay 2' * 20, status: 'accepted')
+      user1.role_applications.create!(org_role_id: org_role.id, status: 'not_reviewed')
+      user2.role_applications.create!(org_role_id: org_role.id, status: 'accepted')
 
       get admin_panel_role_applications_path
       expect(response).to be_successful
@@ -37,7 +38,7 @@ RSpec.describe AdminPanel::RoleApplicationsController, type: :request do
     end
 
     it 'includes user and organizational role information' do
-      user1.create_role_application!(org_role_id: org_role.id, essay: 'Test essay' * 20)
+      user1.role_applications.create!(org_role_id: org_role.id)
 
       get admin_panel_role_applications_path
       expect(response).to be_successful
@@ -47,12 +48,12 @@ RSpec.describe AdminPanel::RoleApplicationsController, type: :request do
 
     it 'orders applications by created_at descending (newest first)' do
       # Create applications with specific times
-      app1 = user1.create_role_application!(org_role_id: org_role.id, essay: 'Old essay' * 20)
+      app1 = user1.role_applications.create!(org_role_id: org_role.id)
       app1.update_column(:created_at, 2.days.ago)
 
       user3 = create_user(uid: 'user3', email: 'user3@test.com')
       attach_resume_to_user(user3)
-      app2 = user3.create_role_application!(org_role_id: org_role.id, essay: 'New essay' * 20)
+      app2 = user3.role_applications.create!(org_role_id: org_role.id)
       app2.update_column(:created_at, 1.day.ago)
 
       get admin_panel_role_applications_path
@@ -65,10 +66,10 @@ RSpec.describe AdminPanel::RoleApplicationsController, type: :request do
     end
 
     it 'filters by not_reviewed status when status param provided' do
-      user1.create_role_application!(org_role_id: org_role.id, essay: 'Not reviewed essay' * 20,
-                                     status: 'not_reviewed')
-      user2.create_role_application!(org_role_id: org_role.id, essay: 'Accepted essay' * 20,
-                                     status: 'accepted')
+      user1.role_applications.create!(org_role_id: org_role.id,
+                                      status: 'not_reviewed')
+      user2.role_applications.create!(org_role_id: org_role.id,
+                                      status: 'accepted')
 
       get admin_panel_role_applications_path, params: { status: { not_reviewed: '1' } }
       expect(response).to be_successful
@@ -77,16 +78,16 @@ RSpec.describe AdminPanel::RoleApplicationsController, type: :request do
     end
 
     it 'filters by multiple statuses' do
-      user1.create_role_application!(org_role_id: org_role.id, essay: 'Not reviewed essay' * 20,
-                                     status: 'not_reviewed')
+      user1.role_applications.create!(org_role_id: org_role.id,
+                                      status: 'not_reviewed')
 
       user3 = create_user(uid: 'user3', email: 'user3@test.com')
       attach_resume_to_user(user3)
-      user3.create_role_application!(org_role_id: org_role.id, essay: 'Accepted essay' * 20,
-                                     status: 'accepted')
+      user3.role_applications.create!(org_role_id: org_role.id,
+                                      status: 'accepted')
 
-      user2.create_role_application!(org_role_id: org_role.id, essay: 'Rejected essay' * 20,
-                                     status: 'rejected')
+      user2.role_applications.create!(org_role_id: org_role.id,
+                                      status: 'rejected')
 
       get admin_panel_role_applications_path, params: { status: { not_reviewed: '1', accepted: '1' } }
       expect(response).to be_successful
@@ -96,8 +97,8 @@ RSpec.describe AdminPanel::RoleApplicationsController, type: :request do
     end
 
     it 'shows all applications when no status filter provided' do
-      user1.create_role_application!(org_role_id: org_role.id, essay: 'Essay 1' * 20, status: 'not_reviewed')
-      user2.create_role_application!(org_role_id: org_role.id, essay: 'Essay 2' * 20, status: 'accepted')
+      user1.role_applications.create!(org_role_id: org_role.id, status: 'not_reviewed')
+      user2.role_applications.create!(org_role_id: org_role.id, status: 'accepted')
 
       get admin_panel_role_applications_path
       expect(response).to be_successful
@@ -106,7 +107,7 @@ RSpec.describe AdminPanel::RoleApplicationsController, type: :request do
     end
 
     it 'ignores invalid status filters' do
-      user1.create_role_application!(org_role_id: org_role.id, essay: 'Test essay' * 20)
+      user1.role_applications.create!(org_role_id: org_role.id)
 
       get admin_panel_role_applications_path, params: { status: { invalid: '1' } }
       expect(response).to be_successful
@@ -114,12 +115,11 @@ RSpec.describe AdminPanel::RoleApplicationsController, type: :request do
   end
 
   describe 'GET /admin_panel/role_applications/:id' do
-    let(:application) { user1.create_role_application!(org_role_id: org_role.id, essay: 'Detailed essay' * 20) }
+    let(:application) { user1.role_applications.create!(org_role_id: org_role.id) }
 
     it 'displays full application details' do
       get admin_panel_role_application_path(application)
       expect(response).to be_successful
-      expect(response.body).to include('Detailed essay')
       expect(response.body).to include(user1.email)
       expect(response.body).to include('Test Role')
     end
@@ -132,7 +132,7 @@ RSpec.describe AdminPanel::RoleApplicationsController, type: :request do
 
   describe 'PATCH /admin_panel/role_applications/:id/update_status' do
     let(:application) do
-      user1.create_role_application!(org_role_id: org_role.id, essay: 'Test essay' * 20, status: 'not_reviewed')
+      user1.role_applications.create!(org_role_id: org_role.id, status: 'not_reviewed')
     end
 
     it 'updates application status successfully' do
@@ -171,7 +171,7 @@ RSpec.describe AdminPanel::RoleApplicationsController, type: :request do
   end
 
   describe 'DELETE /admin_panel/role_applications/:id' do
-    let(:application) { user1.create_role_application!(org_role_id: org_role.id, essay: 'Test essay' * 20) }
+    let(:application) { user1.role_applications.create!(org_role_id: org_role.id) }
 
     it 'deletes the application successfully' do
       # Force creation of the application before the expect block

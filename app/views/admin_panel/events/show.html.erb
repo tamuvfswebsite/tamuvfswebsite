@@ -1,92 +1,150 @@
-<h1><%= @event.title %></h1>
+<div class="admin-event-show-page">
+  <div class="page-header">
+    <h1><%= @event.title %></h1>
+    <div class="header-actions">
+      <%= button_to 'Edit Event', edit_admin_panel_event_path(@event), method: :get, class: 'btn btn-primary', form: { style: 'display: inline;' } %>
+      <%= button_to 'Delete Event', admin_panel_event_path(@event), method: :delete, class: 'btn btn-danger', data: { turbo_confirm: "Are you sure you want to delete this event?" }, form: { style: 'display: inline;' } %>
+      <%= button_to 'Back to Events', admin_panel_events_path, method: :get, class: 'btn btn-outline', form: { style: 'display: inline;' } %>
+    </div>
+  </div>
 
-<div class="event-details">
-  <p><strong>Description:</strong> <%= @event.description %></p>
-  <p><strong>Date & Time:</strong> <%= @event.formatted_date %></p>
-  <p><strong>Location:</strong> <%= @event.location %></p>
-  <p><strong>Status:</strong> <%= @event.upcoming? ? "Upcoming" : "Past Event" %></p>
-</div>
+  <!-- Event Details Card -->
+  <div class="event-details-card">
+    <h2>Event Details</h2>
+    <div class="details-grid">
+      <div class="detail-item">
+        <span class="detail-label">Date & Time:</span>
+        <span class="detail-value"><%= @event.formatted_date %></span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Location:</span>
+        <span class="detail-value"><%= @event.location %></span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Status:</span>
+        <span class="detail-value">
+          <span class="status-badge <%= @event.upcoming? ? 'status-upcoming' : 'status-past' %>">
+            <%= @event.upcoming? ? "Upcoming" : "Past Event" %>
+          </span>
+        </span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Visibility:</span>
+        <span class="detail-value">
+          <% if @event.is_public? %>
+            <span class="badge badge-public">Public (Everyone)</span>
+          <% elsif @event.organizational_roles.any? %>
+            <% @event.organizational_roles.each do |role| %>
+              <span class="badge badge-role"><%= role.name %></span>
+            <% end %>
+          <% else %>
+            <span class="badge badge-all">All Roles</span>
+          <% end %>
+        </span>
+      </div>
+    </div>
+    <div class="description-section">
+      <span class="detail-label">Description:</span>
+      <p class="description-text"><%= @event.description %></p>
+    </div>
+  </div>
 
-<div class="actions">
-  <%= link_to 'Edit Event', edit_admin_panel_event_path(@event) %>
-  <%= button_to 'Delete Event', admin_panel_event_path(@event),
-              method: :delete,
-              data: { confirm: "Are you sure you want to delete this event?" } %>
-  <%= link_to 'Back to Events', admin_panel_events_path %>
-</div>
-
-<hr>
-
-<h2>Public View + RSVP Summary</h2>
-<p><strong>Date:</strong> <%= @event.formatted_date %> • <strong>Location:</strong> <%= @event.location %></p>
-<p><%= @event.description %></p>
-
-<h3>RSVP counts</h3>
-<ul>
-  <li>Yes: <%= @yes_count %></li>
-  <li>Maybe: <%= @maybe_count %></li>
-  <li>No: <%= @no_count %></li>
-</ul>
-
-<% if @event.event_date > Time.current %>
-  <p>RSVP is currently open.</p>
-<% else %>
-  <p>RSVP is closed for this event.</p>
-<% end %>
-
-<hr>
-
-<h2>RSVPs</h2>
-<% if @rsvps.present? %>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Status</th>
-        <th>Responded At</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @rsvps.each do |rsvp| %>
-        <% user = rsvp.user %>
-        <tr>
-          <td><%= [user&.first_name, user&.last_name].compact.join(' ') %></td>
-          <td><%= user&.email %></td>
-          <td><%= rsvp.status %></td>
-          <td><%= rsvp.created_at&.strftime('%Y-%m-%d %H:%M') %></td>
-        </tr>
+  <!-- RSVP Summary Card -->
+  <div class="rsvp-summary-card">
+    <h2>RSVP Summary</h2>
+    <div class="rsvp-counts-grid">
+      <div class="count-card count-yes">
+        <div class="count-number"><%= @yes_count %></div>
+        <div class="count-label">Yes</div>
+      </div>
+      <div class="count-card count-maybe">
+        <div class="count-number"><%= @maybe_count %></div>
+        <div class="count-label">Maybe</div>
+      </div>
+      <div class="count-card count-no">
+        <div class="count-number"><%= @no_count %></div>
+        <div class="count-label">No</div>
+      </div>
+    </div>
+    <div class="rsvp-status-message">
+      <% if @event.event_date > Time.current %>
+        <span class="status-open">✓ RSVP is currently open</span>
+      <% else %>
+        <span class="status-closed">✕ RSVP is closed for this event</span>
       <% end %>
-    </tbody>
-  </table>
-<% else %>
-  <p>No RSVPs yet.</p>
-<% end %>
+    </div>
+  </div>
 
-<hr>
+  <!-- RSVPs Table Card -->
+  <div class="data-table-card">
+    <h2>RSVPs (<%= @rsvps.count %>)</h2>
+    <% if @rsvps.present? %>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Responded At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @rsvps.each do |rsvp| %>
+              <% user = rsvp.user %>
+              <tr>
+                <td class="name-cell"><%= [user&.first_name, user&.last_name].compact.join(' ') %></td>
+                <td class="email-cell"><%= user&.email %></td>
+                <td>
+                  <span class="rsvp-badge rsvp-<%= rsvp.status %>"><%= rsvp.status.titleize %></span>
+                </td>
+                <td class="date-cell"><%= rsvp.created_at&.strftime('%B %d, %Y at %I:%M %p') %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="empty-state">
+        <p>No RSVPs yet.</p>
+      </div>
+    <% end %>
+  </div>
 
-<h2>Attendance</h2>
-<p><strong>Attendance Stats:</strong> <%= @attended_count %> attended out of <%= @total_rsvps_yes %> RSVPs (Yes)</p>
-<% if @attendances.present? %>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Checked In At</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @attendances.each do |attendance| %>
-        <% user = attendance.user %>
-        <tr>
-          <td><%= [user&.first_name, user&.last_name].compact.join(' ') %></td>
-          <td><%= user&.email %></td>
-          <td><%= attendance.checked_in_at&.strftime('%Y-%m-%d %H:%M') %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% else %>
-  <p>No attendees have checked in yet.</p>
-<% end %>
+  <!-- Attendance Table Card -->
+  <div class="data-table-card">
+    <h2>Attendance</h2>
+    <div class="attendance-stats">
+      <span class="stats-text">
+        <strong><%= @attended_count %></strong> attended out of <strong><%= @total_rsvps_yes %></strong> RSVPs (Yes)
+      </span>
+    </div>
+    <% if @attendances.present? %>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Checked In At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @attendances.each do |attendance| %>
+              <% user = attendance.user %>
+              <tr>
+                <td class="name-cell"><%= [user&.first_name, user&.last_name].compact.join(' ') %></td>
+                <td class="email-cell"><%= user&.email %></td>
+                <td class="date-cell"><%= attendance.checked_in_at&.strftime('%B %d, %Y at %I:%M %p') %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="empty-state">
+        <p>No attendees have checked in yet.</p>
+      </div>
+    <% end %>
+  </div>
+</div>

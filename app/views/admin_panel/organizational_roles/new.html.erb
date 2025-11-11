@@ -1,0 +1,13 @@
+<div class="admin-org-role-form-page">
+  <div class="page-header">
+    <h1>Create New Organizational Role</h1>
+  </div>
+
+  <div class="form-card">
+    <%= render "form", organizational_role: @organizational_role %>
+  </div>
+
+  <div class="form-footer">
+    <%= button_to 'Back to Roles', admin_panel_organizational_roles_path, method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
+  </div>
+</div>

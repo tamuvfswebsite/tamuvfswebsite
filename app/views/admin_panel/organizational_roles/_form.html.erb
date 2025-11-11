@@ -1,0 +1,50 @@
+<%= form_with(model: organizational_role, url: organizational_role.persisted? ? admin_panel_organizational_role_path(organizational_role) : admin_panel_organizational_roles_path, local: true, class: 'org-role-form') do |form| %>
+  <% if organizational_role.errors.any? %>
+    <div class="form-errors">
+      <h4><%= pluralize(organizational_role.errors.count, "error") %> prohibited this organizational role from being saved:</h4>
+      <ul>
+        <% organizational_role.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-section">
+    <h3>Basic Information</h3>
+
+    <div class="form-field">
+      <%= form.label :name, "Role Name" %>
+      <%= form.text_field :name, class: "form-input", placeholder: "e.g., Web Developer" %>
+    </div>
+
+    <div class="form-field">
+      <%= form.label :description, "Role Description" %>
+      <%= form.text_area :description, rows: 4, class: "form-textarea", placeholder: "Describe the role and its responsibilities..." %>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3>Application Questions</h3>
+    <p class="form-help-text">Configure up to three questions that applicants will answer when applying for this role. Leave blank if no questions are needed.</p>
+
+    <div class="form-field">
+      <%= form.label :question_1, "Question 1" %>
+      <%= form.text_area :question_1, rows: 3, class: "form-textarea", placeholder: "Enter the first application question (optional)" %>
+    </div>
+
+    <div class="form-field">
+      <%= form.label :question_2, "Question 2" %>
+      <%= form.text_area :question_2, rows: 3, class: "form-textarea", placeholder: "Enter the second application question (optional)" %>
+    </div>
+
+    <div class="form-field">
+      <%= form.label :question_3, "Question 3" %>
+      <%= form.text_area :question_3, rows: 3, class: "form-textarea", placeholder: "Enter the third application question (optional)" %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= form.submit organizational_role.persisted? ? "Update Organizational Role" : "Create Organizational Role", class: "btn btn-primary" %>
+  </div>
+<% end %>

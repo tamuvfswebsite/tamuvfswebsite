@@ -1,0 +1,49 @@
+<div class="admin-org-roles-page">
+  <div class="page-header">
+    <h1>Organizational Roles</h1>
+    <div class="header-actions">
+      <%= button_to "Create New Role", new_admin_panel_organizational_role_path, method: :get, class: "btn btn-primary", form: { style: 'display: inline;' } %>
+    </div>
+  </div>
+
+  <% if @organizational_roles.any? %>
+    <div class="roles-table-container">
+      <table class="roles-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th class="text-center">Application Questions</th>
+            <th class="actions-column">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @organizational_roles.each do |org_role| %>
+            <tr>
+              <td class="role-name"><%= org_role.name %></td>
+              <td class="role-description"><%= truncate(org_role.description, length: 100) %></td>
+              <td class="text-center">
+                <% questions_count = [org_role.question_1, org_role.question_2, org_role.question_3].compact.count %>
+                <span class="questions-badge"><%= pluralize(questions_count, 'question') %></span>
+              </td>
+              <td class="actions-cell">
+                <%= button_to "View", admin_panel_organizational_role_path(org_role), method: :get, class: "btn btn-sm btn-outline", form: { style: 'display: inline;' } %>
+                <%= button_to "Edit", edit_admin_panel_organizational_role_path(org_role), method: :get, class: "btn btn-sm btn-primary", form: { style: 'display: inline;' } %>
+                <%= button_to "Delete", admin_panel_organizational_role_path(org_role), method: :delete, class: "btn btn-sm btn-danger", form: { style: 'display: inline;', data: { turbo_confirm: "Are you sure you want to delete this organizational role?" } } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <p>No organizational roles have been created yet.</p>
+      <%= button_to "Create First Role", new_admin_panel_organizational_role_path, method: :get, class: "btn btn-primary", form: { style: 'display: inline;' } %>
+    </div>
+  <% end %>
+
+  <div class="page-footer">
+    <%= button_to 'Back to Admin Dashboard', admin_panel_root_path, method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
+  </div>
+</div>

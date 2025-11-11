@@ -1,10 +1,76 @@
+<!-- app/views/sponsors/dashboard.html.erb -->
 <div class="sponsor-dashboard">
   <% if @sponsor %>
-    <h1>Welcome, <%= @sponsor.company_name %></h1>
-    <p>Welcome to your Sponsor Dashboard. Quick links and company details are shown below.</p>
+    <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px;">
+      <% if @sponsor.logo.attached? %>
+        <%= image_tag @sponsor.logo, 
+            style: 'max-width: 150px; max-height: 150px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);',
+            alt: "#{@sponsor.company_name} logo" %>
+      <% end %>
+      <div>
+        <h1 style="margin: 0;">Welcome, <%= @sponsor.company_name %></h1>
+        <p style="margin: 5px 0 0 0; color: #666;">Welcome to your Sponsor Dashboard. Quick links and company details are shown below.</p>
+      </div>
+    </div>
+
+    <!-- Recent Design Updates Section with PDF Embeds -->
+    <div class="design-updates">
+      <h2>Recent Design Updates</h2>
+      <% recent_updates = DesignUpdate.recent.limit(5) %>
+      <% if recent_updates.any? %>
+        <div class="updates-list">
+          <% recent_updates.each do |update| %>
+            <div class="update-card">
+              <div class="update-header">
+                <h3><%= update.title %></h3>
+                <span class="update-date"><%= update.update_date.strftime("%B %d, %Y") %></span>
+              </div>
+              
+              <% if update.pdf_file.attached? %>
+                <div class="pdf-embed">
+                  <embed 
+                    src="<%= rails_blob_path(update.pdf_file, disposition: "inline") %>" 
+                    type="application/pdf" 
+                    width="100%" 
+                    height="600px" />
+                  
+                  <div class="pdf-fallback">
+                    <p>Can't view the PDF? 
+                      <%= link_to "Download PDF", rails_blob_path(update.pdf_file, disposition: "attachment") %>
+                      or 
+                      <%= link_to "Open in new tab", rails_blob_path(update.pdf_file, disposition: "inline"), target: "_blank" %>
+                    </p>
+                  </div>
+                </div>
+              <% else %>
+                <p class="no-pdf">No PDF available for this update.</p>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+        
+        <% if DesignUpdate.count > 5 %>
+          <div class="view-all">
+            <%= link_to "View All Design Updates", sponsor_design_updates_path, class: "btn-secondary" %>
+          </div>
+        <% end %>
+      <% else %>
+        <p>No recent design updates.</p>
+      <% end %>
+    </div>
 
     <div class="sponsor-info">
       <h2>Company Details</h2>
+      
+      <% if @sponsor.logo.attached? %>
+        <div style="margin: 20px 0;">
+          <p><strong>Company Logo:</strong></p>
+          <%= image_tag @sponsor.logo, 
+              style: 'max-width: 250px; max-height: 250px; border: 1px solid #ddd; border-radius: 4px; padding: 10px; background: white;',
+              alt: "#{@sponsor.company_name} logo" %>
+        </div>
+      <% end %>
+      
       <p><strong>Company:</strong> <%= @sponsor.company_name %></p>
       <p><strong>Tier:</strong> <%= @sponsor.tier %></p>
       <p><strong>Website:</strong>
@@ -30,6 +96,17 @@
       <% else %>
         <p>No logo placements yet.</p>
       <% end %>
+    </div>
+
+    <div class="sponsorship-package">
+      <h3>Sponsorship Package</h3>
+      <p>
+        <%= link_to "Download Sponsorship Package Information",
+                    asset_path('VFD 25-26 Full Sponsorship Package.pdf'),
+                    target: '_blank',
+                    rel: 'noopener',
+                    download: 'VFD 25-26 Full Sponsorship Package.pdf' %>
+      </p>
     </div>
 
     <div class="actions">

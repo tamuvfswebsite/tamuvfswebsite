@@ -9,37 +9,79 @@
     </div>
 
     <div class="right">
-      <div class="image-placeholder" aria-label="Hero image placeholder">
-        <span>Image placeholder</span>
-      </div>
+      <%= image_tag 'vfs-bird-logo.png', alt: 'Vertical Flight Society Logo', class: 'landing-logo' %>
     </div>
   </div>
 </div>
 
-<div class="events-section">
-  <div class="events-container">
-    <h2 class="events-title">Upcoming Events</h2>
-    <% if @upcoming_events.present? %>
-      <ul class="events-list">
-        <% @upcoming_events.each do |event| %>
-          <li class="event-item">
-            <div class="event-main">
-              <span class="event-title"><%= event.title %></span>
-              <span class="event-date"><%= event.formatted_date %></span>
-            </div>
-            <div class="event-meta">
-              <span class="event-location"><%= event.location %></span>
-            </div>
-            <% if admin_signed_in? %>
-              <div class="event-actions">
-                <%= link_to "View & RSVP", event_path(event), class: "btn" %>
-              </div>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p class="events-empty">No upcoming events scheduled.</p>
-    <% end %>
+<div class="home-events-section">
+  <div class="home-events-header">
+    <h2>Upcoming Events</h2>
   </div>
+
+  <% if @upcoming_events.present? %>
+    <div class="home-events-grid">
+      <% @upcoming_events.each do |event| %>
+        <% if admin_signed_in? %>
+          <%= link_to event, class: 'home-event-card' do %>
+            <div class="home-event-card-header">
+              <h3 class="home-event-card-title"><%= event.title %></h3>
+            </div>
+            <div class="home-event-card-body">
+              <div class="home-event-card-info">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span class="home-event-card-date"><%= event.formatted_date %></span>
+              </div>
+              <div class="home-event-card-info">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span class="home-event-card-location"><%= event.location %></span>
+              </div>
+              <% if event.description.present? %>
+                <p class="home-event-card-description"><%= truncate(event.description, length: 100) %></p>
+              <% end %>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="home-event-card home-event-card-static">
+            <div class="home-event-card-header">
+              <h3 class="home-event-card-title"><%= event.title %></h3>
+            </div>
+            <div class="home-event-card-body">
+              <div class="home-event-card-info">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span class="home-event-card-date"><%= event.formatted_date %></span>
+              </div>
+              <div class="home-event-card-info">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span class="home-event-card-location"><%= event.location %></span>
+              </div>
+              <% if event.description.present? %>
+                <p class="home-event-card-description"><%= truncate(event.description, length: 100) %></p>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="home-events-empty">
+      <p>No upcoming events scheduled.</p>
+    </div>
+  <% end %>
 </div>

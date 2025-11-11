@@ -1,5 +1,5 @@
 module AdminPanel
-  class LogoPlacementsController < ApplicationController
+  class LogoPlacementsController < BaseController
     before_action :set_sponsor
     before_action :set_logo_placement, only: %i[ show edit update destroy ]
 

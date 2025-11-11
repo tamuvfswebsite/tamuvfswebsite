@@ -1,8 +1,7 @@
-<%= form_with(model: resume, url: user_resume_path(@user, return_to: @return_to), method: resume.new_record? ? :post : :patch) do |form| %>
+<%= form_with(model: resume, url: user_resume_path(@user, return_to: @return_to), method: resume.new_record? ? :post : :patch, class: "resume-form") do |form| %>
   <% if resume.errors.any? %>
-    <div style="color: red">
-      <h2>Cannot save resume, <%= pluralize(resume.errors.count, "error") %> found:</h2>
-
+    <div class="form-errors">
+      <h2><%= pluralize(resume.errors.count, "error") %> prevented this resume from being saved:</h2>
       <ul>
         <% resume.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -11,40 +10,35 @@
     </div>
   <% end %>
 
-  <div class="gpa" style="margin-bottom: 15px;">
-    <%= form.label :gpa, "GPA *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
-    <%= form.number_field :gpa, step: 0.01, min: 0, max: 4, required: true, 
-        style: "padding: 8px; width: 200px; border: 1px solid #ccc; border-radius: 4px;" %>
+  <div class="form-group">
+    <%= form.label :gpa, "GPA *", class: "form-label" %>
+    <%= form.number_field :gpa, step: 0.01, min: 0, max: 4, required: true, class: "form-control", placeholder: "e.g., 3.75" %>
+    <small class="form-hint">Enter your current GPA on a 4.0 scale</small>
   </div>
 
-  <div class="graduation-date" style="margin-bottom: 15px;">
-    <%= form.label :graduation_date, "Graduation Year *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
-    <%= form.select :graduation_date, ((Date.today.year - 4)...(Date.today.year + 8)).to_a.reverse, 
-        { prompt: "Select Graduation Year" }, 
-        { required: true, style: "padding: 8px; width: 250px; border: 1px solid #ccc; border-radius: 4px;" } %>
+  <div class="form-group">
+    <%= form.label :graduation_date, "Graduation Year *", class: "form-label" %>
+    <%= form.select :graduation_date, ((Date.today.year - 4)...(Date.today.year + 8)).to_a.reverse,
+        { prompt: "Select Graduation Year" },
+        { required: true, class: "form-control" } %>
+    <small class="form-hint">When do you expect to graduate?</small>
   </div>
 
-  <div class="major" style="margin-bottom: 15px;">
-    <%= form.label :major, "Major *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
-    <%= form.select :major, ["Aerospace Engineering", "Civil Engineering", "Computer Science", "Computer Engineering", "Mechanical Engineering"], 
-        { prompt: "Select Major" }, 
-        { required: true, style: "padding: 8px; width: 250px; border: 1px solid #ccc; border-radius: 4px;" } %>
+  <div class="form-group">
+    <%= form.label :major, "Major *", class: "form-label" %>
+    <%= form.select :major, ["Aerospace Engineering", "Civil Engineering", "Computer Science", "Computer Engineering", "Mechanical Engineering"],
+        { prompt: "Select Major" },
+        { required: true, class: "form-control" } %>
+    <small class="form-hint">Choose your primary field of study</small>
   </div>
 
-  <div class="organizational-role" style="margin-bottom: 15px;">
-    <%= form.label :organizational_role, "Organizational Role *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
-    <%= form.select :organizational_role, ["X Team", "Y Team", "Z Team", "Student"], 
-        { prompt: "Select VFS Team" }, 
-        { required: true, style: "padding: 8px; width: 250px; border: 1px solid #ccc; border-radius: 4px;" } %>
+  <div class="form-group">
+    <%= form.label :file, "Upload Resume (PDF only) *", class: "form-label" %>
+    <%= form.file_field :file, accept: 'application/pdf', required: true, class: "form-control-file" %>
+    <small class="form-hint">Please upload your resume as a PDF file</small>
   </div>
 
-  <div class="field" style="margin-bottom: 15px;">
-    <%= form.label :file, "Upload Resume (PDF only) *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
-    <%= form.file_field :file, accept: 'application/pdf', required: true,
-        style: "padding: 8px; border: 1px solid #ccc; border-radius: 4px;" %>
-  </div>
-
-  <div>
-    <%= form.submit "Submit Resume", style: "padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;" %>
+  <div class="form-actions">
+    <%= form.submit "Submit Resume", class: "btn btn-primary" %>
   </div>
 <% end %>

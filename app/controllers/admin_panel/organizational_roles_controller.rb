@@ -69,7 +69,7 @@ module AdminPanel
     end
 
     def organizational_role_params
-      params.require(:organizational_role).permit(:name, :description)
+      params.require(:organizational_role).permit(:name, :description, :question_1, :question_2, :question_3)
     end
 
     def handle_successful_create(format)

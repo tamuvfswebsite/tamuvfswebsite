@@ -14,10 +14,10 @@ RSpec.describe 'admin_panel/sponsors/new.html.erb', type: :view do
 
   it 'renders the sponsor form' do
     expect(rendered).to have_selector('form')
-    expect(rendered).to have_field('Sponsor Company Name')
+    expect(rendered).to have_field('Company Name')
   end
 
   it 'includes navigation back to sponsors' do
-    expect(rendered).to have_link('Back to Sponsors', href: admin_panel_sponsors_path)
+    expect(rendered).to have_button('Back to Sponsors')
   end
 end

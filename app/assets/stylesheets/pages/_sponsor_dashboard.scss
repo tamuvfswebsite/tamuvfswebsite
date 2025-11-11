@@ -443,3 +443,104 @@
     display: none !important;
   }
 }
+
+// ============================================
+// Design Update Section
+// ============================================
+
+/* Add to your stylesheet */
+.design-updates {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.updates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.update-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.update-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.update-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #212529;
+}
+
+.update-date {
+  color: #6c757d;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.pdf-embed {
+  margin-top: 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pdf-embed embed {
+  display: block;
+  border: none;
+}
+
+.pdf-fallback {
+  padding: 1rem;
+  background: #f8f9fa;
+  text-align: center;
+  border-top: 1px solid #dee2e6;
+}
+
+.pdf-fallback p {
+  margin: 0;
+  color: #6c757d;
+}
+
+.pdf-fallback a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.pdf-fallback a:hover {
+  text-decoration: underline;
+}
+
+.no-pdf {
+  color: #6c757d;
+  font-style: italic;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.view-all {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.current-file {
+  margin-top: 0.75rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+  border-left: 3px solid #007bff;
+}

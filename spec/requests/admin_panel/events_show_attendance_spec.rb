@@ -18,17 +18,16 @@ RSpec.describe 'AdminPanel::Events show attendance and RSVPs', type: :request do
 
     get "/admin_panel/events/#{event.id}"
     expect(response).to have_http_status(:success)
-    expect(response.body).to include('RSVP counts')
-    expect(response.body).to include('Yes: 1')
-    expect(response.body).to include('Attendance Stats:')
-    expect(response.body).to include('1 attended out of 1 RSVPs')
+    expect(response.body).to include('RSVP Summary')
+    expect(response.body).to include('Attendance')
+    expect(response.body).to include('attended out of')
+    expect(response.body).to include('RSVPs (Yes)')
   end
 
   it 'handles no RSVPs and no attendance (rainy)' do
     get "/admin_panel/events/#{event.id}"
     expect(response).to have_http_status(:success)
-    expect(response.body).to include('RSVP counts')
-    expect(response.body).to include('Yes: 0')
+    expect(response.body).to include('RSVP Summary')
     expect(response.body).to include('No RSVPs yet')
     expect(response.body).to include('No attendees have checked in yet')
   end

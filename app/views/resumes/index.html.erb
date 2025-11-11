@@ -22,6 +22,17 @@
   <!-- Filter Section -->
   <div class="filter-section">
     <%= form_with url: resumes_path, method: :get, class: "filter-form" do |f| %>
+      <!-- Search Bar -->
+      <div class="filter-row">
+        <div class="filter-group filter-group-search">
+          <%= f.label :search, "Search by Name or Email:", class: "filter-label" %>
+          <%= f.text_field :search, 
+              value: params[:search],
+              placeholder: "Enter name or email",
+              class: "filter-input search-input" %>
+        </div>
+      </div>
+
       <div class="filter-row">
         <div class="filter-group">
           <%= f.label :major, "Filter by Major:", class: "filter-label" %>
@@ -32,10 +43,12 @@
         </div>
 
         <div class="filter-group">
-          <%= f.label :organizational_role, "Filter by Role:", class: "filter-label" %>
-          <%= f.select :organizational_role,
-              options_for_select([["All Roles", ""]] + @organizational_roles.map { |r| [r, r] }, params[:organizational_role]),
-              {},
+          <%= f.label :organizational_role_id, "Filter by Role:", class: "filter-label" %>
+          <%= f.collection_select :organizational_role_id,
+              @organizational_roles,
+              :id,
+              :name,
+              { include_blank: "All Roles" },
               class: "filter-select" %>
         </div>
 
@@ -68,13 +81,12 @@
 
         <div class="filter-buttons">
           <%= f.submit "Apply Filters", class: "btn btn-apply-filters" %>
-          <% if params[:major].present? || params[:organizational_role].present? || params[:graduation_year].present? || params[:gpa_value].present? %>
-            <%= link_to "Clear Filters", resumes_path(request.query_parameters.except(:major, :organizational_role, :graduation_year, :gpa_operator, :gpa_value)), class: "btn btn-clear-filters" %>
+          <% if params[:search].present? || params[:major].present? || params[:organizational_role_id].present? || params[:graduation_year].present? || params[:gpa_value].present? %>
+            <%= link_to "Clear Filters", resumes_path(request.query_parameters.except(:search, :major, :organizational_role_id, :graduation_year, :gpa_operator, :gpa_value)), class: "btn btn-clear-filters" %>
           <% end %>
         </div>
       </div>
 
-      <!-- Preserve sort and direction params -->
       <%= hidden_field_tag :sort, params[:sort] %>
       <%= hidden_field_tag :direction, params[:direction] %>
     <% end %>
@@ -84,10 +96,11 @@
   <thead>
     <tr>
       <th>
-        User
-        <%= link_to "↑", resumes_path(request.query_parameters.merge(sort: 'user', direction: 'asc')), title: 'Sort user asc' %>
-        <%= link_to "↓", resumes_path(request.query_parameters.merge(sort: 'user', direction: 'desc')), title: 'Sort user desc' %>
+        Name
+        <%= link_to "↑", resumes_path(request.query_parameters.merge(sort: 'user', direction: 'asc')), title: 'Sort name asc' %>
+        <%= link_to "↓", resumes_path(request.query_parameters.merge(sort: 'user', direction: 'desc')), title: 'Sort name desc' %>
       </th>
+      <th>Email</th>
       <th>
         GPA
         <%= link_to "↑", resumes_path(request.query_parameters.merge(sort: 'gpa', direction: 'asc')), title: 'Sort gpa asc' %>
@@ -114,11 +127,18 @@
   <tbody>
     <% @resumes.each do |resume| %>
       <tr>
+        <td><%= "#{resume.user.first_name} #{resume.user.last_name}" %></td>
         <td><%= resume.user.email %></td>
         <td><%= resume.gpa %></td>
         <td><%= resume.graduation_date %></td>
         <td><%= resume.major %></td>
-        <td><%= resume.organizational_role %></td>
+        <td>
+          <% if resume.organizational_roles.any? %>
+            <%= resume.organizational_roles.map(&:name).join(", ") %>
+          <% else %>
+            <em>None</em>
+          <% end %>
+        </td>
         <td><%= link_to "Show", resume_path(resume) %></td>
       </tr>
     <% end %>

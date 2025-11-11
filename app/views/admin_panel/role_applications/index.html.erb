@@ -17,8 +17,14 @@
     <% end %>
   </div>
 
-  <h1>Role Applications</h1>
-  <p class="subtitle">Review and manage all submitted applications.</p>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+    <div>
+      <h1>Role Applications</h1>
+      <p class="subtitle">Review and manage all submitted applications.</p>
+    </div>
+    <% csv_params = params[:status].present? ? { format: :csv, status: params[:status].to_unsafe_h } : { format: :csv } %>
+    <%= link_to "Export to CSV", admin_panel_role_applications_path(csv_params), class: "btn btn-primary" %>
+  </div>
 
   <!-- Status Filters -->
   <%= form_with url: admin_panel_role_applications_path, method: :get, local: true do |form| %>
@@ -32,6 +38,10 @@
         <label>
           <%= check_box_tag 'status[in_review]', '1', params.dig(:status, :in_review) == '1' %>
           <span class="status-label in-review">● In Review</span>
+        </label>
+        <label>
+          <%= check_box_tag 'status[interview_needed]', '1', params.dig(:status, :interview_needed) == '1' %>
+          <span class="status-label interview-needed">● Interview Needed</span>
         </label>
         <label>
           <%= check_box_tag 'status[accepted]', '1', params.dig(:status, :accepted) == '1' %>
@@ -93,18 +103,43 @@
           </div>
 
           <div class="card-field">
-            <strong>Essay:</strong>
+            <strong>Application Responses:</strong>
             <div class="essay-preview">
-              <%= simple_format(application.essay) %>
+              <% if application.organizational_role.question_1.present? && application.answer_1.present? %>
+                <div style="margin-bottom: 10px;">
+                  <em><%= application.organizational_role.question_1 %></em>
+                  <p><%= simple_format(application.answer_1) %></p>
+                </div>
+              <% end %>
+              <% if application.organizational_role.question_2.present? && application.answer_2.present? %>
+                <div style="margin-bottom: 10px;">
+                  <em><%= application.organizational_role.question_2 %></em>
+                  <p><%= simple_format(application.answer_2) %></p>
+                </div>
+              <% end %>
+              <% if application.organizational_role.question_3.present? && application.answer_3.present? %>
+                <div style="margin-bottom: 10px;">
+                  <em><%= application.organizational_role.question_3 %></em>
+                  <p><%= simple_format(application.answer_3) %></p>
+                </div>
+              <% end %>
+              <% if application.organizational_role.question_1.blank? && 
+                    application.organizational_role.question_2.blank? && 
+                    application.organizational_role.question_3.blank? %>
+                <em>No application questions for this role.</em>
+              <% end %>
             </div>
           </div>
 
           <div class="card-actions">
-            <%= link_to "View Full Application", admin_panel_role_application_path(application), class: "btn-view" %>
-            <%= button_to "Delete", admin_panel_role_application_path(application), 
+            <%= button_to "View Full Application", admin_panel_role_application_path(application),
+                method: :get,
+                class: "btn btn-primary",
+                form: { style: 'display: inline;' } %>
+            <%= button_to "Delete", admin_panel_role_application_path(application),
                 method: :delete,
-                data: { turbo_confirm: "Are you sure you want to delete this application?" },
-                class: "btn-delete" %>
+                class: "btn btn-danger",
+                form: { style: 'display: inline;', data: { turbo_confirm: "Are you sure you want to delete this application?" } } %>
           </div>
         </div>
       <% end %>

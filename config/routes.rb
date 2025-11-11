@@ -26,8 +26,8 @@ Rails.application.routes.draw do
     resource :resume, only: %i[new create show edit update destroy]
   end
 
-  # Role applications
-  resources :role_applications, only: %i[new create show edit update]
+  # Role applications - users can create/view their own, admins can view all
+  resources :role_applications, only: %i[index new create show edit update]
 
   # Admin authentication (Devise + OmniAuth)
   devise_for :admins, controllers: { omniauth_callbacks: 'admins/omniauth_callbacks' }
@@ -57,10 +57,10 @@ Rails.application.routes.draw do
       member do
         get   :assign_users
         patch :update_users
+        delete :remove_logo
       end
-      # Future sponsor routes (e.g., resumes, applications)
-      # resources :resumes, only: [:index]
-      # resources :applications, only: [:index]
     end
+
+    resources :design_updates
   end
 end

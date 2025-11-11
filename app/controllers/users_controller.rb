@@ -52,7 +52,7 @@ class UsersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def user_params
-    params.expect(user: [:role, { organizational_role_ids: [] }])
+    params.expect(user: [:role, :points, { organizational_role_ids: [] }])
   end
 
   def ensure_own_profile_or_admin

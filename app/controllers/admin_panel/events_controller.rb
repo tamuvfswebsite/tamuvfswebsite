@@ -48,7 +48,8 @@ module AdminPanel
     end
 
     def event_parameters
-      params.require(:event).permit(:title, :description, :event_date, :location, :capacity, :attendance_points)
+      params.require(:event).permit(:title, :description, :event_date, :location, :capacity, :attendance_points,
+                                    :is_public, organizational_role_ids: [])
     end
 
     def load_rsvp_data

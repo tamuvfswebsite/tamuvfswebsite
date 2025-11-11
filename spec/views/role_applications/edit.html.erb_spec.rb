@@ -5,8 +5,7 @@ RSpec.describe 'role_applications/edit', type: :view do
   let(:organizational_role) { OrganizationalRole.create!(name: 'Test Role') }
 
   let!(:resume) do
-    resume = Resume.new(user: user, gpa: 3.5, graduation_date: 2025, major: 'Computer Science',
-                        organizational_role: 'Student')
+    resume = Resume.new(user: user, gpa: 3.5, graduation_date: 2025, major: 'Computer Science')
     resume.file.attach(io: File.open(Rails.root.join('spec/fixtures/test.pdf')), filename: 'test.pdf',
                        content_type: 'application/pdf')
     resume.save!
@@ -16,8 +15,7 @@ RSpec.describe 'role_applications/edit', type: :view do
   let(:role_application) do
     RoleApplication.create!(
       user: user,
-      organizational_role: organizational_role,
-      essay: 'This is a test essay that is at least fifty characters long for validation.'
+      organizational_role: organizational_role
     )
   end
 
@@ -36,7 +34,7 @@ RSpec.describe 'role_applications/edit', type: :view do
 
     assert_select 'form[action=?][method=?]', role_application_path(role_application), 'post' do
       assert_select 'select[name=?]', 'role_application[org_role_id]'
-      assert_select 'textarea[name=?]', 'role_application[essay]'
+      # Since the organizational_role has no questions, no answer fields will be present
     end
   end
 end

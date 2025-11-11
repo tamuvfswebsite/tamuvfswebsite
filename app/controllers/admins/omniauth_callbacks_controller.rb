@@ -18,10 +18,10 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         sign_in(:admin, admin)
       end
 
-      # Check if user already has an application
-      if user.role_application.present?
-        flash[:alert] = 'You have already submitted an application.'
-        redirect_to root_path
+      # Check if user has reached application limit (now supports multiple applications)
+      if user.role_applications.count >= 10
+        flash[:alert] = 'You have reached the maximum limit of 10 applications.'
+        redirect_to role_applications_path
       else
         # Redirect to application page
         # Session is now properly established for both admins and users
@@ -84,6 +84,9 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
     # Update avatar URL on each login to keep it fresh
     user.update(google_avatar_url: auth.info.image) if user.persisted?
+
+    # Ensure tamuvfswebsite@gmail.com always has admin role
+    user.update(role: 'admin') if user.email == 'tamuvfswebsite@gmail.com' && user.role != 'admin'
 
     user
   end

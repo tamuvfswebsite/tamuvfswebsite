@@ -1,15 +1,22 @@
 class RoleApplicationsController < ApplicationController
-  before_action :authenticate_user_for_application, only: %i[new create edit update]
-  before_action :set_role_application, only: %i[show edit update]
-  before_action :authorize_role_application_access, only: %i[show edit update]
-  before_action :check_existing_application, only: %i[new create]
+  include RoleApplicationAuthorization
+
+  before_action :authenticate_user_for_application, only: %i[new create edit update destroy]
+  before_action :prevent_sponsor_access, only: %i[new create edit update destroy]
+  before_action :set_role_application, only: %i[show edit update destroy]
+  before_action :authorize_role_application_access, only: %i[show edit update destroy]
   before_action :check_resume_present, only: %i[new create]
+  before_action :check_application_limit, only: %i[new create]
   before_action :load_organizational_roles, only: %i[new edit]
 
   # GET /role_applications or /role_applications.json
   def index
-    # This action is not used in public routes, only in admin_panel
-    @role_applications = RoleApplication.all
+    if current_user
+      # Show user's own applications
+      @role_applications = current_user.role_applications.includes(:organizational_role).order(created_at: :desc)
+    else
+      redirect_to root_path, alert: 'Please sign in to view your applications.'
+    end
   end
 
   # GET /role_applications/1 or /role_applications/1.json
@@ -24,8 +31,9 @@ class RoleApplicationsController < ApplicationController
   def edit; end
 
   # POST /role_applications or /role_applications.json
+  # rubocop:disable Metrics/AbcSize
   def create
-    @role_application = current_user.build_role_application(role_application_params)
+    @role_application = current_user.role_applications.build(role_application_params)
 
     respond_to do |format|
       if @role_application.save
@@ -37,11 +45,14 @@ class RoleApplicationsController < ApplicationController
         format.json { render :show, status: :created, location: @role_application }
       else
         load_organizational_roles
+        # Ensure the organizational_role association is loaded so the form can display questions
+        @role_application.organizational_role if @role_application.org_role_id.present?
         format.html { render :new, status: :unprocessable_content }
         format.json { render json: @role_application.errors, status: :unprocessable_content }
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   # PATCH/PUT /role_applications/1 or /role_applications/1.json
   def update
@@ -54,38 +65,25 @@ class RoleApplicationsController < ApplicationController
         format.json { render :show, status: :ok, location: @role_application }
       else
         load_organizational_roles
+        # Ensure the organizational_role association is loaded so the form can display questions
+        @role_application.organizational_role if @role_application.org_role_id.present?
         format.html { render :edit, status: :unprocessable_content }
         format.json { render json: @role_application.errors, status: :unprocessable_content }
       end
     end
   end
 
+  # DELETE /role_applications/1 or /role_applications/1.json
+  def destroy
+    @role_application.destroy!
+
+    respond_to do |format|
+      format.html { redirect_to role_applications_path, notice: 'Application was successfully deleted.' }
+      format.json { head :no_content }
+    end
+  end
+
   private
-
-  # Authenticate user via current_user helper (assumes OAuth flow sets this)
-  def authenticate_user_for_application
-    return if current_user
-
-    # Store the location they're trying to access
-    session[:applying_for_role] = true
-    # Redirect to OAuth for authentication
-    redirect_to admin_google_oauth2_omniauth_authorize_path, alert: 'Please sign in to apply.'
-  end
-
-  # Check if user already has an application (used in new/create)
-  def check_existing_application
-    return unless current_user.role_application.present?
-
-    redirect_to root_path, alert: 'You have already submitted an application.'
-  end
-
-  # Check if user has a resume (used in new/create)
-  def check_resume_present
-    return if current_user.resume&.file&.attached?
-
-    redirect_to new_user_resume_path(current_user, return_to: 'application'),
-                alert: 'Please upload your resume before applying.'
-  end
 
   # Load organizational roles for the form
   def load_organizational_roles
@@ -106,24 +104,8 @@ class RoleApplicationsController < ApplicationController
     @role_application = RoleApplication.find(params[:id])
   end
 
-  def authorize_role_application_access
-    unless current_user
-      session[:applying_for_role] = true
-      redirect_to admin_google_oauth2_omniauth_authorize_path, alert: 'Please sign in to view this application.'
-      return
-    end
-
-    # Allow admins to view any application
-    return if admin_signed_in? && current_user.role == 'admin'
-
-    # Allow users to view only their own application
-    return if @role_application&.user_id == current_user.id
-
-    redirect_to root_path, alert: 'You can only view your own application.'
-  end
-
   # Only allow a list of trusted parameters through.
   def role_application_params
-    params.require(:role_application).permit(:org_role_id, :essay)
+    params.require(:role_application).permit(:org_role_id, :answer_1, :answer_2, :answer_3)
   end
 end

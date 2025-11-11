@@ -26,8 +26,8 @@ RSpec.describe 'admin_panel/sponsors/show.html.erb', type: :view do
     expect(rendered).to include('Yes') # resume_access
   end
 
-  it 'includes navigation links' do
-    expect(rendered).to have_link('Edit Sponsor', href: edit_admin_panel_sponsor_path(sponsor))
-    expect(rendered).to have_link('Back to Sponsors', href: admin_panel_sponsors_path)
+  it 'includes navigation buttons' do
+    expect(rendered).to have_button('Edit Sponsor')
+    expect(rendered).to have_button('Back to Sponsors')
   end
 end

@@ -1,6 +1,6 @@
-<%= form_with(model: [:admin_panel, event], local: true) do |form| %>
+<%= form_with(model: [:admin_panel, event], local: true, class: 'event-form') do |form| %>
   <% if event.errors.any? %>
-    <div class="error-messages">
+    <div class="form-errors">
       <h4><%= pluralize(event.errors.count, "error") %> prohibited this event from being saved:</h4>
       <ul>
         <% event.errors.full_messages.each do |message| %>
@@ -10,37 +10,70 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :title, "Event Title" %>
-    <%= form.text_field :title %>
+  <div class="form-section">
+    <h3>Basic Information</h3>
+
+    <div class="form-field">
+      <%= form.label :title, "Event Title" %>
+      <%= form.text_field :title, placeholder: "Enter event title", class: 'form-input' %>
+    </div>
+
+    <div class="form-field">
+      <%= form.label :description, "Event Description" %>
+      <%= form.text_area :description, rows: 4, placeholder: "Describe the event", class: 'form-textarea' %>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <%= form.label :event_date, "Event Date & Time" %>
+        <%= form.datetime_local_field :event_date, class: 'form-input' %>
+      </div>
+
+      <div class="form-field">
+        <%= form.label :location, "Event Location" %>
+        <%= form.text_field :location, placeholder: "Enter location", class: 'form-input' %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <%= form.label :capacity, "Maximum Capacity" %>
+        <%= form.number_field :capacity, min: 1, placeholder: "e.g., 50", class: 'form-input' %>
+      </div>
+
+      <div class="form-field">
+        <%= form.label :attendance_points, "Attendance Points" %>
+        <%= form.number_field :attendance_points, min: 0, step: 1, placeholder: "e.g., 10", class: 'form-input' %>
+      </div>
+    </div>
   </div>
 
-  <div class="field">
-    <%= form.label :description, "Event Description" %>
-    <%= form.text_area :description, rows: 4 %>
+  <div class="form-section">
+    <h3>Visibility Settings</h3>
+
+    <div class="form-field form-checkbox-field">
+      <div class="checkbox-wrapper">
+        <%= form.check_box :is_public, class: 'form-checkbox' %>
+        <%= form.label :is_public, "Make this event public (visible to everyone)", class: 'checkbox-label' %>
+      </div>
+      <small class="form-help-text">Public events are visible to everyone, regardless of organizational role or sign-in status.</small>
+    </div>
+
+    <div class="form-field">
+      <%= form.label :organizational_role_ids, "Target Organizational Roles" %>
+      <small class="form-help-text">Select specific roles this event is for. Leave empty if event is for all roles (or if marked as Public above).</small>
+      <div class="checkbox-group">
+        <%= form.collection_check_boxes :organizational_role_ids, OrganizationalRole.all.order(:name), :id, :name do |b| %>
+          <div class="checkbox-item">
+            <%= b.check_box class: "role-checkbox" %>
+            <%= b.label class: "role-label" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
 
-  <div class="field">
-    <%= form.label :event_date, "Event Date & Time" %>
-    <%= form.datetime_local_field :event_date %>
-  </div>
-
-  <div class="field">
-    <%= form.label :location, "Event Location" %>
-    <%= form.text_field :location %>
-  </div>
-
-  <div class="field">
-    <%= form.label :capacity, "Maximum Capacity" %>
-    <%= form.number_field :capacity, min: 1 %>
-  </div>
-
-  <div class="field">
-    <%= form.label :attendance_points, "Attendance Points" %>
-    <%= form.number_field :attendance_points, min: 0, step: 1 %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
+  <div class="form-actions">
+    <%= form.submit class: 'btn btn-primary' %>
   </div>
 <% end %>

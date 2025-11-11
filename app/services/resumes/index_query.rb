@@ -11,7 +11,9 @@ module Resumes
     end
 
     def call
+      # Join with users table once at the start if needed
       resumes = Resume.includes(:user)
+      resumes = resumes.joins(:user) if needs_user_join?
       resumes = apply_filters(resumes)
       apply_sorting(resumes)
     end
@@ -20,15 +22,27 @@ module Resumes
 
     attr_reader :filters, :sort, :direction
 
+    def needs_user_join?
+      filters[:search].present? || filters[:organizational_role_id].present?
+    end
+
     def apply_filters(resumes)
       resumes = apply_basic_filters(resumes)
-      apply_gpa_filter(resumes)
+      resumes = apply_gpa_filter(resumes)
+      apply_search_filter(resumes)
     end
 
     def apply_basic_filters(resumes)
       resumes = apply_major_filter(resumes)
       resumes = apply_organizational_role_filter(resumes)
       apply_graduation_year_filter(resumes)
+    end
+
+    def apply_search_filter(resumes)
+      return resumes unless filters[:search].present?
+
+      # Use the manual search scope which assumes users table is already joined
+      resumes.search_by_user(filters[:search])
     end
 
     def apply_major_filter(resumes)
@@ -38,9 +52,10 @@ module Resumes
     end
 
     def apply_organizational_role_filter(resumes)
-      return resumes unless filters[:organizational_role].present?
+      return resumes unless filters[:organizational_role_id].present?
 
-      resumes.where(organizational_role: filters[:organizational_role])
+      # Don't join again - users table is already joined in call method
+      resumes.where(users: { organizational_role_id: filters[:organizational_role_id] })
     end
 
     def apply_graduation_year_filter(resumes)
@@ -65,9 +80,11 @@ module Resumes
     def apply_sorting(resumes)
       case sort
       when 'user'
-        resumes.joins(:user).order("users.email #{direction}")
-      when 'gpa', 'graduation_date', 'major', 'organizational_role'
+        resumes.joins(:user).order("users.last_name #{direction}, users.first_name #{direction}")
+      when 'gpa', 'graduation_date', 'major'
         resumes.order("#{sort} #{direction}")
+      when 'organizational_role'
+        resumes.joins(user: :organizational_role).order("organizational_roles.name #{direction}")
       else
         resumes.order(created_at: :desc)
       end

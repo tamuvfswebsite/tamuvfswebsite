@@ -4,14 +4,14 @@
 <div class="resume-show">
   <!-- Navigation Header -->
   <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-    <%= link_to root_path, class: "back-to-home", style: "display: flex; align-items: center; gap: 8px; padding: 10px 16px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;" do %>
+    <%= button_to root_path, method: :get, class: "back-to-home", style: "display: flex; align-items: center; gap: 8px; padding: 10px 16px; background-color: #007bff; color: white; text-decoration: none; border: none; border-radius: 4px; font-size: 14px; font-weight: 500; line-height: 1.2; cursor: pointer; box-sizing: border-box; height: 38px;", form: { style: 'display: inline; margin: 0; vertical-align: top;' } do %>
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
         <polyline points="9 22 9 12 15 12 15 22"></polyline>
       </svg>
       <span>Home</span>
     <% end %>
-    
+
     <% back_path = if @return_to == "application"
                      new_role_application_path
                    elsif @return_to&.start_with?("application_edit_")
@@ -20,7 +20,7 @@
                    else
                      :back
                    end %>
-    <%= link_to back_path, style: "display: flex; align-items: center; gap: 8px; padding: 10px 16px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;" do %>
+    <%= button_to back_path, method: :get, style: "display: flex; align-items: center; gap: 8px; padding: 10px 16px; background-color: #6c757d; color: white; text-decoration: none; border: none; border-radius: 4px; font-size: 14px; font-weight: 500; line-height: 1.2; cursor: pointer; box-sizing: border-box; height: 38px;", form: { style: 'display: inline; margin: 0; vertical-align: top;' } do %>
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="19" y1="12" x2="5" y2="12"></line>
         <polyline points="12 19 5 12 12 5"></polyline>
@@ -73,13 +73,6 @@
     <%= form.label :major, "Major *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
     <%= form.select :major, ["Aerospace Engineering", "Civil Engineering", "Computer Science", "Computer Engineering", "Mechanical Engineering"], 
         { prompt: "Select Major" }, 
-        { required: true, style: "padding: 8px; width: 250px; border: 1px solid #ccc; border-radius: 4px;" } %>
-  </div>
-
-  <div class="organizational-role" style="margin-bottom: 15px;">
-    <%= form.label :organizational_role, "Organizational Role *", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
-    <%= form.select :organizational_role, ["X Team", "Y Team", "Z Team", "Student"], 
-        { prompt: "Select VFS Team" }, 
         { required: true, style: "padding: 8px; width: 250px; border: 1px solid #ccc; border-radius: 4px;" } %>
   </div>
 

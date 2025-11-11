@@ -25,12 +25,12 @@ RSpec.describe 'admin_panel/sponsors/edit.html.erb', type: :view do
 
   it 'renders the form with correct fields' do
     expect(rendered).to have_selector('form')
-    expect(rendered).to have_field('Sponsor Company Name', with: 'TechCorp')
-    expect(rendered).to have_field('Sponsor Website', with: 'https://techcorp.com')
+    expect(rendered).to have_field('Company Name', with: 'TechCorp')
+    expect(rendered).to have_field('Website', with: 'https://techcorp.com')
   end
 
-  it 'includes navigation links' do
-    expect(rendered).to have_link('Show Sponsor', href: admin_panel_sponsor_path(sponsor))
-    expect(rendered).to have_link('Back to Sponsors', href: admin_panel_sponsors_path)
+  it 'includes navigation buttons' do
+    expect(rendered).to have_button('View Sponsor')
+    expect(rendered).to have_button('Back to Sponsors')
   end
 end

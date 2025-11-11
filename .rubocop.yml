@@ -7,6 +7,10 @@ Style/FrozenStringLiteralComment:
 Style/Documentation:
   Enabled: false
 
+# Allow numbered variables for questions and answers (question_1, answer_1, etc.)
+Naming/VariableNumber:
+  Enabled: false
+
 Metrics/BlockLength:
   Max: 30
   Exclude:
@@ -17,6 +21,7 @@ Metrics/BlockLength:
     - 'config/routes.rb'
 
 Layout/LineLength:
+  Max: 120
   Exclude:
     - 'config/initializers/devise.rb'
     - 'bin/bundle'
