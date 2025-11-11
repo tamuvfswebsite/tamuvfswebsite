@@ -8,6 +8,26 @@ class Resume < ApplicationRecord
   # Delegate organizational_roles (all) to user
   delegate :organizational_roles, to: :user
 
+  # Search by user's first name, last name, or email
+  # Handles partial matches and multi-word searches (e.g., "hn smi" matches "John Smith")
+  # Assumes users table is already joined in the query chain
+  scope :search_by_user, lambda { |query|
+    return all if query.blank?
+
+    # Split search query into terms
+    terms = query.strip.split(/\s+/)
+
+    # Build conditions for each term
+    conditions = terms.map do |term|
+      sanitized = ActiveRecord::Base.sanitize_sql_like(term)
+      "(users.first_name ILIKE '%#{sanitized}%' OR " \
+        "users.last_name ILIKE '%#{sanitized}%' OR " \
+        "users.email ILIKE '%#{sanitized}%')"
+    end.join(' AND ')
+
+    where(conditions)
+  }
+
   validates :file, presence: true
   validates :gpa,
             numericality: { greater_than_or_equal_to: 0.0, less_than_or_equal_to: 4.0 },

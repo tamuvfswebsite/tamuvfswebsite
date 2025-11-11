@@ -1,56 +1,72 @@
-<h1>Assign Users to <%= @sponsor.company_name %></h1>
-
-<% if @sponsor.default_sponsor? %>
-  <div style="background-color: #fff3cd; border: 1px solid #ffc107; padding: 12px; margin-bottom: 20px; border-radius: 4px;">
-    <strong>Note:</strong> This is the default sponsor. Users assigned here are not yet associated with a real sponsor company.
+<div class="admin-assign-users-page">
+  <div class="page-header">
+    <h1>Assign Users to <%= @sponsor.company_name %></h1>
+    <div class="header-info">
+      Currently assigned: <strong><%= @sponsor.users.count %></strong> user(s)
+    </div>
   </div>
-<% end %>
 
-<p>Currently assigned: <strong><%= @sponsor.users.count %></strong> user(s)</p>
+  <% if @sponsor.default_sponsor? %>
+    <div class="default-sponsor-warning">
+      <strong>Note:</strong> This is the default sponsor. Users assigned here are not yet associated with a real sponsor company.
+    </div>
+  <% end %>
 
-<%= form_with model: @sponsor, url: update_users_admin_panel_sponsor_path(@sponsor), method: :patch, local: true do |f| %>
-  <div>
-    <h3>Select Users (only users with 'sponsor' role):</h3>
-    <p style="color: #666; font-size: 14px; margin-bottom: 15px;">
-      <em>Note: Each user can only be assigned to one sponsor at a time. Selecting a user will remove them from their current sponsor.</em>
-    </p>
-    
-    <% if @available_users.any? %>
-      <%= f.collection_check_boxes :user_ids, @available_users, :id, :email, checked: @sponsor.user_ids do |b| %>
-        <div style="margin: 10px 0;">
-          <%= b.check_box %>
-          <%= b.label do %>
-            <%= b.object.email %> 
-            <% if b.object.first_name.present? %>
-              (<%= b.object.first_name %> <%= b.object.last_name %>)
+  <div class="assign-form-card">
+    <%= form_with model: @sponsor, url: update_users_admin_panel_sponsor_path(@sponsor), method: :patch, local: true, class: 'assign-users-form' do |f| %>
+      <div class="form-section">
+        <h3>Select Users</h3>
+        <p class="form-help-text">Only users with 'sponsor' role can be assigned to sponsors.</p>
+        <p class="form-help-text"><em>Note: Each user can only be assigned to one sponsor at a time. Selecting a user will remove them from their current sponsor.</em></p>
+
+        <% if @available_users.any? %>
+          <div class="users-checkboxes">
+            <%= f.collection_check_boxes :user_ids, @available_users, :id, :email, checked: @sponsor.user_ids do |b| %>
+              <div class="checkbox-item">
+                <%= b.check_box class: "form-checkbox" %>
+                <%= b.label class: "checkbox-label" do %>
+                  <span class="user-email"><%= b.object.email %></span>
+                  <% if b.object.first_name.present? %>
+                    <span class="user-name">(<%= b.object.first_name %> <%= b.object.last_name %>)</span>
+                  <% end %>
+                  <% if b.object.primary_sponsor && b.object.primary_sponsor != @sponsor %>
+                    <span class="current-sponsor-text">- Currently with: <%= b.object.primary_sponsor.company_name %></span>
+                  <% end %>
+                <% end %>
+              </div>
             <% end %>
-            <% if b.object.primary_sponsor && b.object.primary_sponsor != @sponsor %>
-              <span style="color: #999; font-size: 13px;">
-                - Currently with: <%= b.object.primary_sponsor.company_name %>
-              </span>
+          </div>
+        <% else %>
+          <div class="empty-state">
+            <p>No users with 'sponsor' role found. Please create sponsor users first.</p>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="form-actions">
+        <%= f.submit "Update Users", class: "btn btn-primary" %>
+        <%= button_to "Cancel", admin_panel_sponsor_path(@sponsor), method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="assigned-users-card">
+    <h3>Currently Assigned Users</h3>
+    <% if @sponsor.users.any? %>
+      <ul class="assigned-users-list">
+        <% @sponsor.users.each do |user| %>
+          <li class="assigned-user-item">
+            <span class="user-email"><%= user.email %></span>
+            <% if user.first_name.present? %>
+              <span class="user-name">(<%= user.first_name %> <%= user.last_name %>)</span>
             <% end %>
-          <% end %>
-        </div>
-      <% end %>
+          </li>
+        <% end %>
+      </ul>
     <% else %>
-      <p>No users with 'sponsor' role found. Please create sponsor users first.</p>
+      <div class="empty-state">
+        <p>No users currently assigned to this sponsor.</p>
+      </div>
     <% end %>
   </div>
-
-  <div style="margin-top: 20px; display: flex; gap: 10px;">
-    <%= f.submit "Update Users", class: "btn btn-primary", style: 'height: 48px; padding: 12px 32px; box-sizing: border-box; font-weight: 500; font-size: 16px; line-height: 1.2;' %>
-    <%= button_to "Cancel", admin_panel_sponsor_path(@sponsor), method: :get, class: "btn btn-outline", style: 'height: 48px; padding: 12px 32px; box-sizing: border-box; font-weight: 500; font-size: 16px; line-height: 1.2;', form: { style: 'display: inline; margin: 0; vertical-align: top;' } %>
-  </div>
-<% end %>
-
-<hr>
-<h3>Currently Assigned Users:</h3>
-<% if @sponsor.users.any? %>
-  <ul>
-    <% @sponsor.users.each do |user| %>
-      <li><%= user.email %> (<%= user.first_name %> <%= user.last_name %>)</li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>No users currently assigned to this sponsor.</p>
-<% end %>
+</div>

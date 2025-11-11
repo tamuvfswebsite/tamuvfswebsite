@@ -1,12 +1,19 @@
-<% content_for :title, "Editing logo placement" %>
+<% content_for :title, "Editing Logo Placement" %>
 
-<h1>Editing logo placement</h1>
+<div class="admin-logo-placement-form-page">
+  <div class="page-header">
+    <h1>Edit Logo Placement</h1>
+    <div class="header-info">
+      <span class="sponsor-name">for <%= @sponsor.company_name %></span>
+    </div>
+  </div>
 
-<%= render "form", sponsor: @sponsor, logo_placement: @logo_placement %>
+  <div class="form-card">
+    <%= render "form", sponsor: @sponsor, logo_placement: @logo_placement %>
+  </div>
 
-<br>
-
-<div>
-  <%= link_to "Show this logo placement", admin_panel_sponsor_logo_placement_path(@sponsor, @logo_placement) %> |
-  <%= link_to "Back to sponsor", admin_panel_sponsor_path(@sponsor) %>
+  <div class="form-footer">
+    <%= button_to "View Placement", admin_panel_sponsor_logo_placement_path(@sponsor, @logo_placement), method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
+    <%= button_to "Back to Sponsor", admin_panel_sponsor_path(@sponsor), method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
+  </div>
 </div>

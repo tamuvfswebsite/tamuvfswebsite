@@ -121,6 +121,17 @@
     @media (max-width: 767px) { min-width: 100%; }
   }
 
+  .filter-group-search {
+    flex: 1;
+    min-width: 300px;
+
+    @media (max-width: 767px) { min-width: 100%; }
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
   .gpa-filter-controls {
     display: flex;
     gap: var(--space-xs);

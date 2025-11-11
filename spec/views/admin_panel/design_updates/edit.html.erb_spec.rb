@@ -39,7 +39,7 @@ RSpec.describe 'admin_panel/design_updates/edit.html.erb', type: :view do
   end
 
   it 'has a pdf_file field' do
-    expect(rendered).to have_field('PDF Slides')
+    expect(rendered).to have_field('Upload PDF')
   end
 
   it 'has a submit button' do

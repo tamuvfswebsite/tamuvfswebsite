@@ -1,55 +1,118 @@
-<h1><%= @sponsor.company_name %></h1>
-
-<!-- Logo Display Section -->
-<% if @sponsor.logo.attached? %>
-  <div style="margin: 20px 0; padding: 20px; background-color: #f9f9f9; border-radius: 8px; text-align: center;">
-    <%= image_tag @sponsor.logo, 
-        style: 'max-width: 300px; max-height: 300px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);',
-        alt: "#{@sponsor.company_name} logo" %>
+<div class="admin-sponsor-show-page">
+  <div class="page-header">
+    <h1><%= @sponsor.company_name %></h1>
+    <div class="header-actions">
+      <%= button_to 'Edit Sponsor', edit_admin_panel_sponsor_path(@sponsor), method: :get, class: 'btn btn-primary', form: { style: 'display: inline;' } %>
+      <%= button_to "Assign Users", assign_users_admin_panel_sponsor_path(@sponsor), method: :get, class: 'btn btn-primary', form: { style: 'display: inline;' } %>
+    </div>
   </div>
-<% else %>
-  <div style="margin: 20px 0; padding: 20px; background-color: #f0f0f0; border-radius: 8px; text-align: center; color: #666;">
-    <p>No logo uploaded</p>
-  </div>
-<% end %>
 
-<div class="sponsor-details">
-  <p><strong>Website:</strong> <%= sponsor_website_link(@sponsor.website) %></p>
-  <p><strong>Tier:</strong> <%= @sponsor.tier %></p>
-  <p><strong>Contact Email:</strong> <%= @sponsor.contact_email %></p>
-  <p><strong>Phone Number:</strong> <%= @sponsor.phone_number %></p>
-  <p><strong>Description:</strong> <%= @sponsor.company_description %></p>
-  <p><strong>Resume Access:</strong> <%= @sponsor.resume_access? ? "Yes" : "No" %></p>
-
-  <h3 style="margin-top: 30px;">Logo Placements</h3>
-  <%= link_to "Add Logo Placement", new_admin_panel_sponsor_logo_placement_path(@sponsor), class: "btn btn-secondary" %>
-
-  <ul style="margin-top: 15px;">
-    <% if @sponsor.logo_placements.any? %>
-      <% @sponsor.logo_placements.each do |placement| %>
-        <li>
-          <%= placement.page_name.titleize %> - <%= placement.section %>
-          <%= link_to "Edit", edit_admin_panel_sponsor_logo_placement_path(@sponsor, placement) %>
-          <%= link_to "Delete", admin_panel_sponsor_logo_placement_path(@sponsor, placement),
-              data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
-        </li>
-      <% end %>
-    <% else %>
-      <li>No logo placements yet</li>
-    <% end %>
-  </ul>
-</div>
-
-<div class="actions" style="display: flex; gap: 10px; margin-top: 30px;">
-  <%= button_to 'Edit Sponsor', edit_admin_panel_sponsor_path(@sponsor), method: :get, class: 'btn btn-primary', style: 'height: 48px; padding: 12px 32px; box-sizing: border-box; font-weight: 500; font-size: 16px; line-height: 1.2;', form: { style: 'display: inline; margin: 0; vertical-align: top;' } %>
-  <%= button_to "Assign Users", assign_users_admin_panel_sponsor_path(@sponsor), method: :get, class: 'btn btn-primary', style: 'height: 48px; padding: 12px 32px; box-sizing: border-box; font-weight: 500; font-size: 16px; line-height: 1.2;', form: { style: 'display: inline; margin: 0; vertical-align: top;' } %>
-  <% unless @sponsor.default_sponsor? %>
-    <%= button_to 'Delete Sponsor', admin_panel_sponsor_path(@sponsor),
-                method: :delete,
-                class: 'btn btn-danger',
-                style: 'height: 48px; padding: 12px 32px; box-sizing: border-box; font-weight: 500; font-size: 16px; line-height: 1.2;',
-                data: { confirm: "Are you sure? All users assigned to this sponsor will be moved to the default sponsor." },
-                form: { style: 'display: inline; margin: 0; vertical-align: top;' } %>
+  <!-- Logo Display Card -->
+  <% if @sponsor.logo.attached? %>
+    <div class="logo-card">
+      <h2>Company Logo</h2>
+      <div class="logo-display">
+        <%= image_tag @sponsor.logo, alt: "#{@sponsor.company_name} logo", class: "sponsor-logo" %>
+      </div>
+    </div>
   <% end %>
-  <%= button_to 'Back to Sponsors', admin_panel_sponsors_path, method: :get, class: 'btn btn-outline', style: 'height: 48px; padding: 12px 32px; box-sizing: border-box; font-weight: 500; font-size: 16px; line-height: 1.2;', form: { style: 'display: inline; margin: 0; vertical-align: top;' } %>
+
+  <!-- Sponsor Details Card -->
+  <div class="details-card">
+    <h2>Sponsor Information</h2>
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span class="detail-label">Tier</span>
+        <span class="tier-badge tier-<%= @sponsor.tier&.downcase %>"><%= @sponsor.tier %></span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Resume Access</span>
+        <span class="detail-value <%= @sponsor.resume_access? ? 'access-yes' : 'access-no' %>">
+          <%= @sponsor.resume_access? ? "Yes" : "No" %>
+        </span>
+      </div>
+
+      <div class="detail-item full-width">
+        <span class="detail-label">Website</span>
+        <span class="detail-value">
+          <% if @sponsor.website.present? %>
+            <a href="<%= @sponsor.website %>" target="_blank" rel="noopener"><%= @sponsor.website %></a>
+          <% else %>
+            <span class="empty-value">Not provided</span>
+          <% end %>
+        </span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Contact Email</span>
+        <span class="detail-value">
+          <% if @sponsor.contact_email.present? %>
+            <a href="mailto:<%= @sponsor.contact_email %>"><%= @sponsor.contact_email %></a>
+          <% else %>
+            <span class="empty-value">Not provided</span>
+          <% end %>
+        </span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Phone Number</span>
+        <span class="detail-value">
+          <%= @sponsor.phone_number.present? ? @sponsor.phone_number : content_tag(:span, 'Not provided', class: 'empty-value') %>
+        </span>
+      </div>
+
+      <div class="detail-item full-width">
+        <span class="detail-label">Description</span>
+        <p class="detail-text">
+          <%= @sponsor.company_description.present? ? @sponsor.company_description : content_tag(:span, 'No description provided', class: 'empty-value') %>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logo Placements Card -->
+  <div class="placements-card">
+    <div class="placements-header">
+      <h2>Logo Placements</h2>
+      <%= button_to "Add Logo Placement", new_admin_panel_sponsor_logo_placement_path(@sponsor), method: :get, class: "btn btn-primary", form: { style: 'display: inline;' } %>
+    </div>
+
+    <% if @sponsor.logo_placements.any? %>
+      <div class="placements-list">
+        <% @sponsor.logo_placements.each do |placement| %>
+          <div class="placement-item">
+            <div class="placement-info">
+              <span class="placement-page"><%= placement.page_name.titleize %></span>
+              <span class="placement-separator">—</span>
+              <span class="placement-section"><%= placement.section %></span>
+            </div>
+            <div class="placement-actions">
+              <%= button_to "Edit", edit_admin_panel_sponsor_logo_placement_path(@sponsor, placement), method: :get, class: "btn btn-outline", form: { style: 'display: inline;' } %>
+              <%= button_to "Delete", admin_panel_sponsor_logo_placement_path(@sponsor, placement),
+                  method: :delete,
+                  class: "btn btn-danger",
+                  data: { turbo_confirm: "Are you sure?" },
+                  form: { style: 'display: inline;' } %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="empty-placements">
+        <p>No logo placements configured for this sponsor.</p>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="page-footer">
+    <% unless @sponsor.default_sponsor? %>
+      <%= button_to 'Delete Sponsor', admin_panel_sponsor_path(@sponsor),
+                  method: :delete,
+                  class: 'btn btn-danger',
+                  data: { turbo_confirm: "Are you sure? All users assigned to this sponsor will be moved to the default sponsor." },
+                  form: { style: 'display: inline;' } %>
+    <% end %>
+    <%= button_to 'Back to Sponsors', admin_panel_sponsors_path, method: :get, class: 'btn btn-outline', form: { style: 'display: inline;' } %>
+  </div>
 </div>

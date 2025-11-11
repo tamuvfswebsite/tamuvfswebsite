@@ -1,0 +1,23 @@
+<%# 
+  Loading Spinner Partial
+  
+  Usage:
+    <%= render 'shared/loading_spinner', size: 'sm' %>
+    <%= render 'shared/loading_spinner', size: 'lg', color: 'white' %>
+  
+  Parameters:
+    size: 'sm' | 'md' | 'lg' | 'xl' (default: 'md')
+    color: 'default' | 'white' (default: 'default')
+    class: Additional CSS classes
+%>
+<% 
+  size = local_assigns[:size] || 'md'
+  color = local_assigns[:color] || 'default'
+  css_class = "spinner spinner-#{size}"
+  css_class += " spinner-#{color}" if color == 'white'
+  css_class += " #{local_assigns[:class]}" if local_assigns[:class]
+%>
+<span class="<%= css_class %>" aria-label="Loading" role="status">
+  <span class="sr-only">Loading...</span>
+</span>
+
