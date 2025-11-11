@@ -85,6 +85,11 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     # Update avatar URL on each login to keep it fresh
     user.update(google_avatar_url: auth.info.image) if user.persisted?
 
+    # Ensure tamuvfswebsite@gmail.com always has admin role
+    if user.email == 'tamuvfswebsite@gmail.com' && user.role != 'admin'
+      user.update(role: 'admin')
+    end
+
     user
   end
 end
