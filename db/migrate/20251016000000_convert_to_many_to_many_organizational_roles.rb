@@ -31,6 +31,8 @@ class ConvertToManyToManyOrganizationalRoles < ActiveRecord::Migration[7.2]
   end
 
   def migrate_existing_data
+    return unless column_exists?(:users, :organizational_role_id)
+
     User.where.not(organizational_role_id: nil).find_each do |user|
       execute <<-SQL
         INSERT INTO organizational_role_users (user_id, organizational_role_id, created_at, updated_at)
@@ -40,6 +42,8 @@ class ConvertToManyToManyOrganizationalRoles < ActiveRecord::Migration[7.2]
   end
 
   def remove_old_column
+    return unless column_exists?(:users, :organizational_role_id)
+
     remove_foreign_key :users, :organizational_roles
     remove_column :users, :organizational_role_id
   end
