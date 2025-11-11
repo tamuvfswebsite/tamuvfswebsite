@@ -122,3 +122,4 @@ gem 'aws-sdk-s3', '~> 1.0'
 
 # dotenv
 gem 'dotenv-rails', groups: %i[development test]
+gem 'rails-controller-testing'
