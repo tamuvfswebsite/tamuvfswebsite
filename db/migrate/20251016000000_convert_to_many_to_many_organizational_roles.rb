@@ -1,5 +1,15 @@
 class ConvertToManyToManyOrganizationalRoles < ActiveRecord::Migration[7.2]
   def up
+    # Create organizational_roles table if it doesn't exist
+    unless table_exists?(:organizational_roles)
+      create_table :organizational_roles do |t|
+        t.string :name, null: false
+        t.text :description
+        t.timestamps
+      end
+      add_index :organizational_roles, :name, unique: true
+    end
+
     # Create the junction table
     create_table :organizational_role_users do |t|
       t.references :user, null: false, foreign_key: true
@@ -44,5 +54,8 @@ class ConvertToManyToManyOrganizationalRoles < ActiveRecord::Migration[7.2]
 
     # Drop the junction table
     drop_table :organizational_role_users
+
+    # Note: We don't drop organizational_roles table in down migration
+    # because it may have been created by a different migration
   end
 end
